@@ -6,10 +6,8 @@ Fillable TU/e master's-program forms with live ECTS calculations, programme-rule
 
 No installation is needed to fill in a form. Download the programme form, then open the downloaded HTML file in a browser such as Microsoft Edge, Google Chrome or Firefox.
 
-- <a href="./dist/dsai.html" download>Download the DS&AI form</a>
-- <a href="./dist/cse.html" download>Download the CSE form</a>
-
-*Side note: If the link opens the form instead of downloading it, use the browser's **Save page** option to save the HTML file, then open that saved file.*
+- [Download the DS&AI form](https://github.com/Ivayla377/tue-master-programme-forms/releases/latest/download/dsai.html)
+- [Download the CSE form](https://github.com/Ivayla377/tue-master-programme-forms/releases/latest/download/cse.html)
 
 The forms work offline after download.
 
