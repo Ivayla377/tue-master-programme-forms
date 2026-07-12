@@ -1,0 +1,26 @@
+{
+  "name": "tue-program-of-examinations-forms",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Offline SurveyJS Program of Examinations forms for TU/e master programs.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "node scripts/build-program.mjs dsai",
+    "build:program": "node scripts/build-program.mjs",
+    "build:dsai": "npm run build:program -- dsai",
+    "build:cse": "npm run build:program -- cse",
+    "build:all": "npm run build:dsai && npm run build:cse",
+    "test": "node --test",
+    "preview": "vite preview --host 127.0.0.1"
+  },
+  "dependencies": {
+    "survey-core": "^2.0.0",
+    "survey-js-ui": "^2.0.0"
+  },
+  "devDependencies": {
+    "sass": "^1.89.0",
+    "vite": "^7.0.0",
+    "vite-plugin-singlefile": "^2.3.0"
+  }
+}

@@ -1,0 +1,688 @@
+{
+    "title":  "Form 1: DS\u0026AI Program of Examinations 2025-2026",
+    "description":  "This form is used to create a report that shows your current study program. Its purpose is to be shared with the examination committee, so that they can check whether it satisfies the requirements of DS\u0026AI programs and approve it or inform you of how it does not satisfy the requirements. This form has built-in validation that should help you create a valid study program.",
+    "completedHtml":  "Thank you for completing the form",
+    "completedBeforeHtml":  "You have already completed this form.",
+    "loadingHtml":  "Loading form...",
+    "pages":  [
+                  {
+                      "name":  "frontmatter",
+                      "title":  "General information",
+                      "elements":  [
+                                       {
+                                           "type":  "multipletext",
+                                           "name":  "personal_info",
+                                           "title":  "Personal information",
+                                           "isRequired":  true,
+                                           "items":  [
+                                                         {
+                                                             "name":  "name",
+                                                             "isRequired":  true,
+                                                             "placeholder":  "Surname, Given name(s)",
+                                                             "title":  "Name"
+                                                         },
+                                                         {
+                                                             "name":  "id",
+                                                             "isRequired":  true,
+                                                             "maskType":  "pattern",
+                                                             "maskSettings":  {
+                                                                                  "pattern":  "9999999"
+                                                                              },
+                                                             "title":  "Student ID",
+                                                             "maxLength":  7,
+                                                             "inputSize":  7,
+                                                             "validators":  [
+                                                                                {
+                                                                                    "type":  "regex",
+                                                                                    "text":  "Your id is a 7-digit number",
+                                                                                    "regex":  "\\d{7}"
+                                                                                }
+                                                                            ]
+                                                         },
+                                                         {
+                                                             "name":  "enrollment",
+                                                             "isRequired":  true,
+                                                             "inputType":  "date",
+                                                             "title":  "Enrollment date"
+                                                         }
+                                                     ]
+                                       },
+                                       {
+                                           "type":  "panel",
+                                           "name":  "graduation_group_panel",
+                                           "title":  "Graduation group",
+                                           "elements":  [
+                                                            {
+                                                                "type":  "boolean",
+                                                                "name":  "matched",
+                                                                "title":  "Have you already been matched to a graduation group?",
+                                                                "isRequired":  true
+                                                            },
+                                                            {
+                                                                "type":  "text",
+                                                                "name":  "mentor",
+                                                                "visibleIf":  "{matched} = false",
+                                                                "title":  "Who is your mentor?",
+                                                                "description":  "The name of the person who advised you in the composition of your study program",
+                                                                "isRequired":  true,
+                                                                "requiredIf":  "{matched} = false",
+                                                                "placeholder":  "Surname, Given name"
+                                                            },
+                                                            {
+                                                                "type":  "dropdown",
+                                                                "name":  "grad_group",
+                                                                "visibleIf":  "{matched} = true",
+                                                                "title":  "What graduation group have you been matched with?",
+                                                                "description":  "The graduation group you have been matched with",
+                                                                "isRequired":  true,
+                                                                "requiredIf":  "{matched} = true",
+                                                                "choices":  [
+                                                                                {
+                                                                                    "value":  "algo",
+                                                                                    "text":  "ALGO"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "db",
+                                                                                    "text":  "DAI-DB"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "dm",
+                                                                                    "text":  "DAI-DM"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "uai",
+                                                                                    "text":  "DAI-UAI"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "fsa",
+                                                                                    "text":  "FSA"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "iris",
+                                                                                    "text":  "IRIS"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "pa",
+                                                                                    "text":  "PA"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "sec",
+                                                                                    "text":  "SEC"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "set",
+                                                                                    "text":  "SET"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "spor",
+                                                                                    "text":  "SPOR"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "vis",
+                                                                                    "text":  "VIS"
+                                                                                }
+                                                                            ],
+                                                                "showOtherItem":  true
+                                                            }
+                                                        ]
+                                       },
+                                       {
+                                           "type":  "panel",
+                                           "name":  "previous_panel",
+                                           "elements":  [
+                                                            {
+                                                                "type":  "boolean",
+                                                                "name":  "previous",
+                                                                "title":  "Is this a change of a previously approved study program?",
+                                                                "isRequired":  true
+                                                            },
+                                                            {
+                                                                "type":  "comment",
+                                                                "name":  "changes",
+                                                                "visibleIf":  "{previous} = true",
+                                                                "title":  "What has changed?",
+                                                                "isRequired":  true
+                                                            }
+                                                        ]
+                                       }
+                                   ]
+                  },
+                  {
+                      "name":  "program",
+                      "title":  "Program courses",
+                      "elements":  [
+                                       {
+                                           "type":  "panel",
+                                           "name":  "homologation_panel",
+                                           "title":  "Homologation courses",
+                                           "description":  "Homologation courses are bachelor courses assigned during the admission process to make up deficiencies in previous knowledge. Please check your admission letter to see if you have homologation courses. It is also possible to pick a maximum of three bachelor courses yourself to compensate deficiencies, if you think it is necessary. If you do that, a motivation for including the self-chosen homologation courses must be attached to this form.",
+                                           "elements":  [
+                                                            {
+                                                                "type":  "boolean",
+                                                                "name":  "homologation",
+                                                                "title":  "Were you assigned or did you otherwise include one or more homologation courses? ",
+                                                                "isRequired":  true
+                                                            },
+                                                            {
+                                                                "type":  "tagbox",
+                                                                "name":  "homologation_courses",
+                                                                "visibleIf":  "{homologation} = true",
+                                                                "title":  "Select all the homologation courses included in your program",
+                                                                "isRequired":  true,
+                                                                "requiredIf":  "{homologation} = true",
+                                                                "choices":  [
+                                                                                "Item 1",
+                                                                                "Item 2",
+                                                                                {
+                                                                                    "value":  "Item 3",
+                                                                                    "text":  "Visualization"
+                                                                                }
+                                                                            ],
+                                                                "maxSelectedChoices":  3
+                                                            },
+                                                            {
+                                                                "type":  "boolean",
+                                                                "name":  "unassigned_homologation",
+                                                                "visibleIf":  "{homologation} = true",
+                                                                "title":  "Did you include unassigned homologation courses?",
+                                                                "defaultValue":  "false",
+                                                                "isRequired":  true
+                                                            },
+                                                            {
+                                                                "type":  "comment",
+                                                                "name":  "unassigned_motivation",
+                                                                "visibleIf":  "{unassigned_homologation} = true",
+                                                                "title":  "Motivation for including your unassigned homologation courses",
+                                                                "isRequired":  true
+                                                            }
+                                                        ]
+                                       },
+                                       {
+                                           "type":  "panel",
+                                           "name":  "core_panel",
+                                           "title":  "Mandatory courses",
+                                           "description":  "The mandatory courses of the DS\u0026AI program consist of 5 core courses and a mandatory choice of one out of three core electives. (All these courses are 5 EC.)",
+                                           "elements":  [
+                                                            {
+                                                                "type":  "checkbox",
+                                                                "name":  "core",
+                                                                "title":  "These are your core courses",
+                                                                "description":  "Every DS\u0026AI student should have these courses in their program.",
+                                                                "defaultValue":  [
+                                                                                     "2amm20",
+                                                                                     "2ams11",
+                                                                                     "0lm190",
+                                                                                     "2amd15",
+                                                                                     "2amu10"
+                                                                                 ],
+                                                                "correctAnswer":  [
+                                                                                      "2amm20",
+                                                                                      "2ams11",
+                                                                                      "0lm190",
+                                                                                      "2amd15",
+                                                                                      "2amu10"
+                                                                                  ],
+                                                                "commentText":  "",
+                                                                "choices":  [
+                                                                                {
+                                                                                    "value":  "2amm20",
+                                                                                    "text":  "2AMM20 Research Topics in Data Mining"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "2ams11",
+                                                                                    "text":  "2AMS11 Survival Analysis for Data Scientists"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "0lm190",
+                                                                                    "text":  "0LM190 Philosophy and ethics of AI"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "2amu10",
+                                                                                    "text":  "2AMU10 Foundations of Artificial Intelligence"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "2amd15",
+                                                                                    "text":  "2AMD15 Big Data Management"
+                                                                                }
+                                                                            ]
+                                                            },
+                                                            {
+                                                                "type":  "comment",
+                                                                "name":  "core_deselected",
+                                                                "visibleIf":  "{core} \u003c\u003e [\u00272amm20\u0027, \u00272ams11\u0027, \u00270lm190\u0027, \u00272amd15\u0027, \u00272amu10\u0027]",
+                                                                "title":  "Explain why you have not included all core courses!",
+                                                                "isRequired":  true
+                                                            },
+                                                            {
+                                                                "type":  "radiogroup",
+                                                                "name":  "core_elective",
+                                                                "title":  "Which core elective course did you choose?",
+                                                                "isRequired":  true,
+                                                                "choices":  [
+                                                                                {
+                                                                                    "value":  "2ami10",
+                                                                                    "text":  "2AMI10 Foundations of Process Mining"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "2amv10",
+                                                                                    "text":  "2AMV10 Visual Analytics"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "2ams50",
+                                                                                    "text":  "2AMS50 Optimization for Data Science"
+                                                                                }
+                                                                            ],
+                                                                "choicesOrder":  "asc"
+                                                            }
+                                                        ]
+                                       },
+                                       {
+                                           "type":  "panel",
+                                           "name":  "specialization_panel",
+                                           "title":  "Specialization electives",
+                                           "description":  "As part of your program, you must choose at least six specialization electives. (All these courses are 5 EC.) These are grouped per trajectory. You must have two major trajectories from which you choose at least two courses and also choose two courses from one or more further trajectories (minors).",
+                                           "isRequired":  true,
+                                           "elements":  [
+                                                            {
+                                                                "type":  "checkbox",
+                                                                "name":  "context",
+                                                                "title":  "DS\u0026AI in Context",
+                                                                "choices":  [
+                                                                                {
+                                                                                    "value":  "2imp40",
+                                                                                    "text":  "2IMP40 Empirical Methods in Software Engineering"
+                                                                                }
+                                                                            ]
+                                                            },
+                                                            {
+                                                                "type":  "checkbox",
+                                                                "name":  "stat",
+                                                                "title":  "Statistics",
+                                                                "choices":  [
+                                                                                {
+                                                                                    "value":  "2mms80",
+                                                                                    "text":  "2MMS80 Statistical Learning Theory"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "2dd23",
+                                                                                    "text":  "2DD23 Time Series \u0026 Forecasting"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "2ams30",
+                                                                                    "text":  "2AMS30 Network Statistics for Data Science"
+                                                                                }
+                                                                            ]
+                                                            },
+                                                            {
+                                                                "type":  "checkbox",
+                                                                "name":  "db",
+                                                                "title":  "Data Engineering \u0026 Management",
+                                                                "choices":  [
+                                                                                {
+                                                                                    "value":  "2imd10",
+                                                                                    "text":  "2IMD10 Engineering Data-Intensive Systems"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "2ims25",
+                                                                                    "text":  "2IMS25 Principles of Data Protection"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "2amd20",
+                                                                                    "text":  "2AMD20 Knowledge Engineering"
+                                                                                }
+                                                                            ]
+                                                            },
+                                                            {
+                                                                "type":  "checkbox",
+                                                                "name":  "aiml",
+                                                                "title":  "Artificial Intelligence \u0026 Machine Learning",
+                                                                "choices":  [
+                                                                                {
+                                                                                    "value":  "2amu20",
+                                                                                    "text":  "2AMU20 Generative AI Models"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "2amu30",
+                                                                                    "text":  "2AMU30 Uncertainty Representation and Reasoning"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "2amm40",
+                                                                                    "text":  "2AMM40 Advanced Topics in Artificial Intelligence"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "2ams40",
+                                                                                    "text":  "2AMS40 Optimal Decision Making \u0026 Reinforcement Learning"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "2amc15",
+                                                                                    "text":  "2AMC15 Reinforcement Learning in Practice"
+                                                                                }
+                                                                            ]
+                                                            },
+                                                            {
+                                                                "type":  "checkbox",
+                                                                "name":  "dmml",
+                                                                "title":  "Data Mining \u0026 Machine Learning",
+                                                                "choices":  [
+                                                                                {
+                                                                                    "value":  "2amm15",
+                                                                                    "text":  "2AMM15 Machine Learning Engineering"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "2amm10",
+                                                                                    "text":  "2AMM10 Deep Learning"
+                                                                                }
+                                                                            ]
+                                                            },
+                                                            {
+                                                                "type":  "checkbox",
+                                                                "name":  "pmva",
+                                                                "title":  "Process Mining \u0026 Visual Analytics",
+                                                                "choices":  [
+                                                                                {
+                                                                                    "value":  "2ami10",
+                                                                                    "text":  "2AMI10 Foundations of Process Mining",
+                                                                                    "visibleIf":  "{core_elective} \u003c\u003e \u00272ami10\u0027",
+                                                                                    "enableIf":  "{core_elective} \u003c\u003e \u00272ami10\u0027"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "2ami20",
+                                                                                    "text":  "2AMI20 Advanced Process Mining"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "2ami30",
+                                                                                    "text":  "2AMI30 Process Intelligence in Action"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "2amv11",
+                                                                                    "text":  "2AMV11 Visual Analytics",
+                                                                                    "visibleIf":  "{core_elective} \u003c\u003e \u00272amv10\u0027",
+                                                                                    "enableIf":  "{core_elective} \u003c\u003e \u00272amv10\u0027"
+                                                                                }
+                                                                            ]
+                                                            },
+                                                            {
+                                                                "type":  "checkbox",
+                                                                "name":  "ada",
+                                                                "title":  "Algorithmic Data Analysis",
+                                                                "choices":  [
+                                                                                {
+                                                                                    "value":  "2ams50",
+                                                                                    "text":  "2AMS50 Optimization for Data Science",
+                                                                                    "visibleIf":  "{core_elective} \u003c\u003e \u00272ams50\u0027",
+                                                                                    "enableIf":  "{core_elective} \u003c\u003e \u00272ams50\u0027"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "2ima20",
+                                                                                    "text":  "2IMA20 Algorithms for Geovisualization"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "2ima30",
+                                                                                    "text":  "2IMA30 Topological Data Analysis"
+                                                                                }
+                                                                            ]
+                                                            }
+                                                        ]
+                                       },
+                                       {
+                                           "type":  "html",
+                                           "name":  "project",
+                                           "visibleIf":  "{core_elective} \u003c\u003e \u00272amv10\u0027 and {db} notcontains \u00272amd20\u0027 and {aiml} notcontains \u00272amc15\u0027 and {pmva} notcontains \u00272ami30\u0027 and {pmva} notcontains \u00272amv11\u0027",
+                                           "html":  "\u003cdiv class=\"project-warning\"\u003e\u003cp class=\"project-warning__title\"\u003eYou must choose at least one project course!\u003c/p\u003e\u003cp class=\"project-warning__description\"\u003eYour study program must include at least one project course. Below, we show the possible project courses. Select one of them above as a core elective or specialization elective.\u003c/p\u003e\u003cul class=\"project-course-list\"\u003e\u003cli\u003e2AMV10 Visual Analytics\u003c/li\u003e\u003cli\u003e2AMI30 Process Intelligence in Action\u003c/li\u003e\u003cli\u003e2AMC15 Reinforcement Learning in Practice\u003c/li\u003e\u003cli\u003e2AMD20 Knowledge Engineering\u003c/li\u003e\u003c/ul\u003e\u003c/div\u003e"
+                                       }
+                                   ]
+                  },
+                  {
+                      "name":  "free_elective_space",
+                      "title":  "Free elective space",
+                      "elements":  [
+                                       {
+                                           "type":  "panel",
+                                           "name":  "internship_panel",
+                                           "elements":  [
+                                                            {
+                                                                "type":  "boolean",
+                                                                "name":  "internship",
+                                                                "title":  "Do you do an internship as part of your study program?",
+                                                                "description":  "An internship is optional (course code 2IMC10, counts for 15 EC). Keep in mind, when you do an external internship (e.g. at a company), your graduation project needs to be executed internally (within TU/e), when you do an internal internship you cannot graduate with the same supervisor.",
+                                                                "defaultValue":  "false",
+                                                                "isRequired":  true
+                                                            },
+                                                            {
+                                                                "type":  "text",
+                                                                "name":  "internship_supervisor",
+                                                                "visibleIf":  "{internship} = true",
+                                                                "title":  "Internship supervisor",
+                                                                "description":  "If known, please fill in the name of your TU/e internship supervisor",
+                                                                "placeholder":  "Surname, Given name"
+                                                            }
+                                                        ]
+                                       },
+                                       {
+                                           "type":  "panel",
+                                           "name":  "panel1",
+                                           "elements":  [
+                                                            {
+                                                                "type":  "matrixdynamic",
+                                                                "name":  "free",
+                                                                "title":  "Which free elective courses did you include?",
+                                                                "description":  "Free elective courses can be any master-level courses from the TU/e or another university. You can have up to three free elective courses in your study program. In case a free elective was followed at another university, please add its name between parentheses to the course name.\n\nNotes: Homologation courses are considered to fill up a free elective slot, so you need to subtract the number of  homologation courses from the number of courses you need to fill in here. Furthermore, if you do an internship as part of your study program, that completely fills up your free elective space and then you should not fill in anything here.",
+                                                                "columns":  [
+                                                                                {
+                                                                                    "name":  "code",
+                                                                                    "title":  "Course code",
+                                                                                    "isRequired":  true,
+                                                                                    "isUnique":  true,
+                                                                                    "width":  "6em"
+                                                                                },
+                                                                                {
+                                                                                    "name":  "name",
+                                                                                    "title":  "Course name",
+                                                                                    "isRequired":  true,
+                                                                                    "isUnique":  true
+                                                                                },
+                                                                                {
+                                                                                    "name":  "credits",
+                                                                                    "title":  "Credits",
+                                                                                    "cellType":  "text",
+                                                                                    "isRequired":  true,
+                                                                                    "width":  "3em",
+                                                                                    "totalType":  "sum",
+                                                                                    "totalDisplayStyle":  "decimal",
+                                                                                    "totalCurrency":  "EUR",
+                                                                                    "inputType":  "number",
+                                                                                    "min":  0
+                                                                                }
+                                                                            ],
+                                                                "choices":  [
+                                                                                1,
+                                                                                2,
+                                                                                3,
+                                                                                4,
+                                                                                5
+                                                                            ],
+                                                                "cellType":  "text",
+                                                                "rowCount":  0,
+                                                                "maxRowCount":  3,
+                                                                "confirmDelete":  true,
+                                                                "confirmDeleteText":  "Are you sure you want to delete this free elective?",
+                                                                "addRowText":  "Add free elective",
+                                                                "allowRowReorder":  true
+                                                            },
+                                                            {
+                                                                "type":  "boolean",
+                                                                "name":  "external_courses",
+                                                                "visibleIf":  "{free[0].name} notempty",
+                                                                "title":  "Are any of your free electives from another university?",
+                                                                "isRequired":  true
+                                                            },
+                                                            {
+                                                                "type":  "comment",
+                                                                "name":  "external_justification",
+                                                                "visibleIf":  "{external_courses} = true",
+                                                                "title":  "Justification of free electives from another university",
+                                                                "description":  "For every free elective that is from another university, please give links to course descriptions. Also including a motivation for your selection and an explanation of why these courses do not overlap with each other or with other courses in your study program",
+                                                                "isRequired":  true
+                                                            }
+                                                        ]
+                                       }
+                                   ]
+                  },
+                  {
+                      "name":  "grad_phase",
+                      "title":  "Graduation phase",
+                      "elements":  [
+                                       {
+                                           "type":  "panel",
+                                           "name":  "seminar_panel",
+                                           "elements":  [
+                                                            {
+                                                                "type":  "radiogroup",
+                                                                "name":  "seminar",
+                                                                "title":  "What seminar is included in your study program?",
+                                                                "description":  "If you have already been matched to a graduation group, you should normally here choose the corresponding seminar. Seminars are 5 EC courses.",
+                                                                "isRequired":  true,
+                                                                "requiredIf":  "{matched} = true",
+                                                                "choices":  [
+                                                                                {
+                                                                                    "value":  "algo",
+                                                                                    "text":  "2IMA00 Seminar Algorithms (ALGO)"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "db",
+                                                                                    "text":  "2IMD00 Seminar Datamanagement (DAI-DB)"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "pa",
+                                                                                    "text":  "2IMI00 Seminar Process Analytics (PA)"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "dm",
+                                                                                    "text":  "2IMM00 Seminar Data Mining (DAI-DM)"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "sec",
+                                                                                    "text":  "2IMS00 Seminar Information Security Technology (SEC)"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "uai",
+                                                                                    "text":  "2AMU00 Seminar Uncertainty in AI (DAI-UAI)"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "vis",
+                                                                                    "text":  "2IMV00 Seminar Visualization (VIS)"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "spor",
+                                                                                    "text":  "2AMS00 Seminar Statistics, Probability and Operations Research (SPOR)"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "iris",
+                                                                                    "text":  "2IMN00 Seminar Interconnected Resource-aware Intelligent Systems (IRIS)"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "set",
+                                                                                    "text":  "2IMP00 Seminar Software Engineering and Technology (SET)"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "fsa",
+                                                                                    "text":  "2IMF00 Seminar Formal System Analysis (FSA)"
+                                                                                }
+                                                                            ]
+                                                            },
+                                                            {
+                                                                "type":  "comment",
+                                                                "name":  "mismatch",
+                                                                "visibleIf":  "{seminar} notempty and {matched} = true and {grad_group} \u003c\u003e {seminar}",
+                                                                "title":  "Your seminar does not correspond to the graduation group to which you are matched!",
+                                                                "description":  "Please explain why this is the case",
+                                                                "isRequired":  true
+                                                            }
+                                                        ]
+                                       },
+                                       {
+                                           "type":  "checkbox",
+                                           "name":  "graduation",
+                                           "title":  "Graduation",
+                                           "description":  "The following study components will in any case be part of your study program.",
+                                           "defaultValue":  [
+                                                                "2amc05",
+                                                                "2amc00"
+                                                            ],
+                                           "correctAnswer":  [
+                                                                 "2amc05",
+                                                                 "2amc00"
+                                                             ],
+                                           "readOnly":  true,
+                                           "choices":  [
+                                                           {
+                                                               "value":  "2amc05",
+                                                               "text":  "2AMC05 Graduation Preparation Project [10 EC]"
+                                                           },
+                                                           {
+                                                               "value":  "2amc00",
+                                                               "text":  "2AMC00 Master Project [30 EC]"
+                                                           }
+                                                       ]
+                                       }
+                                   ]
+                  },
+                  {
+                      "name":  "reporting",
+                      "title":  "Reporting"
+                  }
+              ],
+    "calculatedValues":  [
+                             {
+                                 "name":  "number_of_context_electives",
+                                 "expression":  "count({context})",
+                                 "includeIntoResult":  true
+                             },
+                             {
+                                 "name":  "number_of_stat_electives",
+                                 "expression":  "count({stat})",
+                                 "includeIntoResult":  true
+                             },
+                             {
+                                 "name":  "number_of_db_electives",
+                                 "expression":  "count({db})"
+                             },
+                             {
+                                 "name":  "number_of_aiml_electives",
+                                 "expression":  "count({aiml})",
+                                 "includeIntoResult":  true
+                             },
+                             {
+                                 "name":  "number_of_dmml_electives",
+                                 "expression":  "count({dmml})",
+                                 "includeIntoResult":  true
+                             },
+                             {
+                                 "name":  "number_of_pmva_electives",
+                                 "expression":  "count({pmva})",
+                                 "includeIntoResult":  true
+                             },
+                             {
+                                 "name":  "number_of_ada_electives",
+                                 "expression":  "count({ada})",
+                                 "includeIntoResult":  true
+                             },
+                             {
+                                 "name":  "trajectory_numbers",
+                                 "expression":  "[{number_of_context_electives}, {number_of_stat_electives}, {number_of_db_electives}, {number_of_aiml_electives}, {number_of_dmml_electives}, {number_of_pmva_electives}, {number_of_ada_electives}]",
+                                 "includeIntoResult":  true
+                             },
+                             {
+                                 "name":  "major_candidates",
+                                 "expression":  "[{number_of_context_electives} \u003e 1, {number_of_stat_electives} \u003e 1, {number_of_db_electives} \u003e 1, {number_of_aiml_electives} \u003e 1, {number_of_dmml_electives} \u003e 1, {number_of_pmva_electives} \u003e 1, {number_of_ada_electives} \u003e 1]",
+                                 "includeIntoResult":  true
+                             },
+                             {
+                                 "name":  "minor_candidates",
+                                 "expression":  "[{number_of_context_electives} \u003e 0, {number_of_stat_electives} \u003e 0, {number_of_db_electives} \u003e 0, {number_of_aiml_electives} \u003e 0, {number_of_dmml_electives} \u003e 0, {number_of_pmva_electives} \u003e 0, {number_of_ada_electives} \u003e 0]",
+                                 "includeIntoResult":  true
+                             }
+                         ],
+    "partialSendEnabled":  true,
+    "headerView":  "advanced"
+}

@@ -1,0 +1,955 @@
+{
+  "title": "Form 1: CSE Program of Examinations",
+  "description": "Use this form to assemble a Computer Science and Engineering program of examinations. Complete it at least six weeks before the start of the preparation graduation project. The live ECTS panel and review page flag missing selections, double counting, and incorrect credit totals before the report is shared with the university.",
+  "completedHtml": "",
+  "showCompletePage": false,
+  "clearInvisibleValues": "onHidden",
+  "pages": [
+    {
+      "name": "frontmatter",
+      "title": "General information",
+      "elements": [
+        {
+          "type": "multipletext",
+          "name": "personal_info",
+          "title": "Personal information",
+          "isRequired": true,
+          "items": [
+            {
+              "name": "name",
+              "title": "Name",
+              "isRequired": true,
+              "placeholder": "Surname, Given name(s)"
+            },
+            {
+              "name": "id",
+              "title": "Student ID",
+              "isRequired": true,
+              "maskType": "pattern",
+              "maskSettings": {
+                "pattern": "9999999"
+              },
+              "maxLength": 7,
+              "inputSize": 7,
+              "validators": [
+                {
+                  "type": "regex",
+                  "text": "Your student ID must be a 7-digit number.",
+                  "regex": "\\d{7}"
+                }
+              ]
+            },
+            {
+              "name": "enrollment",
+              "title": "Month and year of enrollment",
+              "isRequired": true,
+              "inputType": "month",
+              "min": "2010-01",
+              "max": "2035-12",
+              "validators": [
+                {
+                  "type": "regex",
+                  "text": "Enter a valid enrollment month from 2010 to 2035 in YYYY-MM format.",
+                  "regex": "^(?:201[0-9]|202[0-9]|203[0-5])-(?:0[1-9]|1[0-2])$"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "panel",
+          "name": "graduation_group_panel",
+          "title": "Graduation group",
+          "elements": [
+            {
+              "type": "dropdown",
+              "name": "graduation_group",
+              "title": "Intended graduation group",
+              "isRequired": true,
+              "choices": [
+                {
+                  "value": "algorithms",
+                  "text": "Algorithms"
+                },
+                {
+                  "value": "formal_systems_analysis",
+                  "text": "Formal Systems Analysis"
+                },
+                {
+                  "value": "security",
+                  "text": "Security"
+                },
+                {
+                  "value": "software_engineering_technology",
+                  "text": "Software Engineering and Technology"
+                },
+                {
+                  "value": "iris",
+                  "text": "Interconnected Resource-aware Intelligent Systems"
+                },
+                {
+                  "value": "dai_databases",
+                  "text": "Data and Artificial Intelligence - Databases"
+                },
+                {
+                  "value": "dai_other",
+                  "text": "Data and Artificial Intelligence - Other groups"
+                },
+                {
+                  "value": "process_analytics",
+                  "text": "Process Analytics"
+                },
+                {
+                  "value": "visualization",
+                  "text": "Visualization"
+                },
+                {
+                  "value": "discrete_mathematics",
+                  "text": "Discrete Mathematics"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "name": "research_cluster",
+              "title": "Name of representative research cluster",
+              "description": "Enter the official name if it is already known.",
+              "placeholder": "Research cluster name"
+            }
+          ]
+        },
+        {
+          "type": "panel",
+          "name": "previous_panel",
+          "elements": [
+            {
+              "type": "boolean",
+              "name": "previous",
+              "title": "Is this a change to a previously approved program?",
+              "isRequired": true
+            },
+            {
+              "type": "comment",
+              "name": "changes",
+              "visibleIf": "{previous} = true",
+              "title": "What has changed?",
+              "isRequired": true,
+              "requiredIf": "{previous} = true"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "focus_courses",
+      "title": "Foundational and extra courses",
+      "description": "Choose one foundational course from each focus area. Then choose one focus area and select three additional courses from that area.",
+      "elements": [
+        {
+          "type": "panel",
+          "name": "foundational_panel",
+          "title": "Foundational courses",
+          "description": "Select exactly one course from each of the three focus areas. Each selected course contributes 5 ECTS.",
+          "elements": [
+            {
+              "type": "dropdown",
+              "name": "foundational_algorithms",
+              "title": "Algorithms and Theory",
+              "isRequired": true,
+              "choices": [
+                {
+                  "value": "2ima10",
+                  "text": "2IMA10 Advanced Algorithms (5 ECTS)",
+                  "focus": "algorithms"
+                },
+                {
+                  "value": "2imf25",
+                  "text": "2IMF25 Automated Reasoning (5 ECTS)",
+                  "focus": "algorithms"
+                },
+                {
+                  "value": "2imf10",
+                  "text": "2IMF10 Process Algebra (5 ECTS)",
+                  "focus": "algorithms"
+                }
+              ]
+            },
+            {
+              "type": "dropdown",
+              "name": "foundational_architectures",
+              "title": "Architectures and Systems",
+              "isRequired": true,
+              "choices": [
+                {
+                  "value": "2imn10",
+                  "text": "2IMN10 Architecture of Distributed Systems (5 ECTS)",
+                  "focus": "architectures"
+                },
+                {
+                  "value": "2imf30",
+                  "text": "2IMF30 System Validation (5 ECTS)",
+                  "focus": "architectures"
+                },
+                {
+                  "value": "2imd10",
+                  "text": "2IMD10 Engineering Data-Intensive Systems (5 ECTS)",
+                  "focus": "architectures"
+                }
+              ]
+            },
+            {
+              "type": "dropdown",
+              "name": "foundational_software",
+              "title": "Software and Analytics",
+              "isRequired": true,
+              "choices": [
+                {
+                  "value": "2imp25",
+                  "text": "2IMP25 Software Evolution (5 ECTS)",
+                  "focus": "software"
+                },
+                {
+                  "value": "2ami10",
+                  "text": "2AMI10 Foundations of Process Mining (5 ECTS)",
+                  "focus": "software"
+                },
+                {
+                  "value": "2imp10",
+                  "text": "2IMP10 Program Verification Techniques (5 ECTS)",
+                  "focus": "software"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "panel",
+          "name": "extra_panel",
+          "title": "Extra courses",
+          "description": "Select one focus area, then select exactly three additional courses. Your foundational course in that area is automatically removed from the available choices.",
+          "elements": [
+            {
+              "type": "dropdown",
+              "name": "extra_focus_area",
+              "title": "Focus area for extra courses",
+              "isRequired": true,
+              "choices": [
+                {
+                  "value": "algorithms",
+                  "text": "Algorithms and Theory"
+                },
+                {
+                  "value": "architectures",
+                  "text": "Architectures and Systems"
+                },
+                {
+                  "value": "software",
+                  "text": "Software and Analytics"
+                }
+              ]
+            },
+            {
+              "type": "checkbox",
+              "name": "extra_algorithms",
+              "title": "Select 3 Algorithms and Theory extra courses",
+              "visibleIf": "{extra_focus_area} = 'algorithms'",
+              "isRequired": true,
+              "requiredIf": "{extra_focus_area} = 'algorithms'",
+              "minSelectedChoices": 3,
+              "maxSelectedChoices": 3,
+              "choices": [
+                {
+                  "value": "2ima10",
+                  "text": "2IMA10 Advanced Algorithms (5 ECTS)",
+                  "focus": "algorithms"
+                },
+                {
+                  "value": "2imf25",
+                  "text": "2IMF25 Automated Reasoning (5 ECTS)",
+                  "focus": "algorithms"
+                },
+                {
+                  "value": "2imf10",
+                  "text": "2IMF10 Process Algebra (5 ECTS)",
+                  "focus": "algorithms"
+                },
+                {
+                  "value": "2ima20",
+                  "text": "2IMA20 Algorithms for Geovisualization (5 ECTS)",
+                  "focus": "algorithms"
+                },
+                {
+                  "value": "2ima15",
+                  "text": "2IMA15 Geometric Algorithms (5 ECTS)",
+                  "focus": "algorithms"
+                },
+                {
+                  "value": "2ima35",
+                  "text": "2IMA35 Massively Parallel Algorithms (5 ECTS)",
+                  "focus": "algorithms"
+                },
+                {
+                  "value": "2ima25",
+                  "text": "2IMA25 Exact Algorithms for NP-hard Problems (5 ECTS)",
+                  "focus": "algorithms"
+                },
+                {
+                  "value": "2imf15",
+                  "text": "2IMF15 Proving with Computer Assistance (5 ECTS)",
+                  "focus": "algorithms"
+                },
+                {
+                  "value": "2ima30",
+                  "text": "2IMA30 Topological Data Analysis (5 ECTS)",
+                  "focus": "algorithms"
+                },
+                {
+                  "value": "2ima50",
+                  "text": "2IMA50 Algorithms for Collective Decision Making (5 ECTS)",
+                  "focus": "algorithms"
+                }
+              ],
+              "choicesVisibleIf": "{item} <> {foundational_algorithms}"
+            },
+            {
+              "type": "checkbox",
+              "name": "extra_architectures",
+              "title": "Select 3 Architectures and Systems extra courses",
+              "visibleIf": "{extra_focus_area} = 'architectures'",
+              "isRequired": true,
+              "requiredIf": "{extra_focus_area} = 'architectures'",
+              "minSelectedChoices": 3,
+              "maxSelectedChoices": 3,
+              "choices": [
+                {
+                  "value": "2imn10",
+                  "text": "2IMN10 Architecture of Distributed Systems (5 ECTS)",
+                  "focus": "architectures"
+                },
+                {
+                  "value": "2imf30",
+                  "text": "2IMF30 System Validation (5 ECTS)",
+                  "focus": "architectures"
+                },
+                {
+                  "value": "2imd10",
+                  "text": "2IMD10 Engineering Data-Intensive Systems (5 ECTS)",
+                  "focus": "architectures"
+                },
+                {
+                  "value": "2imf35",
+                  "text": "2IMF35 Algorithms for Model Checking (5 ECTS)",
+                  "focus": "architectures"
+                },
+                {
+                  "value": "2imn15",
+                  "text": "2IMN15 Internet of Things (5 ECTS)",
+                  "focus": "architectures"
+                },
+                {
+                  "value": "2imn20",
+                  "text": "2IMN20 Real-Time Systems (5 ECTS)",
+                  "focus": "architectures"
+                },
+                {
+                  "value": "2imn25",
+                  "text": "2IMN25 Quantitative Evaluation of Cyber Physical Systems (5 ECTS)",
+                  "focus": "architectures"
+                },
+                {
+                  "value": "2imn35",
+                  "text": "2IMN35 VLSI Programming (5 ECTS)",
+                  "focus": "architectures"
+                },
+                {
+                  "value": "2imn30",
+                  "text": "2IMN30 Machine Learning for Industry (5 ECTS)",
+                  "focus": "architectures"
+                }
+              ],
+              "choicesVisibleIf": "{item} <> {foundational_architectures}"
+            },
+            {
+              "type": "checkbox",
+              "name": "extra_software",
+              "title": "Select 3 Software and Analytics extra courses",
+              "visibleIf": "{extra_focus_area} = 'software'",
+              "isRequired": true,
+              "requiredIf": "{extra_focus_area} = 'software'",
+              "minSelectedChoices": 3,
+              "maxSelectedChoices": 3,
+              "choices": [
+                {
+                  "value": "2imp25",
+                  "text": "2IMP25 Software Evolution (5 ECTS)",
+                  "focus": "software"
+                },
+                {
+                  "value": "2ami10",
+                  "text": "2AMI10 Foundations of Process Mining (5 ECTS)",
+                  "focus": "software"
+                },
+                {
+                  "value": "2imp10",
+                  "text": "2IMP10 Program Verification Techniques (5 ECTS)",
+                  "focus": "software"
+                },
+                {
+                  "value": "2amm10",
+                  "text": "2AMM10 Deep Learning (5 ECTS)",
+                  "focus": "software"
+                },
+                {
+                  "value": "2amm20",
+                  "text": "2AMM20 Research Topics in Data Mining (5 ECTS)",
+                  "focus": "software"
+                },
+                {
+                  "value": "2imn30",
+                  "text": "2IMN30 Machine Learning for Industry (5 ECTS)",
+                  "focus": "software"
+                },
+                {
+                  "value": "2imp40",
+                  "text": "2IMP40 Empirical Methods in Software Engineering (5 ECTS)",
+                  "focus": "software"
+                },
+                {
+                  "value": "2amd15",
+                  "text": "2AMD15 Big Data Management (5 ECTS)",
+                  "focus": "software"
+                },
+                {
+                  "value": "2imp30",
+                  "text": "2IMP30 System Design Engineering (5 ECTS)",
+                  "focus": "software"
+                },
+                {
+                  "value": "2imp20",
+                  "text": "2IMP20 Domain Specific Language Design (5 ECTS)",
+                  "focus": "software"
+                },
+                {
+                  "value": "2imp60",
+                  "text": "2IMP60 Human-Computer Interaction (5 ECTS)",
+                  "focus": "software"
+                }
+              ],
+              "choicesVisibleIf": "{item} <> {foundational_software}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "specialization",
+      "title": "Specialization electives and internship",
+      "description": "Select exactly 30 ECTS of specialization electives. Use the four grouped selectors below. If an internship is included, it contributes 15 ECTS to this total.",
+      "elements": [
+        {
+          "type": "panel",
+          "name": "specialization_panel",
+          "title": "Specialization electives",
+          "description": "You may combine courses from multiple focus areas and from the additional specialization list.",
+          "elements": [
+            {
+              "type": "tagbox",
+              "name": "specialization_algorithms",
+              "title": "Algorithms and Theory courses",
+              "choices": [
+                {
+                  "value": "2ima10",
+                  "text": "2IMA10 Advanced Algorithms (5 ECTS)",
+                  "focus": "algorithms"
+                },
+                {
+                  "value": "2imf25",
+                  "text": "2IMF25 Automated Reasoning (5 ECTS)",
+                  "focus": "algorithms"
+                },
+                {
+                  "value": "2imf10",
+                  "text": "2IMF10 Process Algebra (5 ECTS)",
+                  "focus": "algorithms"
+                },
+                {
+                  "value": "2ima20",
+                  "text": "2IMA20 Algorithms for Geovisualization (5 ECTS)",
+                  "focus": "algorithms"
+                },
+                {
+                  "value": "2ima15",
+                  "text": "2IMA15 Geometric Algorithms (5 ECTS)",
+                  "focus": "algorithms"
+                },
+                {
+                  "value": "2ima35",
+                  "text": "2IMA35 Massively Parallel Algorithms (5 ECTS)",
+                  "focus": "algorithms"
+                },
+                {
+                  "value": "2ima25",
+                  "text": "2IMA25 Exact Algorithms for NP-hard Problems (5 ECTS)",
+                  "focus": "algorithms"
+                },
+                {
+                  "value": "2imf15",
+                  "text": "2IMF15 Proving with Computer Assistance (5 ECTS)",
+                  "focus": "algorithms"
+                },
+                {
+                  "value": "2ima30",
+                  "text": "2IMA30 Topological Data Analysis (5 ECTS)",
+                  "focus": "algorithms"
+                },
+                {
+                  "value": "2ima50",
+                  "text": "2IMA50 Algorithms for Collective Decision Making (5 ECTS)",
+                  "focus": "algorithms"
+                }
+              ],
+              "choicesVisibleIf": "{item} <> {foundational_algorithms} and {extra_algorithms} notcontains {item}"
+            },
+            {
+              "type": "tagbox",
+              "name": "specialization_architectures",
+              "title": "Architectures and Systems courses",
+              "choices": [
+                {
+                  "value": "2imn10",
+                  "text": "2IMN10 Architecture of Distributed Systems (5 ECTS)",
+                  "focus": "architectures"
+                },
+                {
+                  "value": "2imf30",
+                  "text": "2IMF30 System Validation (5 ECTS)",
+                  "focus": "architectures"
+                },
+                {
+                  "value": "2imd10",
+                  "text": "2IMD10 Engineering Data-Intensive Systems (5 ECTS)",
+                  "focus": "architectures"
+                },
+                {
+                  "value": "2imf35",
+                  "text": "2IMF35 Algorithms for Model Checking (5 ECTS)",
+                  "focus": "architectures"
+                },
+                {
+                  "value": "2imn15",
+                  "text": "2IMN15 Internet of Things (5 ECTS)",
+                  "focus": "architectures"
+                },
+                {
+                  "value": "2imn20",
+                  "text": "2IMN20 Real-Time Systems (5 ECTS)",
+                  "focus": "architectures"
+                },
+                {
+                  "value": "2imn25",
+                  "text": "2IMN25 Quantitative Evaluation of Cyber Physical Systems (5 ECTS)",
+                  "focus": "architectures"
+                },
+                {
+                  "value": "2imn35",
+                  "text": "2IMN35 VLSI Programming (5 ECTS)",
+                  "focus": "architectures"
+                },
+                {
+                  "value": "2imn30",
+                  "text": "2IMN30 Machine Learning for Industry (5 ECTS)",
+                  "focus": "architectures"
+                }
+              ],
+              "choicesVisibleIf": "{item} <> {foundational_architectures} and {extra_architectures} notcontains {item}"
+            },
+            {
+              "type": "tagbox",
+              "name": "specialization_software",
+              "title": "Software and Analytics courses",
+              "choices": [
+                {
+                  "value": "2imp25",
+                  "text": "2IMP25 Software Evolution (5 ECTS)",
+                  "focus": "software"
+                },
+                {
+                  "value": "2ami10",
+                  "text": "2AMI10 Foundations of Process Mining (5 ECTS)",
+                  "focus": "software"
+                },
+                {
+                  "value": "2imp10",
+                  "text": "2IMP10 Program Verification Techniques (5 ECTS)",
+                  "focus": "software"
+                },
+                {
+                  "value": "2amm10",
+                  "text": "2AMM10 Deep Learning (5 ECTS)",
+                  "focus": "software"
+                },
+                {
+                  "value": "2amm20",
+                  "text": "2AMM20 Research Topics in Data Mining (5 ECTS)",
+                  "focus": "software"
+                },
+                {
+                  "value": "2imn30",
+                  "text": "2IMN30 Machine Learning for Industry (5 ECTS)",
+                  "focus": "software"
+                },
+                {
+                  "value": "2imp40",
+                  "text": "2IMP40 Empirical Methods in Software Engineering (5 ECTS)",
+                  "focus": "software"
+                },
+                {
+                  "value": "2amd15",
+                  "text": "2AMD15 Big Data Management (5 ECTS)",
+                  "focus": "software"
+                },
+                {
+                  "value": "2imp30",
+                  "text": "2IMP30 System Design Engineering (5 ECTS)",
+                  "focus": "software"
+                },
+                {
+                  "value": "2imp20",
+                  "text": "2IMP20 Domain Specific Language Design (5 ECTS)",
+                  "focus": "software"
+                },
+                {
+                  "value": "2imp60",
+                  "text": "2IMP60 Human-Computer Interaction (5 ECTS)",
+                  "focus": "software"
+                }
+              ],
+              "choicesVisibleIf": "{item} <> {foundational_software} and {extra_software} notcontains {item}"
+            },
+            {
+              "type": "tagbox",
+              "name": "specialization_additional",
+              "title": "Additional specialization electives",
+              "choices": [
+                {
+                  "value": "2ims10",
+                  "text": "2IMS10 Physical Aspects of Digital Security (5 ECTS)"
+                },
+                {
+                  "value": "2ims25",
+                  "text": "2IMS25 Principles of Data Protection (5 ECTS)"
+                },
+                {
+                  "value": "2imv25",
+                  "text": "2IMV25 Interactive Virtual Environments (5 ECTS)"
+                },
+                {
+                  "value": "2dmi20",
+                  "text": "2DMI20 Software Security (5 ECTS)"
+                },
+                {
+                  "value": "2ims20",
+                  "text": "2IMS20 Cyberattacks, Crime and Defenses (5 ECTS)"
+                },
+                {
+                  "value": "2amm15",
+                  "text": "2AMM15 Machine Learning Engineering (5 ECTS)"
+                },
+                {
+                  "value": "2imd20",
+                  "text": "2IMD20 Language Virtual Machines Design and Implementation (5 ECTS)"
+                },
+                {
+                  "value": "2ims15",
+                  "text": "2IMS15 Verification of Security Protocols (5 ECTS)"
+                },
+                {
+                  "value": "2ims30",
+                  "text": "2IMS30 Advanced Network Security (5 ECTS)"
+                },
+                {
+                  "value": "2ims40",
+                  "text": "2IMS40 Intrusion Detection Laboratory (5 ECTS)"
+                },
+                {
+                  "value": "2ims50",
+                  "text": "2IMS50 Introduction to Quantum Computing and Security (5 ECTS)"
+                },
+                {
+                  "value": "2ims60",
+                  "text": "2IMS60 Provable Security (5 ECTS)"
+                },
+                {
+                  "value": "2imv10",
+                  "text": "2IMV10 Visual Computing Project (5 ECTS)"
+                },
+                {
+                  "value": "2amm10",
+                  "text": "2AMM10 Deep Learning (5 ECTS)"
+                },
+                {
+                  "value": "2imp15",
+                  "text": "2IMP15 Software Project Management (5 ECTS)"
+                },
+                {
+                  "value": "2imv15",
+                  "text": "2IMV15 Simulation in Computer Graphics (5 ECTS)"
+                }
+              ],
+              "choicesVisibleIf": "{item} <> {foundational_software} and {extra_software} notcontains {item}"
+            }
+          ]
+        },
+        {
+          "type": "panel",
+          "name": "internship_panel",
+          "title": "Internship",
+          "description": "An internship is optional and contributes 15 ECTS to the specialization-elective total. For an external internship, the graduation project must be executed internally. For an internal internship, you cannot graduate with the same supervisor.",
+          "elements": [
+            {
+              "type": "boolean",
+              "name": "internship",
+              "title": "Do you include 2IMC10 Internship in your program?",
+              "isRequired": true
+            },
+            {
+              "type": "text",
+              "name": "internship_supervisor",
+              "visibleIf": "{internship} = true",
+              "title": "Internship supervisor (if known)",
+              "placeholder": "Supervisor name"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "free_space",
+      "title": "Free electives and homologation",
+      "description": "Free electives and homologation courses together must total exactly 15 ECTS. Homologation courses count towards this same 15 ECTS space.",
+      "elements": [
+        {
+          "type": "matrixdynamic",
+          "name": "free_electives",
+          "title": "Free elective courses",
+          "description": "In case a free elective was followed at another university, please add its name between parentheses to the course name.",
+          "columns": [
+            {
+              "name": "code",
+              "title": "Course code",
+              "isRequired": true,
+              "isUnique": true,
+              "width": "7em",
+              "cellType": "text",
+              "inputType": "text"
+            },
+            {
+              "name": "name",
+              "title": "Course title",
+              "isRequired": true,
+              "cellType": "text",
+              "inputType": "text"
+            },
+            {
+              "name": "credits",
+              "title": "Credits",
+              "cellType": "text",
+              "inputType": "number",
+              "min": 0,
+              "totalType": "sum",
+              "totalDisplayStyle": "decimal",
+              "isRequired": true,
+              "width": "5em"
+            }
+          ],
+          "rowCount": 0,
+          "maxRowCount": 3,
+          "confirmDelete": true,
+          "addRowText": "Add free elective",
+          "confirmDeleteText": "Remove this free elective?",
+          "cellType": "text"
+        },
+        {
+          "type": "boolean",
+          "name": "external_courses",
+          "visibleIf": "{free_electives.length} > 0",
+          "title": "Are any free electives from another university?",
+          "isRequired": true,
+          "requiredIf": "{free_electives.length} > 0"
+        },
+        {
+          "type": "comment",
+          "name": "external_justification",
+          "visibleIf": "{external_courses} = true",
+          "title": "Links and justification for external free electives",
+          "description": "Provide links to course descriptions, your motivation, and an explanation of why the courses do not overlap with another course in this program.",
+          "isRequired": true,
+          "requiredIf": "{external_courses} = true"
+        },
+        {
+          "type": "boolean",
+          "name": "homologation",
+          "title": "Do you include homologation courses?",
+          "description": "Check your admission letter. You may also include a maximum of three self-chosen bachelor courses to compensate for deficiencies.",
+          "isRequired": true
+        },
+        {
+          "type": "matrixdynamic",
+          "name": "homologation_courses",
+          "visibleIf": "{homologation} = true",
+          "title": "Homologation courses",
+          "description": "Add up to three courses. Their credits are included in the 15 ECTS free-elective total.",
+          "isRequired": true,
+          "requiredIf": "{homologation} = true",
+          "columns": [
+            {
+              "name": "code",
+              "title": "Course code",
+              "isRequired": true,
+              "isUnique": true,
+              "width": "7em",
+              "cellType": "text",
+              "inputType": "text"
+            },
+            {
+              "name": "name",
+              "title": "Course title",
+              "isRequired": true,
+              "cellType": "text",
+              "inputType": "text"
+            },
+            {
+              "name": "credits",
+              "title": "Credits",
+              "cellType": "text",
+              "inputType": "number",
+              "min": 0,
+              "isRequired": true,
+              "width": "5em"
+            }
+          ],
+          "rowCount": 0,
+          "maxRowCount": 3,
+          "confirmDelete": true,
+          "addRowText": "Add homologation course",
+          "confirmDeleteText": "Remove this homologation course?",
+          "cellType": "text"
+        },
+        {
+          "type": "boolean",
+          "name": "self_chosen_homologation",
+          "visibleIf": "{homologation} = true",
+          "title": "Are any homologation courses self-chosen rather than assigned in the admission letter?",
+          "isRequired": true,
+          "requiredIf": "{homologation} = true"
+        },
+        {
+          "type": "comment",
+          "name": "homologation_motivation",
+          "visibleIf": "{self_chosen_homologation} = true",
+          "title": "Motivation for self-chosen homologation courses",
+          "isRequired": true,
+          "requiredIf": "{self_chosen_homologation} = true"
+        }
+      ]
+    },
+    {
+      "name": "graduation",
+      "title": "Seminar and graduation project",
+      "description": "Choose one 5 ECTS seminar. The preparation graduation project and master project are fixed parts of the program and together count for 40 ECTS.",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "seminar",
+          "title": "Seminar",
+          "isRequired": true,
+          "choices": [
+            {
+              "value": "2imd00",
+              "text": "2IMD00 Seminar Datamanagement (5 ECTS)"
+            },
+            {
+              "value": "2imf00",
+              "text": "2IMF00 Seminar Formal System Analysis (5 ECTS)"
+            },
+            {
+              "value": "2imi00",
+              "text": "2IMI00 Seminar Process Analytics (5 ECTS)"
+            },
+            {
+              "value": "2imm00",
+              "text": "2IMM00 Seminar Data Mining (5 ECTS)"
+            },
+            {
+              "value": "2imn00",
+              "text": "2IMN00 Seminar Interconnected Resource-aware Intelligent Systems (IRIS) (5 ECTS)"
+            },
+            {
+              "value": "2imp00",
+              "text": "2IMP00 Seminar Software Engineering and Technology (5 ECTS)"
+            },
+            {
+              "value": "2imu00",
+              "text": "2IMU00 Seminar Uncertainty in AI (5 ECTS)"
+            },
+            {
+              "value": "2imv00",
+              "text": "2IMV00 Seminar Visualization (5 ECTS)"
+            },
+            {
+              "value": "2ima00",
+              "text": "2IMA00 Seminar Algorithms (5 ECTS)"
+            },
+            {
+              "value": "2ims00",
+              "text": "2IMS00 Seminar Information Security Technology (5 ECTS)"
+            }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "name": "graduation_courses",
+          "title": "Graduation project",
+          "description": "These courses are fixed in the CSE form.",
+          "defaultValue": [
+            "2imc05",
+            "2imc00"
+          ],
+          "correctAnswer": [
+            "2imc05",
+            "2imc00"
+          ],
+          "readOnly": true,
+          "choices": [
+            {
+              "value": "2imc05",
+              "text": "2IMC05 Preparation Graduation Project (10 ECTS)"
+            },
+            {
+              "value": "2imc00",
+              "text": "2IMC00 Master Project (30 ECTS)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "agreement",
+      "title": "Additional notes",
+      "description": "Add information that should be visible to the examination committee on the review report.",
+      "elements": [
+        {
+          "type": "comment",
+          "name": "committee_notes",
+          "title": "Changes, course-description links, or additional motivation",
+          "description": "Use this field for changes to a previously approved program, links to courses at another university, or motivation that should be visible to the examination committee."
+        }
+      ]
+    },
+    {
+      "name": "reporting",
+      "title": "Review and print"
+    }
+  ],
+  "headerView": "advanced"
+}
