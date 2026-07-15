@@ -83,7 +83,6 @@ const hasHomologation = isTrue(data.homologation);
           ...(report.selected.internship.selected
             ? [
                 { cells: ["Internship", "Supervisor", report.selected.internship.supervisor] },
-                { cells: ["Internship", "Credits", formatCredits(report.selected.internship.credits)] },
               ]
             : []),
           ...renderCourseRows("Graduation project", report.selected.graduationCourses),

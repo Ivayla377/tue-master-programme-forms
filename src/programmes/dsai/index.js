@@ -13,7 +13,7 @@ export const dsaiFormConfig = {
   logoType: "image/jpeg",
   labels: {
     pageTitle: "DS&AI Program of Examinations",
-    kicker: "TU/e Data Science & Artificial Intelligence",
+    kicker: "TU/e MSc Data Science & Artificial Intelligence",
     heading: "Program of Examinations",
     year: "2025-2026",
     ariaLabel: "DS&AI program form",

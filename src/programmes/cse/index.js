@@ -9,7 +9,7 @@ export const cseFormConfig = {
   logoType: "image/jpeg",
   labels: {
     pageTitle: "CSE Program of Examinations",
-    kicker: "TU/e Computer Science and Engineering",
+    kicker: "TU/e MSc Computer Science and Engineering",
     heading: "Program of Examinations",
     year: "2025-2026",
     ariaLabel: "CSE program form",

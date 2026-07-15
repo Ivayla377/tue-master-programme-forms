@@ -1,9 +1,11 @@
 {
   "title": "Form 1: CSE Program of Examinations",
-  "description": "Use this form to assemble a Computer Science and Engineering program of examinations. Complete it at least six weeks before the start of the preparation graduation project. The live ECTS panel and review page flag missing selections, double counting, and incorrect credit totals before the report is shared with the university.",
+  "description": "This form is used to create a report that shows your current study program. Its purpose is to be shared with the examination committee, so that they can check whether it satisfies the requirements of Computer Science and Engineering programs and approve it or inform you of how it does not satisfy the requirements. This form has built-in validation that should help you create a valid study program. Please complete it at least six weeks before the start of the preparation graduation project.",
   "completedHtml": "",
   "showCompletePage": false,
   "clearInvisibleValues": "onHidden",
+  "showProgressBar": "top",
+  "progressBarType": "pages",
   "pages": [
     {
       "name": "frontmatter",
@@ -49,7 +51,7 @@
               "validators": [
                 {
                   "type": "regex",
-                  "text": "Enter a valid enrollment month from 2010 to 2035 in YYYY-MM format.",
+                  "text": "Enter a valid enrollment month from 2010 to 2035.",
                   "regex": "^(?:201[0-9]|202[0-9]|203[0-5])-(?:0[1-9]|1[0-2])$"
                 }
               ]
@@ -726,7 +728,7 @@
     {
       "name": "free_space",
       "title": "Free electives and homologation",
-      "description": "Free electives and homologation courses together must total exactly 15 ECTS. Homologation courses count towards this same 15 ECTS space.",
+      "description": "Free electives and homologation courses together must total exactly 15 ECTS.",
       "elements": [
         {
           "type": "matrixdynamic",

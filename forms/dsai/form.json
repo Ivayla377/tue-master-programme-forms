@@ -1,9 +1,11 @@
 {
-    "title":  "Form 1: DS\u0026AI Program of Examinations 2025-2026",
+    "title":  "Form 1: DS\u0026AI Program of Examinations",
     "description":  "This form is used to create a report that shows your current study program. Its purpose is to be shared with the examination committee, so that they can check whether it satisfies the requirements of DS\u0026AI programs and approve it or inform you of how it does not satisfy the requirements. This form has built-in validation that should help you create a valid study program.",
     "completedHtml":  "Thank you for completing the form",
     "completedBeforeHtml":  "You have already completed this form.",
     "loadingHtml":  "Loading form...",
+    "showProgressBar":  "top",
+    "progressBarType":  "pages",
     "pages":  [
                   {
                       "name":  "frontmatter",
