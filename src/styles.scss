@@ -24,6 +24,21 @@
   box-sizing: border-box;
 }
 
+html,
+body,
+.ects-panel {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+.ects-panel::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
 body {
   margin: 0;
   min-width: 320px;
@@ -113,6 +128,8 @@ select {
 .ects-panel {
   position: sticky;
   top: 16px;
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
 }
 
 .ects-card {
@@ -200,6 +217,7 @@ select {
 }
 
 .ects-list dd {
+  font-size: 0.88rem;
   margin: 0;
   color: var(--ink);
   font-weight: 500;
@@ -224,6 +242,15 @@ select {
 
 #surveyElement .sd-body {
   padding: 24px;
+}
+
+#surveyElement .sd-progress-buttons {
+  padding-top: 14px;
+  padding-bottom: 0;
+}
+
+#surveyElement .sd-progress-buttons__footer .sd-progress-buttons__page-title {
+  margin-top: 4px;
 }
 
 #surveyElement .sd-title,
@@ -292,6 +319,22 @@ select {
   fill: #ffffff;
 }
 
+#surveyElement .sd-item--disabled,
+#surveyElement .sd-item--readonly {
+  opacity: 1;
+}
+
+#surveyElement .sd-item--disabled.sd-item--checked .sd-item__decorator,
+#surveyElement .sd-item--readonly.sd-item--checked .sd-item__decorator {
+  border-color: #b9bec3;
+  background: #e3e6e8;
+}
+
+#surveyElement .sd-item--disabled.sd-checkbox--checked .sd-checkbox__svg use,
+#surveyElement .sd-item--readonly.sd-checkbox--checked .sd-checkbox__svg use {
+  fill: #60656a;
+}
+
 .print-button {
   cursor: pointer;
   padding: 10px 14px;
@@ -312,6 +355,12 @@ select {
 .is-summary-page #surveyElement .sd-header,
 .is-summary-page #surveyElement .sd-root-modern > .sd-container-modern > .sd-title,
 .is-summary-page #surveyElement .sd-root-modern > .sd-container-modern > .sd-description {
+  display: none;
+}
+
+body:not(.is-first-survey-page) #surveyElement .sd-header,
+body:not(.is-first-survey-page) #surveyElement .sd-root-modern > .sd-container-modern > .sd-title,
+body:not(.is-first-survey-page) #surveyElement .sd-root-modern > .sd-container-modern > .sd-description {
   display: none;
 }
 
@@ -680,6 +729,7 @@ select {
 
 .validation-item span {
   color: var(--muted);
+  font-size: 0.88rem;
 }
 
 .validation-item--success {
@@ -759,6 +809,8 @@ select {
 
   .ects-panel {
     position: static;
+    max-height: none;
+    overflow: visible;
   }
 
   .ects-list {
@@ -795,6 +847,10 @@ select {
 
   #surveyElement .sd-body {
     padding: 14px;
+  }
+
+  #surveyElement .sd-progress-buttons {
+    padding: 8px 14px 0;
   }
 
   .summary-grid--two,
@@ -856,6 +912,9 @@ select {
   #surveyElement .sd-title,
   #surveyElement .sd-description,
   #surveyElement .sd-progress,
+  #surveyElement .sd-progress-buttons,
+  #surveyElement .sv-progress,
+  #surveyElement .sd-body__progress--top,
   #surveyElement .sd-navigation,
   #surveyElement .sd-action-bar,
   #surveyElement .sv-action-bar,
@@ -1151,5 +1210,157 @@ select {
 
   .validation-item--error {
     border-left-color: var(--error) !important;
+  }
+}
+
+.summary-report--es .summary-row--not-counted td {
+  color: var(--muted);
+}
+
+.summary-report--es .summary-table--completion th:first-child,
+.summary-report--es .summary-table--completion td:first-child {
+  width: 29%;
+  white-space: nowrap;
+}
+
+.summary-report--es .summary-table--completion th:nth-child(2),
+.summary-report--es .summary-table--completion td:nth-child(2) {
+  width: 14%;
+}
+
+.summary-report--es .summary-table--completion th:nth-child(3),
+.summary-report--es .summary-table--completion td:nth-child(3) {
+  width: 42%;
+}
+
+.summary-report--es .summary-table--completion th:last-child,
+.summary-report--es .summary-table--completion td:last-child {
+  width: 15%;
+}
+
+.summary-report--es .summary-table--es-free-space th:first-child,
+.summary-report--es .summary-table--es-free-space td:first-child {
+  width: 28%;
+}
+
+.summary-report--es .summary-table--es-free-space th:nth-child(2),
+.summary-report--es .summary-table--es-free-space td:nth-child(2) {
+  width: 15%;
+}
+
+.summary-report--es .summary-table--es-free-space th:nth-child(3),
+.summary-report--es .summary-table--es-free-space td:nth-child(3) {
+  width: 42%;
+}
+
+.summary-report--es .summary-table--es-free-space th:last-child,
+.summary-report--es .summary-table--es-free-space td:last-child {
+  width: 15%;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.summary-report--es .summary-table--es-duplicates th:first-child,
+.summary-report--es .summary-table--es-duplicates td:first-child {
+  width: 18%;
+}
+
+.summary-report--es .summary-table--es-duplicates th:last-child,
+.summary-report--es .summary-table--es-duplicates td:last-child {
+  width: 82%;
+  text-align: left;
+  white-space: normal;
+}
+
+.summary-report--es .summary-table--committee th {
+  width: 24%;
+}
+
+.summary-approval-line {
+  display: block;
+  width: 100%;
+  min-height: 1.25rem;
+  border-bottom: 1px solid var(--line-strong);
+}
+
+@media print {
+  .summary-report--es .summary-section--allow-break {
+    break-inside: auto !important;
+    page-break-inside: auto !important;
+  }
+
+  .summary-report--es .summary-table thead {
+    display: table-header-group;
+  }
+
+  .summary-report--es .summary-table--es-free-space {
+    font-size: 8pt !important;
+  }
+
+  .summary-report--es .summary-table--completion th:first-child,
+  .summary-report--es .summary-table--completion td:first-child {
+    width: 29% !important;
+    white-space: nowrap !important;
+  }
+
+  .summary-report--es .summary-table--completion th:nth-child(2),
+  .summary-report--es .summary-table--completion td:nth-child(2) {
+    width: 14% !important;
+  }
+
+  .summary-report--es .summary-table--completion th:nth-child(3),
+  .summary-report--es .summary-table--completion td:nth-child(3) {
+    width: 42% !important;
+  }
+
+  .summary-report--es .summary-table--completion th:last-child,
+  .summary-report--es .summary-table--completion td:last-child {
+    width: 15% !important;
+  }
+
+  .summary-report--es .summary-table--es-free-space th:first-child,
+  .summary-report--es .summary-table--es-free-space td:first-child {
+    width: 28% !important;
+  }
+
+  .summary-report--es .summary-table--es-free-space th:nth-child(2),
+  .summary-report--es .summary-table--es-free-space td:nth-child(2) {
+    width: 15% !important;
+  }
+
+  .summary-report--es .summary-table--es-free-space th:nth-child(3),
+  .summary-report--es .summary-table--es-free-space td:nth-child(3) {
+    width: 42% !important;
+  }
+
+  .summary-report--es .summary-table--es-free-space th:last-child,
+  .summary-report--es .summary-table--es-free-space td:last-child {
+    width: 15% !important;
+    text-align: right !important;
+    white-space: nowrap !important;
+  }
+
+  .summary-report--es .summary-table--es-duplicates th:first-child,
+  .summary-report--es .summary-table--es-duplicates td:first-child {
+    width: 18% !important;
+  }
+
+  .summary-report--es .summary-table--es-duplicates th:last-child,
+  .summary-report--es .summary-table--es-duplicates td:last-child {
+    width: 82% !important;
+    text-align: left !important;
+    white-space: normal !important;
+  }
+
+  .summary-report--es .summary-table--committee th {
+    width: 24% !important;
+  }
+
+  .summary-report--es .summary-table--committee td {
+    width: 76% !important;
+  }
+
+  .summary-report--es .summary-approval-line {
+    border-bottom-color: #000000 !important;
   }
 }

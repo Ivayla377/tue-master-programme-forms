@@ -10,7 +10,8 @@
     "build:program": "node scripts/build-program.mjs",
     "build:dsai": "npm run build:program -- dsai",
     "build:cse": "npm run build:program -- cse",
-    "build:all": "npm run build:dsai && npm run build:cse",
+    "build:es": "npm run build:program -- es",
+    "build:all": "npm run build:dsai && npm run build:cse && npm run build:es",
     "test": "node --test",
     "preview": "vite preview --host 127.0.0.1"
   },

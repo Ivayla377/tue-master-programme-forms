@@ -10,6 +10,11 @@ export const programmes = {
     output: "dist/cse.html",
     emptyOutDir: false,
   },
+  es: {
+    input: "es.html",
+    output: "dist/es.html",
+    emptyOutDir: false,
+  },
 };
 
 export function getProgramme(slug) {

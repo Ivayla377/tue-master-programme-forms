@@ -70,6 +70,11 @@ export function mountProgramForm(config) {
         "is-summary-page",
         survey.currentPage?.name === REPORTING_PAGE_NAME,
       );
+      const isFirstPage = survey.currentPageNo === 0;
+      if (survey.showTitle !== isFirstPage) {
+        survey.showTitle = isFirstPage;
+      }
+      document.body.classList.toggle("is-first-survey-page", isFirstPage);
       syncPrintNavigationButton(survey, syncSurveyState);
     } finally {
       isSyncing = false;
@@ -81,7 +86,9 @@ export function mountProgramForm(config) {
   });
 
   survey.onValueChanged.add(syncSurveyState);
-  survey.onCurrentPageChanged.add(syncSurveyState);
+  survey.onCurrentPageChanged.add(() => {
+    queueMicrotask(syncSurveyState);
+  });
   survey.onCompleting.add((sender, options) => {
     options.allow = false;
     const reportingPage = sender.getPageByName(REPORTING_PAGE_NAME);

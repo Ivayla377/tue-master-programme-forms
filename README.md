@@ -8,6 +8,7 @@ No installation is needed to fill in a form. Download the programme form, then o
 
 - [Download the DS&AI form](https://github.com/Ivayla377/tue-master-programme-forms/releases/latest/download/dsai.html)
 - [Download the CSE form](https://github.com/Ivayla377/tue-master-programme-forms/releases/latest/download/cse.html)
+- [Download the ES form](https://github.com/Ivayla377/tue-master-programme-forms/releases/latest/download/es.html)
 
 The forms work offline after download.
 
@@ -37,27 +38,28 @@ npm install
 ```bash
 npm run build:dsai
 npm run build:cse
+npm run build:es
 npm run build:all
 ```
 
-The generated downloadable forms are located in the `dist/` directory. For example, `dist/dsai.html` and `dist/cse.html`. Building one programme preserves the other generated form.
+The generated downloadable forms are located in the `dist/` directory: `dist/dsai.html`, `dist/cse.html` and `dist/es.html`. Building one programme preserves the other generated forms.
 
 ## Project structure
 
 ```text
 dist/                       # Generated standalone forms for users
 forms/
-  dsai/, cse/               # SurveyJS form definitions and source PDFs
-  iam/, es/, ist/           # Placeholders for upcoming programmes
+  dsai/, cse/, es/          # SurveyJS form definitions, rule notes, and source PDFs
+  iam/, ist/                # Placeholders for upcoming programmes
 src/
   shared/                   # Shared SurveyJS, ECTS, print, and summary helpers
   programmes/
-    dsai/, cse/             # Programme-specific config, calculator, and summary
-    iam/, es/, ist/         # Placeholders for upcoming programmes
+    dsai/, cse/, es/        # Programme-specific config, calculator, and summary
+    iam/, ist/              # Placeholders for upcoming programmes
   entries/                  # Browser entry modules for each form
 scripts/
   programmes.mjs            # Registered build targets
   build-program.mjs         # Builds one standalone form
 tests/                      # Calculator regression tests
-dsai.html, cse.html         # Vite HTML entry pages
+dsai.html, cse.html, es.html # Vite HTML entry pages
 ```
