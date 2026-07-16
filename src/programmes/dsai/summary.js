@@ -21,7 +21,6 @@ export function renderEctsPanel(report) {
 export function renderSummary(report, data, choiceLookup, labels = {}) {
   const personalInfo = data.personal_info ?? {};
   const matched = isTrue(data.matched);
-const hasHomologation = isTrue(data.homologation);
   const hasFreeElectives = report.selected.freeRows.length > 0;
   const hasHomologationCourses = report.selected.homologationCourses.length > 0;
   const hasFreeSpaceCourses = hasFreeElectives || hasHomologationCourses;
@@ -202,7 +201,7 @@ function renderReportTable(headers, rows, emptyText = "None selected.") {
 }
 function renderCourseRows(category, courses) {
   return courses.map((course) => ({
-    cells: [category, displayCourseLabel(course), formatCredits(course.credits)],
+    cells: [category, displayCourseLabel(course), formatCourseCredits(course)],
   }));
 }
 
@@ -213,7 +212,7 @@ function renderTrajectoryRows(type, trajectories) {
       cells: [type, trajectory.label, formatCredits(trajectory.credits)],
     },
     ...trajectory.courses.map((course) => ({
-      cells: ["", displayCourseLabel(course), formatCredits(course.credits)],
+      cells: ["", displayCourseLabel(course), formatCourseCredits(course)],
     })),
   ]);
 }
@@ -223,7 +222,7 @@ function renderFreeRows(rows) {
     cells: [
       "Free elective",
       [row.code, row.name].filter(Boolean).join(" "),
-      row.validCredits ? formatCredits(row.credits) : "Not counted",
+      row.validCredits && row.counted !== false ? formatCredits(row.credits) : "Not counted",
     ],
   }));
 }
@@ -251,6 +250,10 @@ function renderValidationItem(validation) {
       <span>${escapeHtml(validation.detail)}</span>
     </li>
   `;
+}
+
+function formatCourseCredits(course) {
+  return course?.counted === false ? "Not counted" : formatCredits(course?.credits ?? 0);
 }
 
 function displayCourseLabel(course) {

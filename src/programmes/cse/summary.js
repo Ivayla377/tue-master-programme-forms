@@ -62,7 +62,7 @@ const focusArea = focusLabel(report.selected.extraFocus);
           CSE_FOCUS_AREAS.flatMap((area) => {
             const course = report.selected.foundationAssignment.get(area.value);
             return course
-              ? [{ cells: [area.label, courseCode(course), courseTitle(course), formatCredits(course.credits)] }]
+              ? [{ cells: [area.label, courseCode(course), courseTitle(course), formatCourseCredits(course)] }]
               : [];
           }),
         )}
@@ -74,7 +74,7 @@ const focusArea = focusLabel(report.selected.extraFocus);
         ${renderReportTable(
           ["Course code", "Course title", "Credits"],
           report.selected.extraCourses.map((course) => ({
-            cells: [courseCode(course), courseTitle(course), formatCredits(course.credits)],
+            cells: [courseCode(course), courseTitle(course), formatCourseCredits(course)],
           })),
         )}
       </section>
@@ -84,7 +84,7 @@ const focusArea = focusLabel(report.selected.extraFocus);
         ${renderReportTable(
           ["Course code", "Course title", "Credits"],
           report.selected.specializationCourses.map((course) => ({
-            cells: [courseCode(course), courseTitle(course), formatCredits(course.credits)],
+            cells: [courseCode(course), courseTitle(course), formatCourseCredits(course)],
           })),
         )}
       </section>
@@ -102,7 +102,7 @@ const focusArea = focusLabel(report.selected.extraFocus);
                 cells: [
                   courseCode(report.selected.internship.course),
                   courseTitle(report.selected.internship.course),
-                  formatCredits(report.selected.internship.credits),
+                  formatCourseCredits(report.selected.internship.course),
                 ],
               }],
             )
@@ -117,7 +117,7 @@ const focusArea = focusLabel(report.selected.extraFocus);
               "Free elective",
               row.code,
               row.name,
-              row.validCredits ? formatCredits(row.credits) : "Not counted",
+              row.validCredits && row.counted !== false ? formatCredits(row.credits) : "Not counted",
             ],
           })),
           ...report.selected.homologationRows.map((row) => ({
@@ -125,7 +125,7 @@ const focusArea = focusLabel(report.selected.extraFocus);
               "Homologation",
               row.code,
               row.name,
-              row.validCredits ? formatCredits(row.credits) : "Not counted",
+              row.validCredits && row.counted !== false ? formatCredits(row.credits) : "Not counted",
             ],
           })),
         ], "None selected")}
@@ -145,7 +145,7 @@ const focusArea = focusLabel(report.selected.extraFocus);
                   "Seminar",
                   courseCode(report.selected.seminar),
                   courseTitle(report.selected.seminar),
-                  formatCredits(report.selected.seminar.credits),
+                  formatCourseCredits(report.selected.seminar),
                 ],
               }]
             : []),
@@ -154,7 +154,7 @@ const focusArea = focusLabel(report.selected.extraFocus);
               "Graduation project",
               courseCode(course),
               courseTitle(course),
-              formatCredits(course.credits),
+              formatCourseCredits(course),
             ],
           })),
         ])}
@@ -244,6 +244,10 @@ function renderNotes(notes) {
 
 function renderValidationItem(validation) {
   return `<li class="validation-item validation-item--${escapeHtml(validation.status)}"><strong>${escapeHtml(validation.label)}</strong><span>${escapeHtml(validation.detail)}</span></li>`;
+}
+
+function formatCourseCredits(course) {
+  return course?.counted === false ? "Not counted" : formatCredits(course?.credits ?? 0);
 }
 
 function courseCode(course) {

@@ -54,20 +54,35 @@ export function createChoiceLookup(surveyJson) {
   return createSharedChoiceLookup(surveyJson);
 }
 export function calculateEcts(data = {}, choiceLookup = createEmptyLookup()) {
+  const duplicateCourses = [];
+  const claimed = new Map();
+
   const coreCodes = hasOwn(data, "core")
     ? getSelectedCodes(data, "core")
     : CORE_MANDATORY_CODES;
   const coreCourses = unique(coreCodes).map((code) =>
     makeCourse(code, choiceLookup, "core"),
   );
+  for (const course of coreCourses) {
+    course.counted = claim(course, "core course", claimed, duplicateCourses);
+  }
 
   const coreElectiveCode = normalizeCode(data.core_elective);
   const coreElectiveCourse = coreElectiveCode
     ? makeCourse(coreElectiveCode, choiceLookup, "core_elective")
     : null;
+  if (coreElectiveCourse) {
+    coreElectiveCourse.counted = claim(
+      coreElectiveCourse,
+      "core elective",
+      claimed,
+      duplicateCourses,
+    );
+  }
 
   const coreTotal =
-    sumCredits(coreCourses) + (coreElectiveCourse ? coreElectiveCourse.credits : 0);
+    sumCountedCourses(coreCourses)
+    + (coreElectiveCourse && coreElectiveCourse.counted ? coreElectiveCourse.credits : 0);
   const blockedByCore = getBlockedSpecializationCodes(coreElectiveCode);
   const selectedCoreCodes = new Set(coreCourses.map((course) => course.code));
   if (coreElectiveCode) selectedCoreCodes.add(coreElectiveCode);
@@ -83,7 +98,26 @@ export function calculateEcts(data = {}, choiceLookup = createEmptyLookup()) {
       const isBlockedByCore = blockedByCore.has(course.code);
       const isRepeatedSpecialization = seenSpecializationCodes.has(course.code);
 
-      if (isCoreDuplicate || isBlockedByCore || isRepeatedSpecialization) {
+      if (isBlockedByCore) {
+        duplicateSpecializationCourses.push(course);
+        recordDuplicate(
+          course,
+          "specialization elective",
+          coreElectiveCourse
+            ? { component: "core elective", item: coreElectiveCourse }
+            : null,
+          duplicateCourses,
+        );
+        continue;
+      }
+
+      if (isCoreDuplicate || isRepeatedSpecialization) {
+        duplicateSpecializationCourses.push(course);
+        claim(course, "specialization elective", claimed, duplicateCourses);
+        continue;
+      }
+
+      if (!claim(course, "specialization elective", claimed, duplicateCourses)) {
         duplicateSpecializationCourses.push(course);
         continue;
       }
@@ -115,30 +149,39 @@ export function calculateEcts(data = {}, choiceLookup = createEmptyLookup()) {
   );
 
   const seminar = data.seminar
-    ? {
-        value: String(data.seminar),
-        label: choiceLookup.getLabel("seminar", data.seminar),
-        credits: DEFAULT_CREDITS,
-      }
+    ? makeCourse(data.seminar, choiceLookup, "seminar")
     : null;
-  const seminarCredits = seminar ? seminar.credits : 0;
-
-  const freeRows = normalizeFreeRows(data.free);
-  const freeRowsCredits = sumCredits(freeRows);
+  if (seminar) {
+    seminar.counted = claim(seminar, "seminar", claimed, duplicateCourses);
+  }
+  const seminarCredits = seminar?.counted ? seminar.credits : 0;
 
   const homologationCourses = isTrue(data.homologation)
     ? getSelectedValues(data, "homologation_courses").map((value) =>
         makeCourse(value, choiceLookup, "homologation_courses"),
       )
     : [];
-  const homologationCredits = sumCredits(homologationCourses);
+  for (const course of homologationCourses) {
+    course.counted = claim(course, "homologation", claimed, duplicateCourses);
+  }
+  const homologationCredits = sumCountedCourses(homologationCourses);
 
   const internshipSelected = isTrue(data.internship);
-  const internshipCredits = internshipSelected ? COURSE_CREDITS["2imc10"] : 0;
+  const internshipCourse = internshipSelected
+    ? makeCourse("2imc10", choiceLookup, "internship")
+    : null;
+  if (internshipCourse) {
+    internshipCourse.counted = claim(internshipCourse, "internship", claimed, duplicateCourses);
+  }
+  const internshipCredits = internshipCourse?.counted ? internshipCourse.credits : 0;
   const internship = {
     selected: internshipSelected,
     supervisor: data.internship_supervisor ?? "",
     credits: internshipCredits,
+    course: internshipCourse,
+    counted: internshipCourse?.counted ?? false,
+    exclusionReason:
+      internshipCourse && !internshipCourse.counted ? "Duplicate course; excluded from totals." : "",
   };
 
   const graduationCodes = hasOwn(data, "graduation")
@@ -147,7 +190,18 @@ export function calculateEcts(data = {}, choiceLookup = createEmptyLookup()) {
   const graduationCourses = unique(graduationCodes).map((code) =>
     makeCourse(code, choiceLookup, "graduation"),
   );
-  const graduationCredits = sumCredits(graduationCourses);
+  for (const course of graduationCourses) {
+    course.counted = claim(course, "graduation project", claimed, duplicateCourses);
+  }
+  const graduationCredits = sumCountedCourses(graduationCourses);
+
+  const freeRows = processFreeRows(
+    normalizeFreeRows(data.free),
+    "free elective",
+    claimed,
+    duplicateCourses,
+  );
+  const freeRowsCredits = sumCountedRows(freeRows);
 
   const freeSpaceTotal = freeRowsCredits + homologationCredits + internshipCredits;
   const totalCredits =
@@ -174,6 +228,7 @@ export function calculateEcts(data = {}, choiceLookup = createEmptyLookup()) {
     graduationCredits,
     totalCredits,
     projectCourses,
+    duplicateCourses,
     duplicateSpecializationCourses,
     invalidFreeRows,
   });
@@ -204,6 +259,7 @@ export function calculateEcts(data = {}, choiceLookup = createEmptyLookup()) {
       internship,
       graduationCourses,
       projectCourses,
+      duplicateCourses,
       duplicateSpecializationCourses,
     },
     validations,
@@ -289,7 +345,7 @@ function buildValidations(values) {
       "Graduation project",
       values.graduationCredits,
       40,
-      "Graduation Preparation and Master Project should total 40 ECTS.",
+      "Graduation Preparation and Master Project total 40 ECTS.",
     ),
     {
       label: "Total credits",
@@ -298,13 +354,13 @@ function buildValidations(values) {
     },
   ];
 
-  if (values.duplicateSpecializationCourses.length > 0) {
+  if (values.duplicateCourses.length > 0) {
     validations.push({
       label: "Double counting",
       status: "error",
-      detail: `${values.duplicateSpecializationCourses
-        .map((course) => course.label)
-        .join(", ")} excluded from totals because it overlaps with another selection.`,
+      detail: `Duplicate or overlapping course selection(s): ${values.duplicateCourses
+        .map(formatDuplicateLabel)
+        .join(", ")}. The later entry was excluded from the ECTS totals.`,
     });
   }
 
@@ -371,18 +427,45 @@ function normalizeFreeRows(rows) {
   return rows
     .map((row, index) => {
       const credits = parseCredits(row?.credits);
+      const code = String(row?.code ?? "").trim();
+      const name = String(row?.name ?? "").trim();
       return {
-        code: row?.code ?? "",
-        name: row?.name ?? "",
+        code,
+        displayCode: code || normalizeCode(code).toUpperCase(),
+        normalizedCode: normalizeCode(code),
+        name,
         credits: credits.value,
         rawCredits: row?.credits ?? "",
         validCredits: credits.valid,
+        counted: false,
+        exclusionReason: credits.valid ? "" : "Incomplete row or invalid credit value.",
         rowNumber: index + 1,
       };
     })
     .filter(
       (row) => row.code !== "" || row.name !== "" || String(row.rawCredits) !== "",
     );
+}
+
+function processFreeRows(rows, component, claimed, duplicateCourses) {
+  return rows.map((row) => {
+    if (!row.validCredits) return row;
+    if (!row.normalizedCode) return { ...row, counted: true };
+    const item = {
+      code: row.normalizedCode,
+      value: row.code,
+      label: [row.displayCode || row.normalizedCode.toUpperCase(), row.name]
+        .filter(Boolean)
+        .join(" "),
+      credits: row.credits,
+    };
+    const counted = claim(item, component, claimed, duplicateCourses);
+    return {
+      ...row,
+      counted,
+      exclusionReason: counted ? "" : "Duplicate course; excluded from totals.",
+    };
+  });
 }
 
 function parseCredits(value) {
@@ -436,9 +519,43 @@ function sumCredits(items) {
   return sumSharedCredits(items);
 }
 
+function sumCountedCourses(items) {
+  return sumCredits(items.filter((item) => item.counted !== false));
+}
+
+function sumCountedRows(rows) {
+  return sumCredits(rows.filter((row) => row.validCredits && row.counted));
+}
+
+function claim(item, component, claimed, duplicateCourses) {
+  if (!item?.code) return false;
+  const prior = claimed.get(item.code);
+  if (prior) {
+    recordDuplicate(item, component, prior, duplicateCourses);
+    return false;
+  }
+  claimed.set(item.code, { component, item });
+  return true;
+}
+
+function recordDuplicate(item, component, prior, duplicateCourses) {
+  duplicateCourses.push({
+    ...item,
+    keptComponent: prior?.component ?? "another programme component",
+    excludedComponent: component,
+    exclusionReason: prior ? `Already counted as ${prior.component}.` : "Overlaps with another selection.",
+  });
+}
+
+function formatDuplicateLabel(item) {
+  const code = item.displayCode || item.code?.toUpperCase?.() || item.code || "";
+  const label = String(item.label ?? "").trim();
+  return label || code;
+}
+
 function normalizeCode(value) {
   if (value === undefined || value === null) return "";
-  return String(value).trim().toLowerCase();
+  return String(value).replace(/\s+/g, "").toLowerCase();
 }
 
 function normalizeChoice(choice) {

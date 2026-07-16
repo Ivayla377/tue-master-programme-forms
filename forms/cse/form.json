@@ -789,69 +789,76 @@
           "requiredIf": "{external_courses} = true"
         },
         {
-          "type": "boolean",
-          "name": "homologation",
-          "title": "Do you include homologation courses?",
-          "description": "Check your admission letter. You may also include a maximum of three self-chosen bachelor courses to compensate for deficiencies.",
-          "isRequired": true
-        },
-        {
-          "type": "matrixdynamic",
-          "name": "homologation_courses",
-          "visibleIf": "{homologation} = true",
+          "type": "panel",
+          "name": "homologation_panel",
           "title": "Homologation courses",
-          "description": "Add up to three courses. Their credits are included in the 15 ECTS free-elective total.",
-          "isRequired": true,
-          "requiredIf": "{homologation} = true",
-          "columns": [
+          "description": "Check your admission letter. You may also include a maximum of three self-chosen bachelor courses to compensate for deficiencies.",
+          "elements": [
             {
-              "name": "code",
-              "title": "Course code",
-              "isRequired": true,
-              "isUnique": true,
-              "width": "7em",
-              "cellType": "text",
-              "inputType": "text"
+              "type": "boolean",
+              "name": "homologation",
+              "title": "Do you include homologation courses?",
+              "isRequired": true
             },
             {
-              "name": "name",
-              "title": "Course title",
+              "type": "matrixdynamic",
+              "name": "homologation_courses",
+              "visibleIf": "{homologation} = true",
+              "title": "Included homologation courses",
+              "description": "Add up to three courses. Their credits are included in the 15 ECTS free-elective total.",
               "isRequired": true,
-              "cellType": "text",
-              "inputType": "text"
+              "requiredIf": "{homologation} = true",
+              "columns": [
+                {
+                  "name": "code",
+                  "title": "Course code",
+                  "isRequired": true,
+                  "isUnique": true,
+                  "width": "7em",
+                  "cellType": "text",
+                  "inputType": "text"
+                },
+                {
+                  "name": "name",
+                  "title": "Course title",
+                  "isRequired": true,
+                  "cellType": "text",
+                  "inputType": "text"
+                },
+                {
+                  "name": "credits",
+                  "title": "Credits",
+                  "cellType": "text",
+                  "inputType": "number",
+                  "min": 0,
+                  "isRequired": true,
+                  "width": "5em"
+                }
+              ],
+              "rowCount": 0,
+              "maxRowCount": 3,
+              "confirmDelete": true,
+              "addRowText": "Add homologation course",
+              "confirmDeleteText": "Remove this homologation course?",
+              "cellType": "text"
             },
             {
-              "name": "credits",
-              "title": "Credits",
-              "cellType": "text",
-              "inputType": "number",
-              "min": 0,
+              "type": "boolean",
+              "name": "self_chosen_homologation",
+              "visibleIf": "{homologation} = true",
+              "title": "Are any homologation courses self-chosen rather than assigned in the admission letter?",
               "isRequired": true,
-              "width": "5em"
+              "requiredIf": "{homologation} = true"
+            },
+            {
+              "type": "comment",
+              "name": "homologation_motivation",
+              "visibleIf": "{homologation} = true and {self_chosen_homologation} = true",
+              "title": "Motivation for self-chosen homologation courses",
+              "isRequired": true,
+              "requiredIf": "{homologation} = true and {self_chosen_homologation} = true"
             }
-          ],
-          "rowCount": 0,
-          "maxRowCount": 3,
-          "confirmDelete": true,
-          "addRowText": "Add homologation course",
-          "confirmDeleteText": "Remove this homologation course?",
-          "cellType": "text"
-        },
-        {
-          "type": "boolean",
-          "name": "self_chosen_homologation",
-          "visibleIf": "{homologation} = true",
-          "title": "Are any homologation courses self-chosen rather than assigned in the admission letter?",
-          "isRequired": true,
-          "requiredIf": "{homologation} = true"
-        },
-        {
-          "type": "comment",
-          "name": "homologation_motivation",
-          "visibleIf": "{self_chosen_homologation} = true",
-          "title": "Motivation for self-chosen homologation courses",
-          "isRequired": true,
-          "requiredIf": "{self_chosen_homologation} = true"
+          ]
         }
       ]
     },

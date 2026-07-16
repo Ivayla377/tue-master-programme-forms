@@ -122,11 +122,26 @@
           ]
         },
         {
-          "type": "boolean",
-          "name": "previous",
-          "title": "Is this a change to a previously approved program?",
-          "description": "If yes, describe every change on the Additional information page.",
-          "isRequired": true
+          "type": "panel",
+          "name": "previous_panel",
+          "elements": [
+            {
+              "type": "boolean",
+              "name": "previous",
+              "title": "Is this a change to a previously approved program?",
+              "description": "If yes, describe every change below.",
+              "isRequired": true
+            },
+            {
+              "type": "comment",
+              "name": "changes",
+              "visibleIf": "{previous} = true",
+              "title": "Changes to the previously approved program",
+              "description": "List each change clearly.",
+              "isRequired": true,
+              "requiredIf": "{previous} = true"
+            }
+          ]
         }
       ]
     },
@@ -284,11 +299,24 @@
               "name": "systems_on_chip_mandatory_display",
               "title": "Mandatory courses · 15 ECTS",
               "readOnly": true,
-              "defaultValue": ["2imf25", "5lih0", "5lid0"],
+              "defaultValue": [
+                "2imf25",
+                "5lih0",
+                "5lid0"
+              ],
               "choices": [
-                { "value": "2imf25", "text": "2IMF25 Automated Reasoning (5 ECTS)" },
-                { "value": "5lih0", "text": "5LIH0 Digital Integrated Circuit Design (5 ECTS)" },
-                { "value": "5lid0", "text": "5LID0 Systems on Silicon (5 ECTS)" }
+                {
+                  "value": "2imf25",
+                  "text": "2IMF25 Automated Reasoning (5 ECTS)"
+                },
+                {
+                  "value": "5lih0",
+                  "text": "5LIH0 Digital Integrated Circuit Design (5 ECTS)"
+                },
+                {
+                  "value": "5lid0",
+                  "text": "5LID0 Systems on Silicon (5 ECTS)"
+                }
               ]
             },
             {
@@ -301,16 +329,56 @@
               "minSelectedChoices": 3,
               "maxSelectedChoices": 3,
               "choices": [
-                { "value": "5cca0", "text": "5CCA0 Semiconductor Physics and Materials (5 ECTS)", "credits": 5 },
-                { "value": "2imnt1", "text": "2IMNT1 Embedded Computer Architectures 2 (5 ECTS)", "credits": 5 },
-                { "value": "5lig0", "text": "5LIG0 Applied Combinatorial Algorithms (5 ECTS)", "credits": 5 },
-                { "value": "5lil0", "text": "5LIL0 Intelligent Architectures (5 ECTS)", "credits": 5 },
-                { "value": "5lie0", "text": "5LIE0 Multiprocessors (5 ECTS)", "credits": 5 },
-                { "value": "5lim0", "text": "5LIM0 Parallelization, Compilers and Platforms (5 ECTS)", "credits": 5 },
-                { "value": "5sib0", "text": "5SIB0 Electronic Design Automation (5 ECTS)", "credits": 5 },
-                { "value": "5lij0", "text": "5LIJ0 Embedded Control Systems (5 ECTS)", "credits": 5 },
-                { "value": "5lia0", "text": "5LIA0 Embedded Visual Control (5 ECTS)", "credits": 5 },
-                { "value": "2imf00", "text": "2IMF00 Seminar Formal System Analysis (5 ECTS)", "credits": 5 }
+                {
+                  "value": "5cca0",
+                  "text": "5CCA0 Semiconductor Physics and Materials (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2imnt1",
+                  "text": "2IMNT1 Embedded Computer Architectures 2 (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "5lig0",
+                  "text": "5LIG0 Applied Combinatorial Algorithms (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "5lil0",
+                  "text": "5LIL0 Intelligent Architectures (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "5lie0",
+                  "text": "5LIE0 Multiprocessors (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "5lim0",
+                  "text": "5LIM0 Parallelization, Compilers and Platforms (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "5sib0",
+                  "text": "5SIB0 Electronic Design Automation (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "5lij0",
+                  "text": "5LIJ0 Embedded Control Systems (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "5lia0",
+                  "text": "5LIA0 Embedded Visual Control (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2imf00",
+                  "text": "2IMF00 Seminar Formal System Analysis (5 ECTS)",
+                  "credits": 5
+                }
               ]
             }
           ]
@@ -326,11 +394,24 @@
               "name": "embedded_software_mandatory_display",
               "title": "Mandatory courses · 15 ECTS",
               "readOnly": true,
-              "defaultValue": ["2imf25", "5lim0", "2imp30"],
+              "defaultValue": [
+                "2imf25",
+                "5lim0",
+                "2imp30"
+              ],
               "choices": [
-                { "value": "2imf25", "text": "2IMF25 Automated Reasoning (5 ECTS)" },
-                { "value": "5lim0", "text": "5LIM0 Parallelization, Compilers and Platforms (5 ECTS)" },
-                { "value": "2imp30", "text": "2IMP30 System Design Engineering (5 ECTS)" }
+                {
+                  "value": "2imf25",
+                  "text": "2IMF25 Automated Reasoning (5 ECTS)"
+                },
+                {
+                  "value": "5lim0",
+                  "text": "5LIM0 Parallelization, Compilers and Platforms (5 ECTS)"
+                },
+                {
+                  "value": "2imp30",
+                  "text": "2IMP30 System Design Engineering (5 ECTS)"
+                }
               ]
             },
             {
@@ -343,20 +424,76 @@
               "minSelectedChoices": 3,
               "maxSelectedChoices": 3,
               "choices": [
-                { "value": "2imn10", "text": "2IMN10 Architecture of Distributed Systems (5 ECTS)", "credits": 5 },
-                { "value": "2dmi20", "text": "2DMI20 Software Security (5 ECTS)", "credits": 5 },
-                { "value": "2imp10", "text": "2IMP10 Program Verification Techniques (5 ECTS)", "credits": 5 },
-                { "value": "5lig0", "text": "5LIG0 Applied Combinatorial Algorithms (5 ECTS)", "credits": 5 },
-                { "value": "2imf35", "text": "2IMF35 Algorithms for Model Checking (5 ECTS)", "credits": 5 },
-                { "value": "2imp25", "text": "2IMP25 Software Evolution (5 ECTS)", "credits": 5 },
-                { "value": "5lie0", "text": "5LIE0 Multiprocessors (5 ECTS)", "credits": 5 },
-                { "value": "5lij0", "text": "5LIJ0 Embedded Control Systems (5 ECTS)", "credits": 5 },
-                { "value": "5lil0", "text": "5LIL0 Intelligent Architectures (5 ECTS)", "credits": 5 },
-                { "value": "2imp20", "text": "2IMP20 Domain Specific Language Design (5 ECTS)", "credits": 5 },
-                { "value": "5lik0", "text": "5LIK0 Embedded Signal Processing Systems (5 ECTS)", "credits": 5 },
-                { "value": "2imf00", "text": "2IMF00 Seminar Formal System Analysis (5 ECTS)", "credits": 5 },
-                { "value": "2imn00", "text": "2IMN00 Seminar Interconnected Resource-aware Intelligent Systems (IRIS) (5 ECTS)", "credits": 5 },
-                { "value": "2imp00", "text": "2IMP00 Seminar Software Engineering and Technology (5 ECTS)", "credits": 5 }
+                {
+                  "value": "2imn10",
+                  "text": "2IMN10 Architecture of Distributed Systems (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2dmi20",
+                  "text": "2DMI20 Software Security (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2imp10",
+                  "text": "2IMP10 Program Verification Techniques (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "5lig0",
+                  "text": "5LIG0 Applied Combinatorial Algorithms (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2imf35",
+                  "text": "2IMF35 Algorithms for Model Checking (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2imp25",
+                  "text": "2IMP25 Software Evolution (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "5lie0",
+                  "text": "5LIE0 Multiprocessors (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "5lij0",
+                  "text": "5LIJ0 Embedded Control Systems (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "5lil0",
+                  "text": "5LIL0 Intelligent Architectures (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2imp20",
+                  "text": "2IMP20 Domain Specific Language Design (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "5lik0",
+                  "text": "5LIK0 Embedded Signal Processing Systems (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2imf00",
+                  "text": "2IMF00 Seminar Formal System Analysis (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2imn00",
+                  "text": "2IMN00 Seminar Interconnected Resource-aware Intelligent Systems (IRIS) (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2imp00",
+                  "text": "2IMP00 Seminar Software Engineering and Technology (5 ECTS)",
+                  "credits": 5
+                }
               ]
             }
           ]
@@ -372,11 +509,24 @@
               "name": "embedded_networking_mandatory_display",
               "title": "Mandatory courses · 15 ECTS",
               "readOnly": true,
-              "defaultValue": ["2imn10", "5lic0", "2imn15"],
+              "defaultValue": [
+                "2imn10",
+                "5lic0",
+                "2imn15"
+              ],
               "choices": [
-                { "value": "2imn10", "text": "2IMN10 Architecture of Distributed Systems (5 ECTS)" },
-                { "value": "5lic0", "text": "5LIC0 Networked Embedded Systems (5 ECTS)" },
-                { "value": "2imn15", "text": "2IMN15 Internet of Things (5 ECTS)" }
+                {
+                  "value": "2imn10",
+                  "text": "2IMN10 Architecture of Distributed Systems (5 ECTS)"
+                },
+                {
+                  "value": "5lic0",
+                  "text": "5LIC0 Networked Embedded Systems (5 ECTS)"
+                },
+                {
+                  "value": "2imn15",
+                  "text": "2IMN15 Internet of Things (5 ECTS)"
+                }
               ]
             },
             {
@@ -389,18 +539,66 @@
               "minSelectedChoices": 3,
               "maxSelectedChoices": 3,
               "choices": [
-                { "value": "2imf25", "text": "2IMF25 Automated Reasoning (5 ECTS)", "credits": 5 },
-                { "value": "5lih0", "text": "5LIH0 Digital Integrated Circuit Design (5 ECTS)", "credits": 5 },
-                { "value": "2ims20", "text": "2IMS20 Cyberattacks, Crime and Defenses (5 ECTS)", "credits": 5 },
-                { "value": "2ims30", "text": "2IMS30 Advanced Network Security (5 ECTS)", "credits": 5 },
-                { "value": "2ims15", "text": "2IMS15 Verification of Security Protocols (5 ECTS)", "credits": 5 },
-                { "value": "5sib0", "text": "5SIB0 Electronic Design Automation (5 ECTS)", "credits": 5 },
-                { "value": "5lik0", "text": "5LIK0 Embedded Signal Processing Systems (5 ECTS)", "credits": 5 },
-                { "value": "5lia0", "text": "5LIA0 Embedded Visual Control (5 ECTS)", "credits": 5 },
-                { "value": "5lid0", "text": "5LID0 Systems on Silicon (5 ECTS)", "credits": 5 },
-                { "value": "2imp30", "text": "2IMP30 System Design Engineering (5 ECTS)", "credits": 5 },
-                { "value": "2imf00", "text": "2IMF00 Seminar Formal System Analysis (5 ECTS)", "credits": 5 },
-                { "value": "2imn00", "text": "2IMN00 Seminar Interconnected Resource-aware Intelligent Systems (IRIS) (5 ECTS)", "credits": 5 }
+                {
+                  "value": "2imf25",
+                  "text": "2IMF25 Automated Reasoning (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "5lih0",
+                  "text": "5LIH0 Digital Integrated Circuit Design (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2ims20",
+                  "text": "2IMS20 Cyberattacks, Crime and Defenses (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2ims30",
+                  "text": "2IMS30 Advanced Network Security (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2ims15",
+                  "text": "2IMS15 Verification of Security Protocols (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "5sib0",
+                  "text": "5SIB0 Electronic Design Automation (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "5lik0",
+                  "text": "5LIK0 Embedded Signal Processing Systems (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "5lia0",
+                  "text": "5LIA0 Embedded Visual Control (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "5lid0",
+                  "text": "5LID0 Systems on Silicon (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2imp30",
+                  "text": "2IMP30 System Design Engineering (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2imf00",
+                  "text": "2IMF00 Seminar Formal System Analysis (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2imn00",
+                  "text": "2IMN00 Seminar Interconnected Resource-aware Intelligent Systems (IRIS) (5 ECTS)",
+                  "credits": 5
+                }
               ]
             }
           ]
@@ -416,11 +614,24 @@
               "name": "cyber_physical_systems_mandatory_display",
               "title": "Mandatory courses · 15 ECTS",
               "readOnly": true,
-              "defaultValue": ["2imn15", "5lij0", "5lik0"],
+              "defaultValue": [
+                "2imn15",
+                "5lij0",
+                "5lik0"
+              ],
               "choices": [
-                { "value": "2imn15", "text": "2IMN15 Internet of Things (5 ECTS)" },
-                { "value": "5lij0", "text": "5LIJ0 Embedded Control Systems (5 ECTS)" },
-                { "value": "5lik0", "text": "5LIK0 Embedded Signal Processing Systems (5 ECTS)" }
+                {
+                  "value": "2imn15",
+                  "text": "2IMN15 Internet of Things (5 ECTS)"
+                },
+                {
+                  "value": "5lij0",
+                  "text": "5LIJ0 Embedded Control Systems (5 ECTS)"
+                },
+                {
+                  "value": "5lik0",
+                  "text": "5LIK0 Embedded Signal Processing Systems (5 ECTS)"
+                }
               ]
             },
             {
@@ -432,18 +643,66 @@
               "minSelectedChoices": 3,
               "maxSelectedChoices": 3,
               "choices": [
-                { "value": "2imn10", "text": "2IMN10 Architecture of Distributed Systems (5 ECTS)", "credits": 5 },
-                { "value": "5csa0", "text": "5CSA0 Modeling Dynamics (5 ECTS)", "credits": 5 },
-                { "value": "5lic0", "text": "5LIC0 Networked Embedded Systems (5 ECTS)", "credits": 5 },
-                { "value": "5lig0", "text": "5LIG0 Applied Combinatorial Algorithms (5 ECTS)", "credits": 5 },
-                { "value": "2imp25", "text": "2IMP25 Software Evolution (5 ECTS)", "credits": 5 },
-                { "value": "5lim0", "text": "5LIM0 Parallelization, Compilers and Platforms (5 ECTS)", "credits": 5 },
-                { "value": "5lie0", "text": "5LIE0 Multiprocessors (5 ECTS)", "credits": 5 },
-                { "value": "5lil0", "text": "5LIL0 Intelligent Architectures (5 ECTS)", "credits": 5 },
-                { "value": "5sib0", "text": "5SIB0 Electronic Design Automation (5 ECTS)", "credits": 5 },
-                { "value": "5lia0", "text": "5LIA0 Embedded Visual Control (5 ECTS)", "credits": 5 },
-                { "value": "2imp30", "text": "2IMP30 System Design Engineering (5 ECTS)", "credits": 5 },
-                { "value": "2imp20", "text": "2IMP20 Domain Specific Language Design (5 ECTS)", "credits": 5 }
+                {
+                  "value": "2imn10",
+                  "text": "2IMN10 Architecture of Distributed Systems (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "5csa0",
+                  "text": "5CSA0 Modeling Dynamics (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "5lic0",
+                  "text": "5LIC0 Networked Embedded Systems (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "5lig0",
+                  "text": "5LIG0 Applied Combinatorial Algorithms (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2imp25",
+                  "text": "2IMP25 Software Evolution (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "5lim0",
+                  "text": "5LIM0 Parallelization, Compilers and Platforms (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "5lie0",
+                  "text": "5LIE0 Multiprocessors (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "5lil0",
+                  "text": "5LIL0 Intelligent Architectures (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "5sib0",
+                  "text": "5SIB0 Electronic Design Automation (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "5lia0",
+                  "text": "5LIA0 Embedded Visual Control (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2imp30",
+                  "text": "2IMP30 System Design Engineering (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2imp20",
+                  "text": "2IMP20 Domain Specific Language Design (5 ECTS)",
+                  "credits": 5
+                }
               ]
             }
           ]
@@ -456,42 +715,91 @@
       "description": "The free-elective space is 25 ECTS. It can be filled with free electives, homologation courses or an internship.",
       "elements": [
         {
-          "type": "matrixdynamic",
-          "name": "free_electives",
+          "type": "panel",
+          "name": "free_electives_panel",
           "title": "Free electives",
           "description": "Free elective courses can be any master-level courses from the TU/e or another university. In case a free elective was followed at another university, please add its name between parentheses to the course name.",
-          "columns": [
+          "elements": [
             {
-              "name": "code",
-              "title": "Course code",
-              "isRequired": true,
-              "isUnique": true,
-              "width": "8em",
-              "cellType": "text",
-              "inputType": "text"
+              "type": "matrixdynamic",
+              "name": "free_electives",
+              "title": "Free elective courses",
+              "columns": [
+                {
+                  "name": "code",
+                  "title": "Course code",
+                  "isRequired": true,
+                  "isUnique": true,
+                  "width": "8em",
+                  "cellType": "text",
+                  "inputType": "text"
+                },
+                {
+                  "name": "title",
+                  "title": "Course title",
+                  "isRequired": true,
+                  "cellType": "text",
+                  "inputType": "text"
+                },
+                {
+                  "name": "credits",
+                  "title": "ECTS",
+                  "isRequired": true,
+                  "width": "6em",
+                  "cellType": "text",
+                  "inputType": "text",
+                  "totalType": "sum",
+                  "totalDisplayStyle": "decimal"
+                }
+              ],
+              "rowCount": 0,
+              "confirmDelete": true,
+              "addRowText": "Add free elective",
+              "confirmDeleteText": "Remove this free elective?"
             },
             {
-              "name": "title",
-              "title": "Course title",
-              "isRequired": true,
-              "cellType": "text",
-              "inputType": "text"
+              "type": "boolean",
+              "name": "external_courses",
+              "title": "Does the proposed program include a course from another university?",
+              "description": "Answer Yes for every external-university course. Selecting 2IMNT1 requires a Yes answer and the supporting information below because it is offered by the University of Twente.",
+              "isRequired": true
             },
             {
-              "name": "credits",
-              "title": "ECTS",
+              "type": "text",
+              "name": "external_course_university",
+              "visibleIf": "{external_courses} = true or {stream_electives_systems_on_chip} contains '2imnt1'",
+              "title": "External university or universities",
               "isRequired": true,
-              "width": "6em",
-              "cellType": "text",
-              "inputType": "text",
-              "totalType": "sum",
-              "totalDisplayStyle": "decimal"
+              "requiredIf": "{external_courses} = true or {stream_electives_systems_on_chip} contains '2imnt1'",
+              "placeholder": "University name(s)"
+            },
+            {
+              "type": "comment",
+              "name": "external_course_links",
+              "visibleIf": "{external_courses} = true or {stream_electives_systems_on_chip} contains '2imnt1'",
+              "title": "Course-description link(s)",
+              "description": "Provide a course-catalogue or official description link for every external course.",
+              "isRequired": true,
+              "requiredIf": "{external_courses} = true or {stream_electives_systems_on_chip} contains '2imnt1'"
+            },
+            {
+              "type": "comment",
+              "name": "external_course_motivation",
+              "visibleIf": "{external_courses} = true or {stream_electives_systems_on_chip} contains '2imnt1'",
+              "title": "Motivation for selecting the external course(s)",
+              "isRequired": true,
+              "requiredIf": "{external_courses} = true or {stream_electives_systems_on_chip} contains '2imnt1'"
+            },
+            {
+              "type": "comment",
+              "name": "external_course_overlap",
+              "visibleIf": "{external_courses} = true or {stream_electives_systems_on_chip} contains '2imnt1'",
+              "title": "Explanation of non-overlap",
+              "description": "Explain why the external courses do not overlap with each other or with another course in the proposed program.",
+              "isRequired": true,
+              "requiredIf": "{external_courses} = true or {stream_electives_systems_on_chip} contains '2imnt1'"
             }
-          ],
-          "rowCount": 0,
-          "confirmDelete": true,
-          "addRowText": "Add free elective",
-          "confirmDeleteText": "Remove this free elective?"
+          ]
         },
         {
           "type": "panel",
@@ -512,9 +820,27 @@
               "visibleIf": "{homologation} = true",
               "title": "Assigned homologation courses",
               "columns": [
-                { "name": "code", "title": "Course code", "isRequired": true, "isUnique": true, "width": "8em", "cellType": "text" },
-                { "name": "title", "title": "Course title", "isRequired": true, "cellType": "text" },
-                { "name": "credits", "title": "ECTS", "isRequired": true, "width": "6em", "cellType": "text" }
+                {
+                  "name": "code",
+                  "title": "Course code",
+                  "isRequired": true,
+                  "isUnique": true,
+                  "width": "8em",
+                  "cellType": "text"
+                },
+                {
+                  "name": "title",
+                  "title": "Course title",
+                  "isRequired": true,
+                  "cellType": "text"
+                },
+                {
+                  "name": "credits",
+                  "title": "ECTS",
+                  "isRequired": true,
+                  "width": "6em",
+                  "cellType": "text"
+                }
               ],
               "rowCount": 0,
               "confirmDelete": true,
@@ -539,9 +865,27 @@
               "isRequired": true,
               "requiredIf": "{homologation} = true and {self_chosen_homologation} = true",
               "columns": [
-                { "name": "code", "title": "Course code", "isRequired": true, "isUnique": true, "width": "8em", "cellType": "text" },
-                { "name": "title", "title": "Course title", "isRequired": true, "cellType": "text" },
-                { "name": "credits", "title": "ECTS", "isRequired": true, "width": "6em", "cellType": "text" }
+                {
+                  "name": "code",
+                  "title": "Course code",
+                  "isRequired": true,
+                  "isUnique": true,
+                  "width": "8em",
+                  "cellType": "text"
+                },
+                {
+                  "name": "title",
+                  "title": "Course title",
+                  "isRequired": true,
+                  "cellType": "text"
+                },
+                {
+                  "name": "credits",
+                  "title": "ECTS",
+                  "isRequired": true,
+                  "width": "6em",
+                  "cellType": "text"
+                }
               ],
               "rowCount": 0,
               "maxRowCount": 3,
@@ -581,8 +925,14 @@
               "isRequired": true,
               "requiredIf": "{internship} = true",
               "choices": [
-                { "value": "2imc10", "text": "2IMC10 Internship (15 ECTS)" },
-                { "value": "5l990", "text": "5L990 Internship (15 ECTS)" }
+                {
+                  "value": "2imc10",
+                  "text": "2IMC10 Internship (15 ECTS)"
+                },
+                {
+                  "value": "5l990",
+                  "text": "5L990 Internship (15 ECTS)"
+                }
               ]
             },
             {
@@ -593,8 +943,14 @@
               "isRequired": true,
               "requiredIf": "{internship} = true",
               "choices": [
-                { "value": "internal", "text": "Internal internship (within TU/e)" },
-                { "value": "external", "text": "External internship (for example, at a company)" }
+                {
+                  "value": "internal",
+                  "text": "Internal internship (within TU/e)"
+                },
+                {
+                  "value": "external",
+                  "text": "External internship (for example, at a company)"
+                }
               ]
             },
             {
@@ -612,57 +968,6 @@
       "name": "additional_information",
       "title": "Additional information",
       "elements": [
-        {
-          "type": "comment",
-          "name": "changes",
-          "visibleIf": "{previous} = true",
-          "title": "Changes to the previously approved program",
-          "description": "List each change clearly. A revised programme for other reasons may also require the separate university change form at the start of the preparation phase.",
-          "isRequired": true,
-          "requiredIf": "{previous} = true"
-        },
-        {
-          "type": "boolean",
-          "name": "external_courses",
-          "title": "Does the proposed program include a course from another university?",
-          "description": "Answer Yes for every external-university course. Selecting 2IMNT1 requires a Yes answer and the supporting information below because it is offered by the University of Twente.",
-          "isRequired": true
-        },
-        {
-          "type": "text",
-          "name": "external_course_university",
-          "visibleIf": "{external_courses} = true or {stream_electives_systems_on_chip} contains '2imnt1'",
-          "title": "External university or universities",
-          "isRequired": true,
-          "requiredIf": "{external_courses} = true or {stream_electives_systems_on_chip} contains '2imnt1'",
-          "placeholder": "University name(s)"
-        },
-        {
-          "type": "comment",
-          "name": "external_course_links",
-          "visibleIf": "{external_courses} = true or {stream_electives_systems_on_chip} contains '2imnt1'",
-          "title": "Course-description link(s)",
-          "description": "Provide a course-catalogue or official description link for every external course.",
-          "isRequired": true,
-          "requiredIf": "{external_courses} = true or {stream_electives_systems_on_chip} contains '2imnt1'"
-        },
-        {
-          "type": "comment",
-          "name": "external_course_motivation",
-          "visibleIf": "{external_courses} = true or {stream_electives_systems_on_chip} contains '2imnt1'",
-          "title": "Motivation for selecting the external course(s)",
-          "isRequired": true,
-          "requiredIf": "{external_courses} = true or {stream_electives_systems_on_chip} contains '2imnt1'"
-        },
-        {
-          "type": "comment",
-          "name": "external_course_overlap",
-          "visibleIf": "{external_courses} = true or {stream_electives_systems_on_chip} contains '2imnt1'",
-          "title": "Explanation of non-overlap",
-          "description": "Explain why the external courses do not overlap with each other or with another course in the proposed program.",
-          "isRequired": true,
-          "requiredIf": "{external_courses} = true or {stream_electives_systems_on_chip} contains '2imnt1'"
-        },
         {
           "type": "comment",
           "name": "committee_notes",

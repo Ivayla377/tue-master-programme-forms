@@ -193,9 +193,10 @@
                                                             {
                                                                 "type":  "comment",
                                                                 "name":  "unassigned_motivation",
-                                                                "visibleIf":  "{unassigned_homologation} = true",
+                                                                "visibleIf":  "{homologation} = true and {unassigned_homologation} = true",
                                                                 "title":  "Motivation for including your unassigned homologation courses",
-                                                                "isRequired":  true
+                                                                "isRequired":  true,
+                                                                "requiredIf":  "{homologation} = true and {unassigned_homologation} = true"
                                                             }
                                                         ]
                                        },

@@ -477,7 +477,7 @@ function buildValidations(values) {
     {
       label: "Stream electives",
       status: values.flags.streamElectiveTargetMet ? "success" : "error",
-      detail: `${formatCredits(values.streamElectivesSelected)} / exactly 15 ECTS from the selected stream's current list.`,
+      detail: `${formatCredits(values.streamElectivesSelected)} / exactly 15 ECTS from the selected stream's electives list.`,
     },
     targetWithOverWarning(
       "Free elective space",
