@@ -15,6 +15,11 @@ export const programmes = {
     output: "dist/es.html",
     emptyOutDir: false,
   },
+  iam: {
+    input: "iam.html",
+    output: "dist/iam.html",
+    emptyOutDir: false,
+  },
 };
 
 export function getProgramme(slug) {

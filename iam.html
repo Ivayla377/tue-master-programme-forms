@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IAM Program of Examinations</title>
+  </head>
+  <body>
+    <div id="app" class="app-shell">
+      <header class="app-header">
+        <div class="brand-lockup">
+          <img id="tueLogo" class="tue-logo" alt="Eindhoven University of Technology" />
+          <div>
+            <p id="appKicker" class="app-kicker">TU/e</p>
+            <h1 id="appTitle">Program of Examinations</h1>
+          </div>
+        </div>
+        <span id="appYear" class="app-year"></span>
+      </header>
+
+      <div class="app-workspace">
+        <aside id="ectsPanel" class="ects-panel" aria-live="polite"></aside>
+        <main class="survey-shell" aria-label="Program form">
+          <div id="surveyElement"></div>
+        </main>
+      </div>
+    </div>
+
+    <script type="module" src="/src/entries/iam.js"></script>
+  </body>
+</html>

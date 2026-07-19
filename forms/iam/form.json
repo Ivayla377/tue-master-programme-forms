@@ -1,0 +1,791 @@
+{
+  "title": "Form 1: IAM Program of Examinations",
+  "description": "This form is used to create a report that shows your current study program. Its purpose is to be shared with the Examination Committee, so that they can check whether it satisfies the requirements of Industrial and Applied Mathematics and approve it or inform you of how it does not satisfy the requirements. This form has built-in validation that should help you create a valid study program.",
+  "completedHtml": "",
+  "showCompletePage": false,
+  "clearInvisibleValues": "onHidden",
+  "showProgressBar": "top",
+  "progressBarType": "pages",
+  "pages": [
+    {
+      "name": "frontmatter",
+      "title": "General information",
+      "elements": [
+        {
+          "type": "multipletext",
+          "name": "personal_info",
+          "title": "Personal information",
+          "isRequired": true,
+          "items": [
+            {
+              "name": "name",
+              "title": "Name",
+              "isRequired": true,
+              "placeholder": "Surname, given name(s)"
+            },
+            {
+              "name": "id",
+              "title": "Student ID",
+              "isRequired": true,
+              "maskType": "pattern",
+              "maskSettings": {
+                "pattern": "9999999"
+              },
+              "maxLength": 7,
+              "inputSize": 7,
+              "validators": [
+                {
+                  "type": "regex",
+                  "text": "Your student ID must be a 7-digit number.",
+                  "regex": "\\d{7}"
+                }
+              ]
+            },
+            {
+              "name": "enrollment",
+              "title": "Month and year of enrollment",
+              "isRequired": true,
+              "inputType": "month",
+              "min": "2010-01",
+              "max": "2035-12",
+              "validators": [
+                {
+                  "type": "regex",
+                  "text": "Enter a valid enrollment month from 2010 to 2035.",
+                  "regex": "^(?:201[0-9]|202[0-9]|203[0-5])-(?:0[1-9]|1[0-2])$"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "name": "mentor",
+          "title": "Mentor",
+          "isRequired": true,
+          "placeholder": "Mentor name"
+        },
+        {
+          "type": "panel",
+          "name": "previous_panel",
+          "elements": [
+            {
+              "type": "boolean",
+              "name": "previous",
+              "title": "Is this a change of a previously approved study program?",
+              "isRequired": true
+            },
+            {
+              "type": "comment",
+              "name": "changes",
+              "visibleIf": "{previous} = true",
+              "title": "What has changed?",
+              "isRequired": true,
+              "requiredIf": "{previous} = true"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "mandatory_and_core",
+      "title": "Mandatory and core courses",
+      "elements": [
+        {
+          "type": "panel",
+          "name": "mandatory_components_panel",
+          "title": "Mandatory components",
+          "elements": [
+            {
+              "type": "checkbox",
+              "name": "mandatory_components_display",
+              "title": "The following courses are already included:",
+              "readOnly": true,
+              "defaultValue": [
+                "2mmr10",
+                "2mmr30"
+              ],
+              "choices": [
+                {
+                  "value": "2mmr10",
+                  "text": "2MMR10 Professional Portfolio (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2mmr30",
+                  "text": "2MMR30 Final Project (30 ECTS)",
+                  "credits": 30
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "name": "core_electives",
+          "title": "Core electives",
+          "description": "Select at least four core electives.",
+          "isRequired": true,
+          "choices": [
+            {
+              "value": "2mma10",
+              "text": "2MMA10 Applied Functional Analysis (5 ECTS)",
+              "credits": 5
+            },
+            {
+              "value": "2mmc10",
+              "text": "2MMC10 Cryptology (5 ECTS)",
+              "credits": 5
+            },
+            {
+              "value": "2mmd10",
+              "text": "2MMD10 Optimization (5 ECTS)",
+              "credits": 5
+            },
+            {
+              "value": "2mmn10",
+              "text": "2MMN10 Scientific Computing (5 ECTS)",
+              "credits": 5
+            },
+            {
+              "value": "2mms10",
+              "text": "2MMS10 Probability and Stochastics 1 (5 ECTS)",
+              "credits": 5
+            },
+            {
+              "value": "2mms90",
+              "text": "2MMS90 Sequential and Nonparametric Statistics (5 ECTS)",
+              "credits": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "specialization",
+      "title": "Specialization electives",
+      "description": "Choose listed IAM specialization electives. Add Mastermath or other approved specialization electives below.",
+      "elements": [
+        {
+          "type": "tagbox",
+          "name": "specialization_electives",
+          "title": "Listed IAM specialization electives",
+          "choices": [
+            {
+              "value": "2ima10",
+              "text": "2IMA10 Advanced Algorithms (5 ECTS)",
+              "credits": 5
+            },
+            {
+              "value": "2mma70",
+              "text": "2MMA70 Differential Geometry for Image Processing (5 ECTS)",
+              "credits": 5
+            },
+            {
+              "value": "2ima25",
+              "text": "2IMA25 Exact Algorithms for NP-hard Problems (5 ECTS)",
+              "credits": 5
+            },
+            {
+              "value": "2dmi10",
+              "text": "2DMI10 Applied Cryptography (5 ECTS)",
+              "credits": 5
+            },
+            {
+              "value": "2mmd20",
+              "text": "2MMD20 Multilinear Algebra and Applications (5 ECTS)",
+              "credits": 5
+            },
+            {
+              "value": "2mmn20",
+              "text": "2MMN20 Scientific Programming (5 ECTS)",
+              "credits": 5
+            },
+            {
+              "value": "2mms30",
+              "text": "2MMS30 Probability and Stochastics 2 (5 ECTS)",
+              "credits": 5
+            },
+            {
+              "value": "5lma0",
+              "text": "5LMA0 Model Reduction (5 ECTS)",
+              "credits": 5
+            },
+            {
+              "value": "2mma80",
+              "text": "2MMA80 Mathematics of Neural Networks (5 ECTS)",
+              "credits": 5
+            },
+            {
+              "value": "2dmi00",
+              "text": "2DMI00 Cryptographic Protocols (5 ECTS)",
+              "credits": 5
+            },
+            {
+              "value": "2mma20",
+              "text": "2MMA20 Partial Differential Equations (5 ECTS)",
+              "credits": 5
+            },
+            {
+              "value": "2mmd30",
+              "text": "2MMD30 Graphs and Algorithms (5 ECTS)",
+              "credits": 5
+            },
+            {
+              "value": "2mms40",
+              "text": "2MMS40 Stochastic Networks (5 ECTS)",
+              "credits": 5
+            },
+            {
+              "value": "2mms80",
+              "text": "2MMS80 Statistical Learning Theory (5 ECTS)",
+              "credits": 5
+            },
+            {
+              "value": "2dd23",
+              "text": "2DD23 Time Series & Forecasting (5 ECTS)",
+              "credits": 5
+            },
+            {
+              "value": "2mma40",
+              "text": "2MMA40 Evolution Equations (5 ECTS)",
+              "credits": 5
+            },
+            {
+              "value": "2mmd40",
+              "text": "2MMD40 Integer Programming (5 ECTS)",
+              "credits": 5
+            },
+            {
+              "value": "2mmd50",
+              "text": "2MMD50 Algebraic Combinatorics (5 ECTS)",
+              "credits": 5
+            },
+            {
+              "value": "2mmn30",
+              "text": "2MMN30 Scientific Computing in Partial Differential Equations (5 ECTS)",
+              "credits": 5
+            },
+            {
+              "value": "2mms50",
+              "text": "2MMS50 Stochastic Decision Theory (5 ECTS)",
+              "credits": 5
+            },
+            {
+              "value": "2mms60",
+              "text": "2MMS60 Random Graphs (5 ECTS)",
+              "credits": 5
+            },
+            {
+              "value": "2mmr40",
+              "text": "2MMR40 Research Topic 1 (Capita Selecta) (5 ECTS)",
+              "credits": 5
+            },
+            {
+              "value": "2mmr50",
+              "text": "2MMR50 Research Topic 2 (Capita Selecta) (5 ECTS)",
+              "credits": 5
+            },
+            {
+              "value": "2mmr60",
+              "text": "2MMR60 Research Topic 3 (Capita Selecta) (5 ECTS)",
+              "credits": 5
+            },
+            {
+              "value": "2ims60",
+              "text": "2IMS60 Provable Security (5 ECTS)",
+              "credits": 5
+            }
+          ]
+        },
+        {
+          "type": "matrixdynamic",
+          "name": "mastermath_special_electives",
+          "title": "Mastermath or other approved specialization electives",
+          "description": "Use this for specialization electives that are not listed above.",
+          "columns": [
+            {
+              "name": "code",
+              "title": "Course code",
+              "isRequired": true,
+              "isUnique": true,
+              "width": "8em",
+              "cellType": "text"
+            },
+            {
+              "name": "title",
+              "title": "Course title",
+              "isRequired": true,
+              "cellType": "text"
+            },
+            {
+              "name": "credits",
+              "title": "ECTS",
+              "isRequired": true,
+              "width": "6em",
+              "cellType": "text",
+              "inputType": "number",
+              "min": 0.1,
+              "step": 0.1,
+              "totalType": "sum",
+              "totalDisplayStyle": "decimal",
+              "validators": [
+                {
+                  "type": "numeric",
+                  "text": "Enter a positive ECTS value.",
+                  "minValue": 0.1
+                }
+              ]
+            }
+          ],
+          "rowCount": 0,
+          "confirmDelete": true,
+          "addRowText": "Add specialization elective",
+          "confirmDeleteText": "Remove this specialization elective?"
+        }
+      ]
+    },
+    {
+      "name": "free_space",
+      "title": "Free-elective space",
+      "description": "Free-elective space can be filled with free electives, homologation courses and an internship.",
+      "elements": [
+        {
+          "type": "panel",
+          "name": "free_electives_panel",
+          "title": "Free electives",
+          "elements": [
+            {
+              "type": "checkbox",
+              "name": "official_free_electives",
+              "title": "Listed free electives",
+              "choices": [
+                {
+                  "value": "sfc640",
+                  "text": "SFC640 Academic Writing in English (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "emdr10",
+                  "text": "EMDR10 Educational Design Research (15 ECTS)",
+                  "credits": 15
+                },
+                {
+                  "value": "emwp30",
+                  "text": "EMWP30 School Internship 3 (10 ECTS)",
+                  "credits": 10
+                },
+                {
+                  "value": "emwp35",
+                  "text": "EMWP35 School Internship 3 for Extra Subject (10 ECTS)",
+                  "credits": 10
+                }
+              ],
+              "description": "Select any listed free-elective option included in your program."
+            },
+            {
+              "type": "matrixdynamic",
+              "name": "free_electives",
+              "title": "Other master-level free electives",
+              "description": "Add TU/e master-level courses or approved master-level courses from another university.",
+              "columns": [
+                {
+                  "name": "code",
+                  "title": "Course code",
+                  "isRequired": true,
+                  "isUnique": true,
+                  "width": "8em",
+                  "cellType": "text"
+                },
+                {
+                  "name": "title",
+                  "title": "Course title",
+                  "isRequired": true,
+                  "cellType": "text"
+                },
+                {
+                  "name": "credits",
+                  "title": "ECTS",
+                  "isRequired": true,
+                  "width": "6em",
+                  "cellType": "text",
+                  "inputType": "number",
+                  "min": 0.1,
+                  "step": 0.1,
+                  "totalType": "sum",
+                  "totalDisplayStyle": "decimal",
+                  "validators": [
+                    {
+                      "type": "numeric",
+                      "text": "Enter a positive ECTS value.",
+                      "minValue": 0.1
+                    }
+                  ]
+                }
+              ],
+              "rowCount": 0,
+              "confirmDelete": true,
+              "addRowText": "Add free elective",
+              "confirmDeleteText": "Remove this free elective?"
+            }
+          ]
+        },
+        {
+          "type": "panel",
+          "name": "homologation_panel",
+          "title": "Homologation courses",
+          "description": "Homologation courses are bachelor courses used to make up deficiencies in previous knowledge.",
+          "elements": [
+            {
+              "type": "boolean",
+              "name": "homologation",
+              "title": "Were you assigned or did you otherwise include one or more homologation courses?",
+              "isRequired": true
+            },
+            {
+              "type": "matrixdynamic",
+              "name": "homologation_courses",
+              "visibleIf": "{homologation} = true",
+              "title": "Assigned homologation courses",
+              "isRequired": true,
+              "requiredIf": "{homologation} = true",
+              "columns": [
+                {
+                  "name": "code",
+                  "title": "Course code",
+                  "isRequired": true,
+                  "isUnique": true,
+                  "width": "8em",
+                  "cellType": "text"
+                },
+                {
+                  "name": "title",
+                  "title": "Course title",
+                  "isRequired": true,
+                  "cellType": "text"
+                },
+                {
+                  "name": "credits",
+                  "title": "ECTS",
+                  "isRequired": true,
+                  "width": "6em",
+                  "cellType": "text",
+                  "inputType": "number",
+                  "min": 0.1,
+                  "step": 0.1,
+                  "totalType": "sum",
+                  "totalDisplayStyle": "decimal",
+                  "validators": [
+                    {
+                      "type": "numeric",
+                      "text": "Enter a positive ECTS value.",
+                      "minValue": 0.1
+                    }
+                  ]
+                }
+              ],
+              "rowCount": 0,
+              "confirmDelete": true,
+              "addRowText": "Add homologation course",
+              "confirmDeleteText": "Remove this homologation course?",
+              "minRowCount": 1,
+              "description": "Add the homologation courses from your admission decision."
+            },
+            {
+              "type": "boolean",
+              "name": "self_chosen_homologation",
+              "visibleIf": "{homologation} = true",
+              "title": "Did you include self-chosen homologation courses?",
+              "defaultValue": false,
+              "isRequired": true,
+              "requiredIf": "{homologation} = true"
+            },
+            {
+              "type": "matrixdynamic",
+              "name": "bachelor_free_electives",
+              "title": "Self-chosen homologation courses",
+              "description": "Add bachelor courses chosen to compensate deficiencies.",
+              "columns": [
+                {
+                  "name": "code",
+                  "title": "Course code",
+                  "isRequired": true,
+                  "isUnique": true,
+                  "width": "8em",
+                  "cellType": "text"
+                },
+                {
+                  "name": "title",
+                  "title": "Bachelor course title",
+                  "isRequired": true,
+                  "cellType": "text"
+                },
+                {
+                  "name": "master_course",
+                  "title": "Prepares for",
+                  "isRequired": true,
+                  "cellType": "text"
+                },
+                {
+                  "name": "credits",
+                  "title": "ECTS",
+                  "isRequired": true,
+                  "width": "6em",
+                  "cellType": "text",
+                  "inputType": "number",
+                  "min": 0.1,
+                  "step": 0.1,
+                  "totalType": "sum",
+                  "totalDisplayStyle": "decimal",
+                  "validators": [
+                    {
+                      "type": "numeric",
+                      "text": "Enter a positive ECTS value.",
+                      "minValue": 0.1
+                    }
+                  ]
+                }
+              ],
+              "rowCount": 0,
+              "confirmDelete": true,
+              "addRowText": "Add self-chosen homologation course",
+              "confirmDeleteText": "Remove this self-chosen homologation course?",
+              "visibleIf": "{homologation} = true and {self_chosen_homologation} = true",
+              "requiredIf": "{homologation} = true and {self_chosen_homologation} = true",
+              "isRequired": true,
+              "maxRowCount": 3
+            },
+            {
+              "type": "comment",
+              "name": "homologation_motivation",
+              "visibleIf": "{homologation} = true and {self_chosen_homologation} = true",
+              "title": "Motivation for self-chosen homologation courses",
+              "description": "Explain the deficiency addressed by each self-chosen bachelor course.",
+              "isRequired": true,
+              "requiredIf": "{homologation} = true and {self_chosen_homologation} = true"
+            }
+          ]
+        },
+        {
+          "type": "panel",
+          "name": "internship_panel",
+          "title": "Internship",
+          "elements": [
+            {
+              "type": "boolean",
+              "name": "internship",
+              "title": "Do you include an internship (2MMR20 Internship, 15 ECTS)?",
+              "isRequired": true
+            },
+            {
+              "type": "checkbox",
+              "name": "internship_course_display",
+              "title": "Internship metadata",
+              "readOnly": true,
+              "defaultValue": [
+                "2mmr20"
+              ],
+              "choices": [
+                {
+                  "value": "2mmr20",
+                  "text": "2MMR20 Internship (15 ECTS)",
+                  "credits": 15
+                }
+              ],
+              "visible": false
+            },
+            {
+              "type": "text",
+              "name": "internship_supervisor",
+              "visibleIf": "{internship} = true",
+              "title": "Internship supervisor (if known)",
+              "placeholder": "Supervisor name"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "additional_information",
+      "title": "Additional information",
+      "elements": [
+        {
+          "type": "panel",
+          "name": "external_courses_panel",
+          "title": "External university courses",
+          "elements": [
+            {
+              "type": "boolean",
+              "name": "external_courses",
+              "title": "Does the proposed program include a course from another university?",
+              "description": "Answer Yes for every external-university course, including external free electives and Mastermath courses where applicable.",
+              "isRequired": true
+            },
+            {
+              "type": "text",
+              "name": "external_course_university",
+              "visibleIf": "{external_courses} = true",
+              "title": "External university or universities",
+              "isRequired": true,
+              "requiredIf": "{external_courses} = true",
+              "placeholder": "University name(s)"
+            },
+            {
+              "type": "comment",
+              "name": "external_course_links",
+              "visibleIf": "{external_courses} = true",
+              "title": "Course-description link(s)",
+              "description": "Provide a course-catalogue or official description link for every external course.",
+              "isRequired": true,
+              "requiredIf": "{external_courses} = true",
+              "validators": [
+                {
+                  "type": "regex",
+                  "text": "Provide at least one http(s) course-description link.",
+                  "regex": "[\\s\\S]*https?:\\/\\/\\S+[\\s\\S]*"
+                }
+              ]
+            },
+            {
+              "type": "comment",
+              "name": "external_course_motivation",
+              "visibleIf": "{external_courses} = true",
+              "title": "Motivation and non-overlap for external course(s)",
+              "isRequired": true,
+              "requiredIf": "{external_courses} = true",
+              "description": "Explain why you selected the external course(s) and why they do not overlap with other courses in your program."
+            }
+          ]
+        },
+        {
+          "type": "comment",
+          "name": "committee_notes",
+          "title": "Additional notes for the Examination Committee",
+          "description": "Include any other information that should appear in the printable review."
+        }
+      ]
+    },
+    {
+      "name": "reporting",
+      "title": "Review and print"
+    }
+  ],
+  "headerView": "advanced",
+  "calculatedValues": [
+    {
+      "name": "rule_programme_target",
+      "expression": "120",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_core_min_credits",
+      "expression": "20",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_core_min_count",
+      "expression": "4",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_core_specialization_min_credits",
+      "expression": "55",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_homologation_max_credits",
+      "expression": "15",
+      "includeIntoResult": true
+    },
+    {
+      "name": "professional_portfolio_credits",
+      "expression": "5",
+      "includeIntoResult": true
+    },
+    {
+      "name": "final_project_credits",
+      "expression": "30",
+      "includeIntoResult": true
+    },
+    {
+      "name": "mandatory_credits",
+      "expression": "{professional_portfolio_credits} + {final_project_credits}",
+      "includeIntoResult": true
+    },
+    {
+      "name": "core_elective_count",
+      "expression": "count({core_electives})",
+      "includeIntoResult": true
+    },
+    {
+      "name": "core_elective_credits",
+      "expression": "{core_elective_count} * 5",
+      "includeIntoResult": true
+    },
+    {
+      "name": "listed_specialization_count",
+      "expression": "count({specialization_electives})",
+      "includeIntoResult": true
+    },
+    {
+      "name": "listed_specialization_credits",
+      "expression": "{listed_specialization_count} * 5",
+      "includeIntoResult": true
+    },
+    {
+      "name": "mastermath_specialization_credits",
+      "expression": "sumInArray({mastermath_special_electives}, 'credits', {code} notempty and {title} notempty and {credits} > 0)",
+      "includeIntoResult": true
+    },
+    {
+      "name": "specialization_credits",
+      "expression": "{listed_specialization_credits} + {mastermath_specialization_credits}",
+      "includeIntoResult": true
+    },
+    {
+      "name": "core_and_specialization_credits",
+      "expression": "{core_elective_credits} + {specialization_credits}",
+      "includeIntoResult": true
+    },
+    {
+      "name": "official_free_elective_credits",
+      "expression": "iif({official_free_electives} contains 'sfc640', 5, 0) + iif({official_free_electives} contains 'emdr10', 15, 0) + iif({official_free_electives} contains 'emwp30', 10, 0) + iif({official_free_electives} contains 'emwp35', 10, 0)",
+      "includeIntoResult": true
+    },
+    {
+      "name": "internship_credits",
+      "expression": "iif({internship} = true, 15, 0)",
+      "includeIntoResult": true
+    },
+    {
+      "name": "manual_free_elective_credits",
+      "expression": "sumInArray({free_electives}, 'credits', {code} notempty and {title} notempty and {credits} > 0)",
+      "includeIntoResult": true
+    },
+    {
+      "name": "self_chosen_homologation_credits",
+      "expression": "iif({homologation} = true and {self_chosen_homologation} = true, sumInArray({bachelor_free_electives}, 'credits', {code} notempty and {title} notempty and {master_course} notempty and {credits} > 0), 0)",
+      "includeIntoResult": true
+    },
+    {
+      "name": "assigned_homologation_credits",
+      "expression": "iif({homologation} = true, sumInArray({homologation_courses}, 'credits', {code} notempty and {title} notempty and {credits} > 0), 0)",
+      "includeIntoResult": true
+    },
+    {
+      "name": "homologation_credits",
+      "expression": "{assigned_homologation_credits} + {self_chosen_homologation_credits}",
+      "includeIntoResult": true
+    },
+    {
+      "name": "free_elective_space_credits",
+      "expression": "{official_free_elective_credits} + {internship_credits} + {manual_free_elective_credits} + {homologation_credits}",
+      "includeIntoResult": true
+    },
+    {
+      "name": "total_programme_credits",
+      "expression": "{mandatory_credits} + {core_and_specialization_credits} + {free_elective_space_credits}",
+      "includeIntoResult": true
+    }
+  ]
+}
