@@ -1,0 +1,998 @@
+{
+  "title": "Form 1: IST Program of Examinations",
+  "description": "Use this form to compose your Information Security Technology study program for review by the Examination Committee. The ECTS overview checks the main program requirements while you work and helps you create a valid study program.",
+  "completedHtml": "",
+  "showCompletePage": false,
+  "clearInvisibleValues": "onHidden",
+  "showProgressBar": "top",
+  "progressBarType": "pages",
+  "pages": [
+    {
+      "name": "frontmatter",
+      "title": "General information",
+      "elements": [
+        {
+          "type": "multipletext",
+          "name": "personal_info",
+          "title": "Personal information",
+          "isRequired": true,
+          "items": [
+            {
+              "name": "name",
+              "title": "Name",
+              "isRequired": true,
+              "placeholder": "Surname, given name(s)"
+            },
+            {
+              "name": "id",
+              "title": "Student ID",
+              "isRequired": true,
+              "maskType": "pattern",
+              "maskSettings": {
+                "pattern": "9999999"
+              },
+              "maxLength": 7,
+              "inputSize": 7,
+              "validators": [
+                {
+                  "type": "regex",
+                  "text": "Your student ID must be a 7-digit number.",
+                  "regex": "\\d{7}"
+                }
+              ]
+            },
+            {
+              "name": "enrollment",
+              "title": "Month and year of enrollment",
+              "isRequired": true,
+              "inputType": "month",
+              "min": "2010-01",
+              "max": "2035-12",
+              "validators": [
+                {
+                  "type": "regex",
+                  "text": "Enter a valid enrollment month from 2010 to 2035.",
+                  "regex": "^(?:201[0-9]|202[0-9]|203[0-5])-(?:0[1-9]|1[0-2])$"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "panel",
+          "name": "graduation_cluster_panel",
+          "title": "Graduation cluster",
+          "elements": [
+            {
+              "type": "text",
+              "name": "graduation_cluster",
+              "title": "Intended graduation cluster",
+              "isRequired": true,
+              "placeholder": "Graduation cluster"
+            }
+          ]
+        },
+        {
+          "type": "panel",
+          "name": "previous_panel",
+          "elements": [
+            {
+              "type": "boolean",
+              "name": "previous",
+              "title": "Is this a change to a previously approved program?",
+              "isRequired": true
+            },
+            {
+              "type": "comment",
+              "name": "changes",
+              "visibleIf": "{previous} = true",
+              "title": "What has changed?",
+              "isRequired": true,
+              "requiredIf": "{previous} = true"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "mandatory_and_ist",
+      "title": "Mandatory and IST courses",
+      "elements": [
+        {
+          "type": "panel",
+          "name": "mandatory_components_panel",
+          "title": "Mandatory components",
+          "elements": [
+            {
+              "type": "checkbox",
+              "name": "mandatory_components_display",
+              "title": "The following courses are already included:",
+              "readOnly": true,
+              "defaultValue": [
+                "2mmc10",
+                "2ims25",
+                "2dmi20",
+                "2ims20",
+                "2ims30",
+                "2ims00"
+              ],
+              "choices": [
+                {
+                  "value": "2mmc10",
+                  "text": "2MMC10 Cryptology (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2ims25",
+                  "text": "2IMS25 Principles of Data Protection (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2dmi20",
+                  "text": "2DMI20 Software Security (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2ims20",
+                  "text": "2IMS20 Cyberattacks, Crime and Defenses (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2ims30",
+                  "text": "2IMS30 Advanced Network Security (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2ims00",
+                  "text": "2IMS00 Seminar Information Security Technology (5 ECTS)",
+                  "credits": 5
+                }
+              ]
+            },
+            {
+              "type": "radiogroup",
+              "name": "graduation_course_set",
+              "title": "Graduation course set",
+              "description": "Choose the graduation department. The matching fixed graduation courses are shown below.",
+              "isRequired": true,
+              "choices": [
+                {
+                  "value": "graduation_computer_science_courses",
+                  "text": "Computer Science"
+                },
+                {
+                  "value": "graduation_mathematics_courses",
+                  "text": "Mathematics"
+                }
+              ]
+            },
+            {
+              "type": "checkbox",
+              "name": "graduation_computer_science_courses",
+              "title": "Computer Science graduation courses",
+              "readOnly": true,
+              "defaultValue": [
+                "2imc05",
+                "2imc00"
+              ],
+              "choices": [
+                {
+                  "value": "2imc05",
+                  "text": "2IMC05 Preparation Graduation Project (10 ECTS)",
+                  "credits": 10
+                },
+                {
+                  "value": "2imc00",
+                  "text": "2IMC00 Master Project (30 ECTS)",
+                  "credits": 30
+                }
+              ],
+              "visibleIf": "{graduation_course_set} = 'graduation_computer_science_courses'"
+            },
+            {
+              "type": "checkbox",
+              "name": "graduation_mathematics_courses",
+              "title": "Mathematics graduation courses",
+              "readOnly": true,
+              "defaultValue": [
+                "2mmr05",
+                "2mmr30"
+              ],
+              "choices": [
+                {
+                  "value": "2mmr05",
+                  "text": "2MMR05 Preparation Graduation Project (10 ECTS)",
+                  "credits": 10
+                },
+                {
+                  "value": "2mmr30",
+                  "text": "2MMR30 Final Project (30 ECTS)",
+                  "credits": 30
+                }
+              ],
+              "visibleIf": "{graduation_course_set} = 'graduation_mathematics_courses'"
+            }
+          ]
+        },
+        {
+          "type": "panel",
+          "name": "ist_electives_panel",
+          "title": "IST electives",
+          "elements": [
+            {
+              "type": "tagbox",
+              "name": "ist_electives",
+              "title": "Select your IST electives",
+              "description": "Select at least three IST electives.",
+              "isRequired": true,
+              "choices": [
+                {
+                  "value": "2ims10",
+                  "text": "2IMS10 Physical Aspects of Digital Security (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2dmi10",
+                  "text": "2DMI10 Applied Cryptography (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2dmi00",
+                  "text": "2DMI00 Cryptographic Protocols (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2ims15",
+                  "text": "2IMS15 Verification of Security Protocols (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2ims40",
+                  "text": "2IMS40 Intrusion Detection Laboratory (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2ims50",
+                  "text": "2IMS50 Introduction to Quantum Computing and Security (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2ims60",
+                  "text": "2IMS60 Provable Security (5 ECTS)",
+                  "credits": 5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "free_space",
+      "title": "Free-elective space",
+      "description": "Include at least 20 ECTS of IAM or CSE courses. Together with free electives, homologation courses and an internship, this fills the 35 ECTS free-elective space.",
+      "elements": [
+        {
+          "type": "panel",
+          "name": "mcs_electives_panel",
+          "title": "M&CS courses",
+          "elements": [
+            {
+              "type": "tagbox",
+              "name": "mcs_course_electives",
+              "title": "IAM and CSE courses",
+              "description": "Search for and select the courses included in your program.",
+              "choices": [
+                {
+                  "value": "2amd15",
+                  "text": "2AMD15 Big Data Management (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2ami10",
+                  "text": "2AMI10 Foundations of Process Mining (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2amm10",
+                  "text": "2AMM10 Deep Learning (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2amm15",
+                  "text": "2AMM15 Machine Learning Engineering (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2amm20",
+                  "text": "2AMM20 Research Topics in Data Mining (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2dd23",
+                  "text": "2DD23 Time Series & Forecasting (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2ima10",
+                  "text": "2IMA10 Advanced Algorithms (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2ima15",
+                  "text": "2IMA15 Geometric Algorithms (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2ima20",
+                  "text": "2IMA20 Algorithms for Geovisualization (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2ima25",
+                  "text": "2IMA25 Exact Algorithms for NP-hard Problems (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2ima30",
+                  "text": "2IMA30 Topological Data Analysis (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2ima35",
+                  "text": "2IMA35 Massively Parallel Algorithms (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2ima50",
+                  "text": "2IMA50 Algorithms for Collective Decision Making (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2imd10",
+                  "text": "2IMD10 Engineering Data-Intensive Systems (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2imd20",
+                  "text": "2IMD20 Language Virtual Machines Design and Implementation (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2imf10",
+                  "text": "2IMF10 Process Algebra (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2imf15",
+                  "text": "2IMF15 Proving with Computer Assistance (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2imf25",
+                  "text": "2IMF25 Automated Reasoning (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2imf30",
+                  "text": "2IMF30 System Validation (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2imf35",
+                  "text": "2IMF35 Algorithms for Model Checking (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2imn10",
+                  "text": "2IMN10 Architecture of Distributed Systems (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2imn15",
+                  "text": "2IMN15 Internet of Things (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2imn20",
+                  "text": "2IMN20 Real-Time Systems (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2imn25",
+                  "text": "2IMN25 Quantitative Evaluation of Cyber Physical Systems (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2imn30",
+                  "text": "2IMN30 Machine Learning for Industry (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2imn35",
+                  "text": "2IMN35 VLSI Programming (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2imp10",
+                  "text": "2IMP10 Program Verification Techniques (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2imp15",
+                  "text": "2IMP15 Software Project Management (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2imp20",
+                  "text": "2IMP20 Domain Specific Language Design (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2imp25",
+                  "text": "2IMP25 Software Evolution (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2imp30",
+                  "text": "2IMP30 System Design Engineering (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2imp40",
+                  "text": "2IMP40 Empirical Methods in Software Engineering (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2imp60",
+                  "text": "2IMP60 Human-Computer Interaction (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2imv10",
+                  "text": "2IMV10 Visual Computing Project (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2imv15",
+                  "text": "2IMV15 Simulation in Computer Graphics (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2imv25",
+                  "text": "2IMV25 Interactive Virtual Environments (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2mma10",
+                  "text": "2MMA10 Applied Functional Analysis (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2mma20",
+                  "text": "2MMA20 Partial Differential Equations (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2mma40",
+                  "text": "2MMA40 Evolution Equations (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2mma70",
+                  "text": "2MMA70 Differential Geometry for Image Processing (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2mma80",
+                  "text": "2MMA80 Mathematics of Neural Networks (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2mmd10",
+                  "text": "2MMD10 Optimization (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2mmd20",
+                  "text": "2MMD20 Multilinear Algebra and Applications (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2mmd30",
+                  "text": "2MMD30 Graphs and Algorithms (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2mmd40",
+                  "text": "2MMD40 Integer Programming (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2mmd50",
+                  "text": "2MMD50 Algebraic Combinatorics (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2mmn10",
+                  "text": "2MMN10 Scientific Computing (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2mmn20",
+                  "text": "2MMN20 Scientific Programming (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2mmn30",
+                  "text": "2MMN30 Scientific Computing in Partial Differential Equations (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2mmr40",
+                  "text": "2MMR40 Research Topic 1 (Capita Selecta) (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2mmr50",
+                  "text": "2MMR50 Research Topic 2 (Capita Selecta) (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2mmr60",
+                  "text": "2MMR60 Research Topic 3 (Capita Selecta) (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2mms10",
+                  "text": "2MMS10 Probability and Stochastics 1 (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2mms30",
+                  "text": "2MMS30 Probability and Stochastics 2 (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2mms40",
+                  "text": "2MMS40 Stochastic Networks (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2mms50",
+                  "text": "2MMS50 Stochastic Decision Theory (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2mms60",
+                  "text": "2MMS60 Random Graphs (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2mms80",
+                  "text": "2MMS80 Statistical Learning Theory (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "2mms90",
+                  "text": "2MMS90 Sequential and Nonparametric Statistics (5 ECTS)",
+                  "credits": 5
+                },
+                {
+                  "value": "5lma0",
+                  "text": "5LMA0 Model Reduction (5 ECTS)",
+                  "credits": 5
+                }
+              ]
+            },
+            {
+              "type": "boolean",
+              "name": "other_mcs_courses",
+              "title": "Do you include other M&CS courses not shown above?",
+              "isRequired": true
+            },
+            {
+              "type": "matrixdynamic",
+              "name": "mcs_other_courses",
+              "title": "Other M&CS courses",
+              "description": "Add eligible IAM or CSE courses that are not shown above.",
+              "columns": [
+                {
+                  "name": "code",
+                  "title": "Course code",
+                  "isRequired": true,
+                  "isUnique": true,
+                  "width": "8em",
+                  "cellType": "text"
+                },
+                {
+                  "name": "title",
+                  "title": "Course title",
+                  "isRequired": true,
+                  "cellType": "text"
+                },
+                {
+                  "name": "credits",
+                  "title": "ECTS",
+                  "isRequired": true,
+                  "width": "6em",
+                  "cellType": "text",
+                  "inputType": "number",
+                  "min": 0.1,
+                  "step": 0.1,
+                  "totalType": "sum",
+                  "totalDisplayStyle": "decimal",
+                  "validators": [
+                    {
+                      "type": "numeric",
+                      "text": "Enter a positive ECTS value.",
+                      "minValue": 0.1
+                    }
+                  ]
+                }
+              ],
+              "rowCount": 0,
+              "confirmDelete": true,
+              "addRowText": "Add M&CS course",
+              "confirmDeleteText": "Remove this course?",
+              "visibleIf": "{other_mcs_courses} = true",
+              "isRequired": true,
+              "requiredIf": "{other_mcs_courses} = true"
+            },
+            {
+              "type": "boolean",
+              "name": "internship",
+              "title": "Do you include 2IMC10 Internship (15 ECTS)?",
+              "isRequired": true
+            },
+            {
+              "type": "checkbox",
+              "name": "internship_course_display",
+              "title": "Internship metadata",
+              "readOnly": true,
+              "visible": false,
+              "defaultValue": [
+                "2imc10"
+              ],
+              "choices": [
+                {
+                  "value": "2imc10",
+                  "text": "2IMC10 Internship (15 ECTS)",
+                  "credits": 15
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "name": "internship_supervisor",
+              "visibleIf": "{internship} = true",
+              "title": "Internship supervisor (if known)",
+              "placeholder": "Supervisor name"
+            }
+          ],
+          "description": "Include at least 20 ECTS from IAM and CSE courses. An included 2IMC10 internship also counts toward this subtotal."
+        },
+        {
+          "type": "panel",
+          "name": "free_electives_panel",
+          "title": "Free elective courses",
+          "description": "In case a free elective was followed at another university, please add its name between parentheses to the course name.",
+          "elements": [
+            {
+              "type": "matrixdynamic",
+              "name": "free_electives",
+              "columns": [
+                {
+                  "name": "code",
+                  "title": "Course code",
+                  "isRequired": true,
+                  "isUnique": true,
+                  "width": "8em",
+                  "cellType": "text"
+                },
+                {
+                  "name": "title",
+                  "title": "Course title",
+                  "isRequired": true,
+                  "cellType": "text"
+                },
+                {
+                  "name": "credits",
+                  "title": "ECTS",
+                  "isRequired": true,
+                  "width": "6em",
+                  "cellType": "text",
+                  "inputType": "number",
+                  "min": 0.1,
+                  "step": 0.1,
+                  "totalType": "sum",
+                  "totalDisplayStyle": "decimal",
+                  "validators": [
+                    {
+                      "type": "numeric",
+                      "text": "Enter a positive ECTS value.",
+                      "minValue": 0.1
+                    }
+                  ]
+                }
+              ],
+              "rowCount": 0,
+              "confirmDelete": true,
+              "addRowText": "Add free elective",
+              "confirmDeleteText": "Remove this free elective?",
+              "titleLocation": "hidden"
+            },
+            {
+              "type": "boolean",
+              "name": "external_courses",
+              "title": "Are any of your free electives from another university?",
+              "isRequired": true
+            },
+            {
+              "type": "text",
+              "name": "external_course_university",
+              "visibleIf": "{external_courses} = true",
+              "title": "External university or universities",
+              "isRequired": true,
+              "requiredIf": "{external_courses} = true",
+              "placeholder": "University name(s)"
+            },
+            {
+              "type": "comment",
+              "name": "external_course_links",
+              "visibleIf": "{external_courses} = true",
+              "title": "Course-description link(s)",
+              "description": "Provide a course-catalogue or official description link for every external course.",
+              "isRequired": true,
+              "requiredIf": "{external_courses} = true",
+              "validators": [
+                {
+                  "type": "regex",
+                  "text": "Provide at least one http(s) course-description link.",
+                  "regex": "[\\s\\S]*https?:\\/\\/\\S+[\\s\\S]*"
+                }
+              ]
+            },
+            {
+              "type": "comment",
+              "name": "external_course_motivation",
+              "visibleIf": "{external_courses} = true",
+              "title": "Motivation and non-overlap for external course(s)",
+              "description": "Explain why you selected the external course(s) and why they do not overlap with other courses in your program.",
+              "isRequired": true,
+              "requiredIf": "{external_courses} = true"
+            }
+          ]
+        },
+        {
+          "type": "panel",
+          "name": "homologation_panel",
+          "title": "Homologation courses",
+          "description": "Homologation courses are bachelor courses used to make up deficiencies in previous knowledge. Please check your admission letter to see if you have homologation courses. It is also possible to pick a maximum of three bachelor courses yourself to compensate deficiencies, if you think it is necessary",
+          "elements": [
+            {
+              "type": "boolean",
+              "name": "homologation",
+              "title": "Do you include homologation courses?",
+              "isRequired": true
+            },
+            {
+              "type": "matrixdynamic",
+              "name": "assigned_homologation_courses",
+              "visibleIf": "{homologation} = true",
+              "title": "Add the homologation courses included in your program:",
+              "columns": [
+                {
+                  "name": "code",
+                  "title": "Course code",
+                  "isRequired": true,
+                  "isUnique": true,
+                  "width": "8em",
+                  "cellType": "text"
+                },
+                {
+                  "name": "title",
+                  "title": "Course title",
+                  "isRequired": true,
+                  "cellType": "text"
+                },
+                {
+                  "name": "credits",
+                  "title": "ECTS",
+                  "isRequired": true,
+                  "width": "6em",
+                  "cellType": "text",
+                  "inputType": "number",
+                  "min": 0.1,
+                  "step": 0.1,
+                  "totalType": "sum",
+                  "totalDisplayStyle": "decimal",
+                  "validators": [
+                    {
+                      "type": "numeric",
+                      "text": "Enter a positive ECTS value.",
+                      "minValue": 0.1
+                    }
+                  ]
+                }
+              ],
+              "rowCount": 0,
+              "confirmDelete": true,
+              "addRowText": "Add homologation course",
+              "confirmDeleteText": "Remove this homologation course?",
+              "isRequired": true,
+              "requiredIf": "{homologation} = true"
+            },
+            {
+              "type": "boolean",
+              "name": "self_chosen_homologation",
+              "visibleIf": "{homologation} = true",
+              "title": "Are any homologation courses self-chosen rather than assigned in your admission letter?",
+              "defaultValue": false,
+              "isRequired": true,
+              "requiredIf": "{homologation} = true"
+            },
+            {
+              "type": "comment",
+              "name": "homologation_motivation",
+              "visibleIf": "{homologation} = true and {self_chosen_homologation} = true",
+              "title": "Motivation for self-chosen homologation courses",
+              "description": "Explain why the self-chosen bachelor course(s) compensate deficiencies.",
+              "isRequired": true,
+              "requiredIf": "{homologation} = true and {self_chosen_homologation} = true"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "additional_information",
+      "title": "Additional information",
+      "elements": [
+        {
+          "type": "comment",
+          "name": "committee_notes",
+          "title": "Additional notes for the Examination Committee",
+          "description": "Include any other information that should appear in the printable review."
+        }
+      ]
+    },
+    {
+      "name": "reporting",
+      "title": "Review and print"
+    }
+  ],
+  "headerView": "advanced",
+  "calculatedValues": [
+    {
+      "name": "rule_programme_target",
+      "expression": "120",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_mandatory_credits",
+      "expression": "70",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_standard_course_credits",
+      "expression": "5",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_graduation_credits",
+      "expression": "40",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_ist_elective_min_credits",
+      "expression": "15",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_ist_elective_min_count",
+      "expression": "3",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_mcs_min_credits",
+      "expression": "20",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_free_elective_space_min_credits",
+      "expression": "35",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_homologation_max_credits",
+      "expression": "15",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_internship_credits",
+      "expression": "15",
+      "includeIntoResult": true
+    },
+    {
+      "name": "mandatory_fixed_credits",
+      "expression": "{rule_mandatory_credits} - {rule_graduation_credits}",
+      "includeIntoResult": true
+    },
+    {
+      "name": "graduation_credits",
+      "expression": "iif({graduation_course_set} notempty, {rule_graduation_credits}, 0)",
+      "includeIntoResult": true
+    },
+    {
+      "name": "mandatory_credits",
+      "expression": "{mandatory_fixed_credits} + {graduation_credits}",
+      "includeIntoResult": true
+    },
+    {
+      "name": "ist_elective_count",
+      "expression": "count({ist_electives})",
+      "includeIntoResult": true
+    },
+    {
+      "name": "ist_elective_credits",
+      "expression": "{ist_elective_count} * {rule_standard_course_credits}",
+      "includeIntoResult": true
+    },
+    {
+      "name": "mcs_course_count",
+      "expression": "count({mcs_course_electives})",
+      "includeIntoResult": true
+    },
+    {
+      "name": "mcs_course_credits",
+      "expression": "{mcs_course_count} * {rule_standard_course_credits}",
+      "includeIntoResult": true
+    },
+    {
+      "name": "manual_mcs_elective_credits",
+      "expression": "iif({other_mcs_courses} = true, sumInArray({mcs_other_courses}, 'credits', {code} notempty and {title} notempty and {credits} > 0), 0)",
+      "includeIntoResult": true
+    },
+    {
+      "name": "internship_credits",
+      "expression": "iif({internship} = true, {rule_internship_credits}, 0)",
+      "includeIntoResult": true
+    },
+    {
+      "name": "mcs_elective_credits",
+      "expression": "{mcs_course_credits} + {manual_mcs_elective_credits} + {internship_credits}",
+      "includeIntoResult": true
+    },
+    {
+      "name": "manual_free_elective_credits",
+      "expression": "sumInArray({free_electives}, 'credits', {code} notempty and {title} notempty and {credits} > 0)",
+      "includeIntoResult": true
+    },
+    {
+      "name": "homologation_course_credits",
+      "expression": "iif({homologation} = true, sumInArray({assigned_homologation_courses}, 'credits', {code} notempty and {title} notempty and {credits} > 0), 0)",
+      "includeIntoResult": true
+    },
+    {
+      "name": "homologation_credits",
+      "expression": "{homologation_course_credits}",
+      "includeIntoResult": true
+    },
+    {
+      "name": "other_free_elective_credits",
+      "expression": "{manual_free_elective_credits} + {homologation_credits}",
+      "includeIntoResult": true
+    },
+    {
+      "name": "free_elective_space_credits",
+      "expression": "{mcs_elective_credits} + {other_free_elective_credits}",
+      "includeIntoResult": true
+    },
+    {
+      "name": "total_programme_credits",
+      "expression": "{mandatory_credits} + {ist_elective_credits} + {free_elective_space_credits}",
+      "includeIntoResult": true
+    }
+  ]
+}

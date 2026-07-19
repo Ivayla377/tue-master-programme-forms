@@ -12,7 +12,8 @@
     "build:cse": "npm run build:program -- cse",
     "build:es": "npm run build:program -- es",
     "build:iam": "npm run build:program -- iam",
-    "build:all": "npm run build:dsai && npm run build:cse && npm run build:es && npm run build:iam",
+    "build:ist": "npm run build:program -- ist",
+    "build:all": "npm run build:dsai && npm run build:cse && npm run build:es && npm run build:iam && npm run build:ist",
     "test": "node --test",
     "preview": "vite preview --host 127.0.0.1"
   },

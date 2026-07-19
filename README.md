@@ -9,6 +9,8 @@ No installation is needed to fill in a form. Download the programme form, then o
 - [Download the DS&AI form](https://github.com/Ivayla377/tue-master-programme-forms/releases/latest/download/dsai.html)
 - [Download the CSE form](https://github.com/Ivayla377/tue-master-programme-forms/releases/latest/download/cse.html)
 - [Download the ES form](https://github.com/Ivayla377/tue-master-programme-forms/releases/latest/download/es.html)
+- [Download the IAM form](https://github.com/Ivayla377/tue-master-programme-forms/releases/latest/download/iam.html)
+- [Download the IST form](https://github.com/Ivayla377/tue-master-programme-forms/releases/latest/download/ist.html)
 
 The forms work offline after download.
 
@@ -39,27 +41,27 @@ npm install
 npm run build:dsai
 npm run build:cse
 npm run build:es
+npm run build:iam
+npm run build:ist
 npm run build:all
 ```
 
-The generated downloadable forms are located in the `dist/` directory: `dist/dsai.html`, `dist/cse.html` and `dist/es.html`. Building one programme preserves the other generated forms.
+The generated downloadable forms are located in the `dist/` directory: `dist/dsai.html`, `dist/cse.html`, `dist/es.html`, `dist/iam.html` and `dist/ist.html`. Building one programme preserves the other generated forms.
 
 ## Project structure
 
 ```text
-dist/                       # Generated standalone forms for users
+dist/                         # Generated standalone forms for users
 forms/
-  dsai/, cse/, es/          # SurveyJS form definitions, rule notes, and source PDFs
-  iam/, ist/                # Placeholders for upcoming programmes
+  dsai/, cse/, es/, iam/, ist/ # SurveyJS form definitions, rule notes, and source PDFs
 src/
-  shared/                   # Shared SurveyJS, ECTS, print, and summary helpers
+  shared/                     # Shared SurveyJS, ECTS, print, and summary helpers
   programmes/
-    dsai/, cse/, es/        # Programme-specific config, calculator, and summary
-    iam/, ist/              # Placeholders for upcoming programmes
-  entries/                  # Browser entry modules for each form
+    dsai/, cse/, es/, iam/, ist/ # Programme-specific config, calculator, and summary
+  entries/                    # Browser entry modules for each form
 scripts/
-  programmes.mjs            # Registered build targets
-  build-program.mjs         # Builds one standalone form
-tests/                      # Calculator regression tests
-dsai.html, cse.html, es.html # Vite HTML entry pages
+  programmes.mjs              # Registered build targets
+  build-program.mjs           # Builds one standalone form
+tests/                        # Calculator regression tests
+dsai.html, cse.html, es.html, iam.html, ist.html # Vite HTML entry pages
 ```
