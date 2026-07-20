@@ -4,7 +4,10 @@ import {
   isTrue,
   sumCredits as sumSharedCredits,
 } from "../../shared/credit-utils.js";
+import { allocateCoursesToTarget } from "../../shared/elective-allocation.js";
 import { exactCreditValidation } from "../../shared/validation-utils.js";
+
+export const CSE_SPECIALIZATION_TARGET = 30;
 
 export const CSE_FOCUS_AREAS = [
   { value: "algorithms", label: "Algorithms and Theory" },
@@ -110,11 +113,11 @@ export function calculateCse(data = {}, choiceLookup = createCseChoiceLookup({ p
   const specializationCandidateCourses = specializationCodes.map((code) =>
     makeCourse(code, "specialization_additional", choiceLookup, catalog),
   );
-  const specializationCourses = [];
+  const selectedSpecializationCourses = [];
   for (const course of specializationCandidateCourses) {
     if (claim(course, "specialization elective", claimed, doubleCountedCourses)) {
       course.counted = true;
-      specializationCourses.push(course);
+      selectedSpecializationCourses.push(course);
     } else {
       course.counted = false;
     }
@@ -129,6 +132,23 @@ export function calculateCse(data = {}, choiceLookup = createCseChoiceLookup({ p
     internshipCourse.counted = claim(internshipCourse, "internship", claimed, doubleCountedCourses);
   }
   const internshipCredits = internshipCourse?.counted ? internshipCourse.credits : 0;
+  const specializationCourseTarget = Math.max(
+    0,
+    CSE_SPECIALIZATION_TARGET - internshipCredits,
+  );
+  const specializationAllocation = allocateCoursesToTarget(
+    selectedSpecializationCourses,
+    specializationCourseTarget,
+  );
+  const specializationCourses = specializationAllocation.required;
+  const excessSpecializationCourses = specializationAllocation.excess;
+  for (const course of excessSpecializationCourses) {
+    renameClaimedComponent(
+      course,
+      "additional specialization elective in free-elective space",
+      claimed,
+    );
+  }
 
   const duplicateSpecializationCourses = duplicateSpecializationCodes.map((code) =>
     makeCourse(code, "specialization_additional", choiceLookup, catalog),
@@ -165,13 +185,15 @@ export function calculateCse(data = {}, choiceLookup = createCseChoiceLookup({ p
   );
   const invalidFreeRows = freeRows.filter((row) => !row.validCredits);
   const invalidHomologationRows = homologationRows.filter((row) => !row.validCredits);
-  const freeCredits = sumCountedRows(freeRows);
+  const manualFreeCredits = sumCountedRows(freeRows);
+  const specializationExcessCredits = specializationAllocation.excessCredits;
+  const freeCredits = manualFreeCredits + specializationExcessCredits;
   const homologationCredits = sumCountedRows(homologationRows);
   const freeSpaceTotal = freeCredits + homologationCredits;
 
   const foundationalCredits = sumCountedCourses(foundationalCourses);
   const extraCredits = sumCountedCourses(extraCourses);
-  const specializationCourseCredits = sumCountedCourses(specializationCourses);
+  const specializationCourseCredits = specializationAllocation.requiredCredits;
   const specializationCredits = specializationCourseCredits + internshipCredits;
   const seminarCredits = seminar?.counted ? seminar.credits : 0;
   const graduationCredits = sumCountedCourses(graduationCourses);
@@ -193,6 +215,7 @@ export function calculateCse(data = {}, choiceLookup = createCseChoiceLookup({ p
     duplicateSpecializationCourses,
     doubleCountedCourses,
     specializationCredits,
+    specializationExcessCredits,
     internshipSelected,
     freeSpaceTotal,
     seminarCredits,
@@ -209,9 +232,12 @@ export function calculateCse(data = {}, choiceLookup = createCseChoiceLookup({ p
     subtotals: {
       foundational: foundationalCredits,
       extra: extraCredits,
+      specializationCoursesSelected: sumCountedCourses(selectedSpecializationCourses),
       specializationCourses: specializationCourseCredits,
+      specializationExcess: specializationExcessCredits,
       internship: internshipCredits,
       specialization: specializationCredits,
+      manualFreeElectives: manualFreeCredits,
       freeElectives: freeCredits,
       homologation: homologationCredits,
       freeSpace: freeSpaceTotal,
@@ -223,6 +249,8 @@ export function calculateCse(data = {}, choiceLookup = createCseChoiceLookup({ p
       foundationalCourses,
       extraCourses,
       specializationCourses,
+      allSpecializationCourses: selectedSpecializationCourses,
+      excessSpecializationCourses,
       foundationAssignment,
       extraFocus,
       seminar,
@@ -259,7 +287,7 @@ function buildValidations(values) {
           : "error",
       detail:
         values.foundationalSelections.length === 3 && values.foundationalCourses.length === 3
-          ? "One 5 ECTS course selected from each focus area."
+          ? "One foundational course selected from each focus area."
           : `${values.foundationalCourses.length}/3 distinct foundational courses selected.`,
     },
     {
@@ -278,14 +306,16 @@ function buildValidations(values) {
     targetValidation(
       "Specialization electives",
       values.specializationCredits,
-      30,
-      "Specialization courses and the optional internship total exactly 30 ECTS.",
+      CSE_SPECIALIZATION_TARGET,
+      values.specializationExcessCredits > 0
+        ? `${formatCredits(CSE_SPECIALIZATION_TARGET)} allocated to specialization. Additional specialization courses (${formatCredits(values.specializationExcessCredits)}) count towards the free-elective space.`
+        : "Specialization courses and the optional internship total exactly 30 ECTS.",
     ),
     targetValidation(
       "Free elective space",
       values.freeSpaceTotal,
       15,
-      "Free electives and homologation courses together total 15 ECTS.",
+      "Additional specialization courses, free electives and homologation courses together total 15 ECTS.",
     ),
     {
       label: "Seminar",
@@ -508,6 +538,11 @@ function recordDuplicate(item, component, prior, doubleCountedCourses) {
     excludedComponent: component,
     exclusionReason: `Already counted as ${prior.component}.`,
   });
+}
+
+function renameClaimedComponent(item, component, claimed) {
+  if (!item?.code || !claimed.has(item.code)) return;
+  claimed.set(item.code, { component, item });
 }
 
 function formatDuplicateLabel(item) {

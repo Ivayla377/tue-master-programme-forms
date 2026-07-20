@@ -446,7 +446,7 @@
               "type": "matrixdynamic",
               "name": "homologation_courses",
               "visibleIf": "{homologation} = true",
-              "title": "Assigned homologation courses",
+              "title": "Included homologation courses",
               "isRequired": true,
               "requiredIf": "{homologation} = true",
               "columns": [
@@ -489,71 +489,17 @@
               "addRowText": "Add homologation course",
               "confirmDeleteText": "Remove this homologation course?",
               "minRowCount": 1,
-              "description": "Add the homologation courses from your admission decision."
+              "maxRowCount": 3,
+              "description": "Add all homologation courses here, whether assigned in your admission letter or chosen by you."
             },
             {
               "type": "boolean",
               "name": "self_chosen_homologation",
               "visibleIf": "{homologation} = true",
-              "title": "Did you include self-chosen homologation courses?",
+              "title": "Are any homologation courses self-chosen rather than assigned in the admission letter?",
               "defaultValue": false,
               "isRequired": true,
               "requiredIf": "{homologation} = true"
-            },
-            {
-              "type": "matrixdynamic",
-              "name": "bachelor_free_electives",
-              "title": "Self-chosen homologation courses",
-              "description": "Add bachelor courses chosen to compensate deficiencies.",
-              "columns": [
-                {
-                  "name": "code",
-                  "title": "Course code",
-                  "isRequired": true,
-                  "isUnique": true,
-                  "width": "8em",
-                  "cellType": "text"
-                },
-                {
-                  "name": "title",
-                  "title": "Bachelor course title",
-                  "isRequired": true,
-                  "cellType": "text"
-                },
-                {
-                  "name": "master_course",
-                  "title": "Prepares for",
-                  "isRequired": true,
-                  "cellType": "text"
-                },
-                {
-                  "name": "credits",
-                  "title": "ECTS",
-                  "isRequired": true,
-                  "width": "6em",
-                  "cellType": "text",
-                  "inputType": "number",
-                  "min": 0.1,
-                  "step": 0.1,
-                  "totalType": "sum",
-                  "totalDisplayStyle": "decimal",
-                  "validators": [
-                    {
-                      "type": "numeric",
-                      "text": "Enter a positive ECTS value.",
-                      "minValue": 0.1
-                    }
-                  ]
-                }
-              ],
-              "rowCount": 0,
-              "confirmDelete": true,
-              "addRowText": "Add self-chosen homologation course",
-              "confirmDeleteText": "Remove this self-chosen homologation course?",
-              "visibleIf": "{homologation} = true and {self_chosen_homologation} = true",
-              "requiredIf": "{homologation} = true and {self_chosen_homologation} = true",
-              "isRequired": true,
-              "maxRowCount": 3
             },
             {
               "type": "comment",
@@ -764,7 +710,7 @@
     },
     {
       "name": "self_chosen_homologation_credits",
-      "expression": "iif({homologation} = true and {self_chosen_homologation} = true, sumInArray({bachelor_free_electives}, 'credits', {code} notempty and {title} notempty and {master_course} notempty and {credits} > 0), 0)",
+      "expression": "0",
       "includeIntoResult": true
     },
     {
@@ -774,7 +720,7 @@
     },
     {
       "name": "homologation_credits",
-      "expression": "{assigned_homologation_credits} + {self_chosen_homologation_credits}",
+      "expression": "{assigned_homologation_credits}",
       "includeIntoResult": true
     },
     {

@@ -140,7 +140,9 @@ export function calculateIst(data = {}, choiceLookup = createIstChoiceLookup()) 
   const homologationActive = isAffirmative(data.homologation);
   const homologationRows = homologationActive
     ? processRows(
-        normalizeRows(data.assigned_homologation_courses),
+        normalizeRows(
+          data.homologation_courses ?? data.assigned_homologation_courses,
+        ),
         "homologation",
         claimed,
         duplicates,

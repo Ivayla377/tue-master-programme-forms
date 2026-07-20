@@ -1,6 +1,6 @@
 {
   "title": "Form 1: IST Program of Examinations",
-  "description": "Use this form to compose your Information Security Technology study program for review by the Examination Committee. The ECTS overview checks the main program requirements while you work and helps you create a valid study program.",
+  "description": "This form is used to create a report that shows your current study program. Its purpose is to be shared with the examination committee, so that they can check whether it satisfies the requirements of IST programs and approve it or inform you of how it does not satisfy the requirements. This form has built-in validation that should help you create a valid study program.",
   "completedHtml": "",
   "showCompletePage": false,
   "clearInvisibleValues": "onHidden",
@@ -778,9 +778,10 @@
             },
             {
               "type": "matrixdynamic",
-              "name": "assigned_homologation_courses",
+              "name": "homologation_courses",
               "visibleIf": "{homologation} = true",
-              "title": "Add the homologation courses included in your program:",
+              "title": "Included homologation courses",
+              "description": "Add all homologation courses here, whether assigned in your admission letter or chosen by you.",
               "columns": [
                 {
                   "name": "code",
@@ -817,6 +818,7 @@
                 }
               ],
               "rowCount": 0,
+              "maxRowCount": 3,
               "confirmDelete": true,
               "addRowText": "Add homologation course",
               "confirmDeleteText": "Remove this homologation course?",
@@ -827,7 +829,7 @@
               "type": "boolean",
               "name": "self_chosen_homologation",
               "visibleIf": "{homologation} = true",
-              "title": "Are any homologation courses self-chosen rather than assigned in your admission letter?",
+              "title": "Are any homologation courses self-chosen rather than assigned in the admission letter?",
               "defaultValue": false,
               "isRequired": true,
               "requiredIf": "{homologation} = true"
@@ -971,7 +973,7 @@
     },
     {
       "name": "homologation_course_credits",
-      "expression": "iif({homologation} = true, sumInArray({assigned_homologation_courses}, 'credits', {code} notempty and {title} notempty and {credits} > 0), 0)",
+      "expression": "iif({homologation} = true, sumInArray({homologation_courses}, 'credits', {code} notempty and {title} notempty and {credits} > 0), 0)",
       "includeIntoResult": true
     },
     {

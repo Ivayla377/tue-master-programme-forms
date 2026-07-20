@@ -20,9 +20,7 @@ const SUMMARY_SUBTOTAL_ROWS = [
   ["coreAndSpecialization", "Core and specialization subtotal"],
   ["officialFreeElectives", "Listed free electives"],
   ["internship", "Internship"],
-  ["assignedHomologation", "Assigned homologation"],
-  ["selfChosenHomologation", "Self-chosen homologation"],
-  ["homologation", "Homologation subtotal"],
+  ["homologation", "Homologation"],
   ["freeElectiveRows", "Other free electives"],
   ["total", "Overall programme total"],
 ];
@@ -82,8 +80,10 @@ export function renderIamSummary(report, data, choiceLookup, labels = {}) {
     ...selected.officialFreeElectiveCourses.map((course) => ({
       cells: ["Listed free elective", courseCode(course), courseTitle(course), courseCredits(course)],
     })),
-    ...manualRows("Homologation", selected.homologationRows),
-    ...manualRows("Self-chosen homologation", selected.selfChosenHomologationRows, true),
+    ...manualRows("Homologation", [
+      ...selected.homologationRows,
+      ...selected.selfChosenHomologationRows,
+    ]),
     ...manualRows("Other free elective", selected.freeElectiveRows),
   ];
 
@@ -142,6 +142,9 @@ export function renderIamSummary(report, data, choiceLookup, labels = {}) {
         <h3>Free electives, homologation and internship</h3>
         ${renderDetailsTable([
           ["Homologation included", yesNo(safeData.homologation)],
+          ...(booleanValue(safeData.homologation) === true
+            ? [["Self-chosen homologation included", yesNo(safeData.self_chosen_homologation)]]
+            : []),
         ])}
         ${renderReportTable(
           ["Type", "Course code", "Course title", "Credits"],
@@ -197,6 +200,12 @@ export function renderIamSummary(report, data, choiceLookup, labels = {}) {
         <h3>Changes, motivations and notes</h3>
         ${renderNotes([
           ["Changes to the previously approved programme", booleanValue(safeData.previous) === true ? safeData.changes : undefined],
+          [
+            "Motivation for self-chosen homologation courses",
+            booleanValue(safeData.self_chosen_homologation) === true
+              ? safeData.homologation_motivation
+              : undefined,
+          ],
           ["Additional notes for the Examination Committee", safeData.committee_notes],
         ])}
       </section>
@@ -545,5 +554,3 @@ function escapeHtml(value) {
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
 }
-
-

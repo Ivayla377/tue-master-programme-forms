@@ -1,5 +1,6 @@
 import { createChoiceLookup as createSharedChoiceLookup } from "../../shared/course-utils.js";
 import { formatCredits, isTrue } from "../../shared/credit-utils.js";
+import { allocateCoursesToTarget } from "../../shared/elective-allocation.js";
 
 export const STREAM_ELECTIVE_TARGET = 15;
 export const FREE_ELECTIVE_TARGET = 25;
@@ -236,6 +237,19 @@ export function calculateEs(data = {}, choiceLookup = createEsChoiceLookup({ pag
       });
     }
   }
+  const streamElectiveAllocation = allocateCoursesToTarget(
+    streamElectiveCourses,
+    STREAM_ELECTIVE_TARGET,
+  );
+  const requiredStreamElectiveCourses = streamElectiveAllocation.required;
+  const excessStreamElectiveCourses = streamElectiveAllocation.excess;
+  for (const item of excessStreamElectiveCourses) {
+    renameClaimedComponent(
+      item,
+      "additional stream elective in free-elective space",
+      claimed,
+    );
+  }
 
   const internship = resolveInternship(data, choiceLookup);
   if (internship.course) {
@@ -267,8 +281,8 @@ export function calculateEs(data = {}, choiceLookup = createEsChoiceLookup({ pag
   const commonMandatory = sumCourses(commonMandatoryCourses);
   const streamMandatory = sumCourses(streamMandatoryCourses);
   const streamElectivesSelected = sumCourses(streamElectiveCourses);
-  const streamElectivesRequired = Math.min(streamElectivesSelected, STREAM_ELECTIVE_TARGET);
-  const streamElectivesExcess = 0;
+  const streamElectivesRequired = streamElectiveAllocation.requiredCredits;
+  const streamElectivesExcess = streamElectiveAllocation.excessCredits;
   const freeElectiveRowCredits = sumCountedRows(freeElectiveRows);
   const assignedHomologationCredits = sumCountedRows(assignedHomologationRows);
   const selfChosenHomologationCredits = sumCountedRows(selfChosenHomologationRows);
@@ -279,14 +293,16 @@ export function calculateEs(data = {}, choiceLookup = createEsChoiceLookup({ pag
     ? internship.course.credits
     : 0;
   const freeElectiveSpace = roundCredits(freeElectiveRowCredits
+    + streamElectivesExcess
     + homologationCredits
     + internshipCredits);
   const preparationProjectCredits = graduation.preparationProject?.credits ?? 0;
   const graduationProjectCredits = graduation.graduationProject?.credits ?? 0;
   const graduationPhase = roundCredits(preparationProjectCredits + graduationProjectCredits);
   const mandatoryAndGraduation = roundCredits(commonMandatory + graduationPhase);
-  // Every selected course contributes exactly once. Additional courses belong
-  // in the explicit free-elective rows rather than being reclassified here.
+  // Every selected course contributes exactly once. The required stream
+  // allocation is capped at 15 ECTS and whole excess courses move into the
+  // free-elective space.
   const total = roundCredits(commonMandatory
     + streamMandatory
     + streamElectivesSelected
@@ -302,9 +318,17 @@ export function calculateEs(data = {}, choiceLookup = createEsChoiceLookup({ pag
     ...freeElectiveRows,
     ...homologationRows,
   ].filter((row) => !row.validCredits);
-  const selfChosenCount = selfChosenHomologationRows.filter(
+  const validHomologationCount = homologationRows.filter(
     (row) => row.validCredits && row.counted,
   ).length;
+  let selfChosenCount = selfChosenHomologationRows.filter(
+    (row) => row.validCredits && row.counted,
+  ).length;
+  if (normalizedHomologation.usesUnifiedTable) {
+    selfChosenCount = normalizedHomologation.selfChosenActive
+      ? validHomologationCount
+      : 0;
+  }
   const homologationAnswered = hasBooleanAnswer(data.homologation);
   const selfChosenAnswered = !isAffirmative(data.homologation)
     || hasBooleanAnswer(data.self_chosen_homologation);
@@ -326,16 +350,12 @@ export function calculateEs(data = {}, choiceLookup = createEsChoiceLookup({ pag
     && hasText(data.external_course_overlap)
   );
   const homologationMotivationPresent = hasText(data.homologation_motivation);
-  const validHomologationCount = homologationRows.filter(
-    (row) => row.validCredits && row.counted,
-  ).length;
-
   const flags = {
     commonMandatoryComplete: commonMandatory === 25,
     hasExactlyOneStream: Boolean(streamDefinition),
     streamMandatoryComplete: streamMandatory === 15,
-    streamElectiveTargetMet: streamElectivesSelected === STREAM_ELECTIVE_TARGET,
-    streamElectiveMinimumMet: streamElectivesSelected === STREAM_ELECTIVE_TARGET,
+    streamElectiveTargetMet: streamElectivesSelected >= STREAM_ELECTIVE_TARGET,
+    streamElectiveMinimumMet: streamElectivesSelected >= STREAM_ELECTIVE_TARGET,
     freeElectiveSpaceMet: freeElectiveSpace >= FREE_ELECTIVE_TARGET,
     freeElectiveSpaceOver: freeElectiveSpace > FREE_ELECTIVE_TARGET,
     graduationContextValid: graduation.contextValid,
@@ -427,6 +447,8 @@ export function calculateEs(data = {}, choiceLookup = createEsChoiceLookup({ pag
       stream,
       streamMandatoryCourses,
       streamElectiveCourses,
+      requiredStreamElectiveCourses,
+      excessStreamElectiveCourses,
       invalidStreamElectiveCourses,
       staleStreamElectiveCourses,
       freeElectiveRows,
@@ -477,13 +499,15 @@ function buildValidations(values) {
     {
       label: "Stream electives",
       status: values.flags.streamElectiveTargetMet ? "success" : "error",
-      detail: `${formatCredits(values.streamElectivesSelected)} / exactly 15 ECTS from the selected stream's electives list.`,
+      detail: values.streamElectivesExcess > 0
+        ? `${formatCredits(STREAM_ELECTIVE_TARGET)} / ${formatCredits(STREAM_ELECTIVE_TARGET)}. Additional stream electives (${formatCredits(values.streamElectivesExcess)}) count towards the free-elective space.`
+        : `${formatCredits(values.streamElectivesSelected)} / ${formatCredits(STREAM_ELECTIVE_TARGET)} from the selected stream's electives list.`,
     },
     targetWithOverWarning(
       "Free elective space",
       values.freeElectiveSpace,
       FREE_ELECTIVE_TARGET,
-      "Free electives, homologation and internship together fill 25 ECTS.",
+      "Additional stream electives, other free electives, homologation and internship together fill 25 ECTS.",
     ),
     {
       label: "Graduation department",
@@ -795,6 +819,7 @@ function normalizeHomologationRows(data) {
       selfChosen: [],
       selfChosenActive: false,
       homologationActive: false,
+      usesUnifiedTable: false,
     };
   }
 
@@ -819,6 +844,7 @@ function normalizeHomologationRows(data) {
     selfChosen: selfChosenActive ? normalizeRows(selfChosenSource) : [],
     selfChosenActive,
     homologationActive,
+    usesUnifiedTable: genericRows.length > 0,
   };
 }
 
@@ -892,6 +918,11 @@ function recordDuplicate(item, component, prior, duplicates) {
     excludedComponent: component,
     exclusionReason: `Already counted as ${prior.component}.`,
   });
+}
+
+function renameClaimedComponent(item, component, claimed) {
+  if (!item?.code || !claimed.has(item.code)) return;
+  claimed.set(item.code, { component, item });
 }
 
 function getStreamElectiveValues(data, streamValue) {

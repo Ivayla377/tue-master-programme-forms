@@ -267,6 +267,21 @@ select {
   line-height: 1.45;
 }
 
+#surveyElement .elective-allocation-note {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+#surveyElement .free-electives-subheading {
+  margin: 0;
+  color: var(--ink);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
 #surveyElement .sd-question {
   border-radius: 4px;
 }

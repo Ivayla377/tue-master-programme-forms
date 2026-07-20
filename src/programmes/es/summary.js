@@ -4,8 +4,8 @@ import { renderEctsPanel as renderSharedEctsPanel } from "../../shared/summary-l
 const PANEL_SUBTOTAL_ROWS = [
   ["commonMandatory", "Common mandatory courses"],
   ["streamMandatory", "Stream mandatory courses"],
-  ["streamElectivesSelected", "Stream electives selected"],
-  ["freeElectiveRows", "Free electives"],
+  ["streamElectivesRequired", "Stream electives (required)"],
+  ["freeElectiveRows", "Entered free electives"],
   ["homologation", "Homologation"],
   ["internship", "Internship"],
   ["freeElectiveSpace", "Free-elective space total"],
@@ -16,10 +16,10 @@ const PANEL_SUBTOTAL_ROWS = [
 const SUMMARY_SUBTOTAL_ROWS = [
   ["commonMandatory", "Common mandatory courses"],
   ["streamMandatory", "Selected-stream mandatory courses"],
-  ["streamElectivesSelected", "Selected stream electives"],
-  ["freeElectiveRows", "Free electives"],
-  ["assignedHomologation", "Assigned homologation courses"],
-  ["selfChosenHomologation", "Self-chosen homologation courses"],
+  ["streamElectivesRequired", "Stream electives (required)"],
+  ["streamElectivesExcess", "Additional stream electives in free space"],
+  ["freeElectiveRows", "Entered free electives"],
+  ["homologation", "Homologation courses"],
   ["internship", "Internship"],
   ["preparationProject", "Preparation graduation project"],
   ["graduationProject", "Graduation project"],
@@ -83,7 +83,7 @@ export function renderEsEctsPanel(report) {
       validations,
       hasWarnings: validations.some((validation) => validationStatus(validation) === "warning"),
     },
-    PANEL_SUBTOTAL_ROWS,
+    visibleSubtotalRows(PANEL_SUBTOTAL_ROWS, safeReport),
   );
 }
 
@@ -171,7 +171,7 @@ export function renderEsSummary(report, data, choiceLookup, labels = {}) {
   );
 
   const streamElectiveRows = [
-    ...selected.streamElectiveCourses.map((course) => ({
+    ...selected.requiredStreamElectiveCourses.map((course) => ({
       cells: [courseCode(course), courseTitle(course), courseCredits(course)],
     })),
     ...selected.invalidStreamElectiveCourses.map((course) => ({
@@ -190,31 +190,27 @@ export function renderEsSummary(report, data, choiceLookup, labels = {}) {
     selected.freeElectiveRows,
     safeData.free_electives,
   );
-  const assignedHomologationRows = homologationState === false
+  const homologationRows = homologationState === false
     ? []
     : reportRowsOrEnteredRows(
-      selected.assignedHomologationRows,
-      safeData.assigned_homologation_courses,
+      selected.homologationRows,
+      safeData.homologation_courses,
     );
-  const selfChosenHomologationRows = homologationState === false || selfChosenState === false
-    ? []
-    : reportRowsOrEnteredRows(
-      selected.selfChosenHomologationRows,
-      safeData.self_chosen_homologation_courses,
-    );
-  const fallbackHomologationRows = assignedHomologationRows.length || selfChosenHomologationRows.length
-    ? []
-    : selected.homologationRows;
   const freeSpaceRows = [
+    ...selected.excessStreamElectiveCourses.map((course) => ({
+      cells: [
+        "Additional stream elective",
+        courseCode(course),
+        courseTitle(course),
+        courseCredits(course),
+      ],
+    })),
     ...manualSummaryRows("Free elective", freeElectiveRows),
-    ...manualSummaryRows("Assigned homologation", assignedHomologationRows),
-    ...manualSummaryRows("Self-chosen homologation", selfChosenHomologationRows),
-    ...manualSummaryRows("Homologation", fallbackHomologationRows),
+    ...manualSummaryRows("Homologation", homologationRows),
   ];
-  const hasHomologationCourses = assignedHomologationRows.length > 0
-    || selfChosenHomologationRows.length > 0
-    || fallbackHomologationRows.length > 0;
-  const hasSelfChosenHomologationCourses = selfChosenHomologationRows.length > 0;
+  const hasHomologationCourses = homologationRows.length > 0;
+  const hasSelfChosenHomologationCourses = selfChosenState === true
+    && homologationRows.length > 0;
 
   const internship = asRecord(selected.internship);
   const internshipSelected = booleanValue(coalesce(internship.selected, safeData.internship));
@@ -253,8 +249,7 @@ export function renderEsSummary(report, data, choiceLookup, labels = {}) {
   const externalDetailsActive = externalState === true
     || selectedExternalCourse
     || (externalState === null && externalDetailsEntered);
-  const selfChosenDetailsActive = selfChosenState === true
-    || (selfChosenState === null && selfChosenHomologationRows.length > 0);
+  const selfChosenDetailsActive = selfChosenState === true;
   const updateDetailsActive = previousState === true
     || (previousState === null && hasText(safeData.changes));
   return `
@@ -297,7 +292,7 @@ export function renderEsSummary(report, data, choiceLookup, labels = {}) {
       <section class="summary-section summary-section--allow-break">
         <h3>Stream electives</h3>
         <p class="summary-inline-detail">
-          <strong>Selected:</strong> ${escapeHtml(formatCredits(safeReport.subtotals.streamElectivesSelected))} / exactly 15 ECTS
+          <strong>Allocated:</strong> ${escapeHtml(formatCredits(safeReport.subtotals.streamElectivesRequired))} / 15 ECTS
         </p>
         ${renderReportTable(
           ["Course code", "Course title", "Credits"],
@@ -311,7 +306,9 @@ export function renderEsSummary(report, data, choiceLookup, labels = {}) {
         <h3>Free electives and homologation</h3>
         ${renderDetailsTable([
           ["Homologation included", yesNo(safeData.homologation)],
-          ["Self-chosen homologation included", yesNo(safeData.self_chosen_homologation)],
+          ...(homologationState === true
+            ? [["Self-chosen homologation included", yesNo(safeData.self_chosen_homologation)]]
+            : []),
         ])}
         ${renderReportTable(
           ["Type", "Course code", "Course title", "Credits"],
@@ -547,6 +544,14 @@ function normalizeReport(report) {
       stream: coalesce(sourceSelected.stream, sourceSelected.selectedStream),
       streamMandatoryCourses: arrayFromAliases(sourceSelected, ["streamMandatoryCourses", "mandatoryStreamCourses"]),
       streamElectiveCourses: arrayFromAliases(sourceSelected, ["streamElectiveCourses", "streamElectives"]),
+      requiredStreamElectiveCourses: arrayFromAliases(
+        sourceSelected,
+        ["requiredStreamElectiveCourses", "streamElectiveCourses", "streamElectives"],
+      ),
+      excessStreamElectiveCourses: arrayFromAliases(
+        sourceSelected,
+        ["excessStreamElectiveCourses", "additionalStreamElectiveCourses"],
+      ),
       invalidStreamElectiveCourses: arrayFromAliases(sourceSelected, ["invalidStreamElectiveCourses", "invalidStreamElectives"]),
       staleStreamElectiveCourses: arrayFromAliases(sourceSelected, ["staleStreamElectiveCourses", "ignoredStreamElectiveCourses"]),
       freeElectiveRows: arrayFromAliases(sourceSelected, ["freeElectiveRows", "freeRows"]),
@@ -571,7 +576,7 @@ function renderSubtotalsTable(report) {
   return `
     <table class="summary-table summary-table--subtotals">
       <tbody>
-        ${SUMMARY_SUBTOTAL_ROWS.map(([key, label]) => `
+        ${visibleSubtotalRows(SUMMARY_SUBTOTAL_ROWS, report).map(([key, label]) => `
           <tr${key === "total" ? ' class="summary-row--group"' : ""}>
             <th scope="row">${escapeHtml(label)}</th>
             <td>${escapeHtml(formatCredits(report.subtotals[key]))}</td>
@@ -580,6 +585,12 @@ function renderSubtotalsTable(report) {
       </tbody>
     </table>
   `;
+}
+
+function visibleSubtotalRows(rows, report) {
+  return rows.filter(
+    ([key]) => key !== "streamElectivesExcess" || report.subtotals.streamElectivesExcess > 0,
+  );
 }
 
 function renderDetailsTable(rows) {

@@ -446,7 +446,7 @@
     {
       "name": "specialization",
       "title": "Specialization electives and internship",
-      "description": "Select exactly 30 ECTS of specialization electives. Use the four grouped selectors below. If an internship is included, it contributes 15 ECTS to this total.",
+      "description": "Fill 30 ECTS of specialization electives using the four grouped selectors below. If an internship is included, it contributes 15 ECTS. If you wish to follow more specialization courses than required, you can select them here and they will count towards the free-elective space.",
       "elements": [
         {
           "type": "panel",
@@ -699,6 +699,12 @@
                 }
               ],
               "choicesVisibleIf": "{item} <> {foundational_software} and {extra_software} notcontains {item}"
+            },
+            {
+              "type": "html",
+              "name": "specialization_excess_notice",
+              "visibleIf": "{specialization_excess_free_electives.length} > 0",
+              "html": "<p class='elective-allocation-note'>The specialization requirement is filled. Additional selected courses count towards your free-elective space and appear on the next page.</p>"
             }
           ]
         },
@@ -728,13 +734,61 @@
     {
       "name": "free_space",
       "title": "Free electives and homologation",
-      "description": "Free electives and homologation courses together must total exactly 15 ECTS.",
+      "description": "Free electives and homologation courses together must fill exactly 15 ECTS.",
       "elements": [
+        {
+          "type": "panel",
+          "name": "free_electives_panel",
+          "title": "Free elective courses",
+          "description": "In case a free elective was followed at another university, please add its name between parentheses to the course name.",
+          "elements": [
+        {
+          "type": "matrixdynamic",
+          "name": "specialization_excess_free_electives",
+          "visibleIf": "{specialization_excess_free_electives.length} > 0",
+          "title": "Specialization courses in your free-elective space",
+          "description": "As you selected more than the required specialization courses, the following courses count as free electives. You can remove one here or change your selection on the previous page.",
+          "columns": [
+            {
+              "name": "code",
+              "title": "Course code",
+              "cellType": "text",
+              "readOnly": true,
+              "width": "7em"
+            },
+            {
+              "name": "title",
+              "title": "Course title",
+              "cellType": "text",
+              "readOnly": true
+            },
+            {
+              "name": "credits",
+              "title": "Credits",
+              "cellType": "text",
+              "readOnly": true,
+              "totalType": "sum",
+              "totalDisplayStyle": "decimal",
+              "width": "5em"
+            }
+          ],
+          "rowCount": 0,
+          "allowAddRows": false,
+          "allowRemoveRows": true,
+          "confirmDelete": true,
+          "confirmDeleteText": "Remove this course from your specialization selection?"
+        },
+        {
+          "type": "html",
+          "name": "specialization_other_free_electives_heading",
+          "visibleIf": "{specialization_excess_free_electives.length} > 0",
+          "html": "<h3 class='free-electives-subheading'>Other free electives</h3>"
+        },
         {
           "type": "matrixdynamic",
           "name": "free_electives",
           "title": "Free elective courses",
-          "description": "In case a free elective was followed at another university, please add its name between parentheses to the course name.",
+          "titleLocation": "hidden",
           "columns": [
             {
               "name": "code",
@@ -787,12 +841,14 @@
           "description": "Provide links to course descriptions, your motivation, and an explanation of why the courses do not overlap with another course in this program.",
           "isRequired": true,
           "requiredIf": "{external_courses} = true"
+        }
+          ]
         },
         {
           "type": "panel",
           "name": "homologation_panel",
           "title": "Homologation courses",
-          "description": "Check your admission letter. You may also include a maximum of three self-chosen bachelor courses to compensate for deficiencies.",
+          "description": "Homologation courses are bachelor courses used to make up deficiencies in previous knowledge. Check your admission letter to see assigned homologation courses. You may also include a maximum of three self-chosen homologation courses.",
           "elements": [
             {
               "type": "boolean",
@@ -805,7 +861,7 @@
               "name": "homologation_courses",
               "visibleIf": "{homologation} = true",
               "title": "Included homologation courses",
-              "description": "Add up to three courses. Their credits are included in the 15 ECTS free-elective total.",
+              "description": "Add up to three courses.",
               "isRequired": true,
               "requiredIf": "{homologation} = true",
               "columns": [

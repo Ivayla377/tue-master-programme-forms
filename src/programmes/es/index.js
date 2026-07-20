@@ -5,6 +5,10 @@ import {
   createEsChoiceLookup,
   synchronizeEsSurvey,
 } from "./calculator.js";
+import {
+  handleEsElectiveRowRemoving,
+  synchronizeEsElectiveRows,
+} from "./elective-survey.js";
 import { renderEsEctsPanel, renderEsSummary } from "./summary.js";
 
 export const esFormConfig = {
@@ -24,6 +28,8 @@ export const esFormConfig = {
   createChoiceLookup: createEsChoiceLookup,
   calculateReport: calculateEs,
   beforeCalculate: synchronizeEsSurvey,
+  afterCalculate: synchronizeEsElectiveRows,
+  onMatrixRowRemoving: handleEsElectiveRowRemoving,
   renderEctsPanel: renderEsEctsPanel,
   renderSummary: renderEsSummary,
 };

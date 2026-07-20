@@ -157,6 +157,7 @@ export function calculateIam(data = {}, choiceLookup = createIamChoiceLookup()) 
   ].filter((row) => !row.validCredits);
   const coreCount = coreSelection.courses.length;
   const homologationRowsPresent = homologationRows.filter((row) => row.validCredits && row.counted).length > 0;
+  const homologationMotivationPresent = String(data.homologation_motivation ?? "").trim() !== "";
 
   const flags = {
     coreMinimumMet: coreElectives >= rules.coreMinimum,
@@ -171,7 +172,9 @@ export function calculateIam(data = {}, choiceLookup = createIamChoiceLookup()) 
     hasInvalidManualRows: invalidManualRows.length > 0,
     hasDuplicates: duplicates.length > 0,
     hasAssignedHomologation: homologationRowsPresent,
-    hasSelfChosenHomologation: selfChosenHomologation > 0,
+    hasSelfChosenHomologation:
+      selfChosenHomologationActive
+      && (homologationRowsPresent || selfChosenHomologation > 0),
     hasMastermathSpecialization: mastermathSpecialization > 0,
     hasInternship: internship.selected && internship.counted,
   };
@@ -193,6 +196,8 @@ export function calculateIam(data = {}, choiceLookup = createIamChoiceLookup()) 
     invalidOfficialFreeCourses: officialFreeSelection.invalidCourses,
     duplicates,
     internship,
+    selfChosenHomologationActive,
+    homologationMotivationPresent,
   });
 
   const hasErrors = validations.some((validation) => validation.status === "error");
@@ -303,7 +308,7 @@ function buildValidations(values) {
       status: values.flags.homologationWithinLimit ? "success" : "error",
       detail: values.homologation === 0
         ? "No homologation credits included."
-        : `${formatCredits(values.homologation)} / maximum ${formatCredits(values.rules.homologationMaximum)} homologation credits (${formatCredits(values.assignedHomologation)} assigned, ${formatCredits(values.selfChosenHomologation)} self-chosen).`,
+        : `${formatCredits(values.homologation)} / maximum ${formatCredits(values.rules.homologationMaximum)} homologation credits.`,
     },
   ];
 
@@ -335,7 +340,7 @@ function buildValidations(values) {
     validations.push({
       label: "Manual course rows",
       status: "error",
-      detail: "Complete the course code, title and positive ECTS value for every manually entered row; bachelor rows also need a linked master-level course or project.",
+      detail: "Complete the course code, title and positive ECTS value for every manually entered row.",
     });
   }
 
@@ -360,6 +365,14 @@ function buildValidations(values) {
       label: "Self-chosen homologation review",
       status: "warning",
       detail: "Self-chosen homologation included - add a motivation for the deficiency it compensates.",
+    });
+  }
+
+  if (values.selfChosenHomologationActive && !values.homologationMotivationPresent) {
+    validations.push({
+      label: "Self-chosen homologation motivation",
+      status: "error",
+      detail: "Provide a motivation for the self-chosen homologation courses.",
     });
   }
 

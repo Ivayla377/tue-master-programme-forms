@@ -2,13 +2,13 @@ import { CSE_FOCUS_AREAS, CSE_GRADUATION_GROUPS } from "./calculator.js";
 import { formatCredits, isTrue } from "../../shared/credit-utils.js";
 import { renderEctsPanel as renderSharedEctsPanel } from "../../shared/summary-layout.js";
 
-const SUBTOTAL_ROWS = [
+const PANEL_SUBTOTAL_ROWS = [
   ["foundational", "Foundational courses"],
   ["extra", "Extra courses"],
-  ["specializationCourses", "Specialization courses"],
+  ["specializationCourses", "Specialization courses (required)"],
   ["internship", "Internship"],
   ["specialization", "Specialization total"],
-  ["freeElectives", "Free elective courses"],
+  ["manualFreeElectives", "Entered free electives"],
   ["homologation", "Homologation courses"],
   ["freeSpace", "Free elective space total"],
   ["seminar", "Seminar"],
@@ -16,8 +16,14 @@ const SUBTOTAL_ROWS = [
   ["total", "Total credits"],
 ];
 
+const SUMMARY_SUBTOTAL_ROWS = [
+  ...PANEL_SUBTOTAL_ROWS.slice(0, 6),
+  ["specializationExcess", "Additional specialization in free space"],
+  ...PANEL_SUBTOTAL_ROWS.slice(6),
+];
+
 export function renderCseEctsPanel(report) {
-  return renderSharedEctsPanel(report, SUBTOTAL_ROWS);
+  return renderSharedEctsPanel(report, PANEL_SUBTOTAL_ROWS);
 }
 
 export function renderCseSummary(report, data, _choiceLookup, labels = {}) {
@@ -25,10 +31,13 @@ export function renderCseSummary(report, data, _choiceLookup, labels = {}) {
   const summaryEyebrow = labels.summaryEyebrow ?? "CSE Program of Examinations";
   const summaryTitle = labels.summaryTitle ?? "Form 1: CSE Program of Examinations";
   const generatedOn = formatCurrentDate();
-const focusArea = focusLabel(report.selected.extraFocus);
+  const focusArea = focusLabel(report.selected.extraFocus);
   const hasFreeElectives = report.selected.freeRows.length > 0;
   const hasHomologationCourses = report.selected.homologationRows.length > 0;
-  const hasFreeSpaceCourses = hasFreeElectives || hasHomologationCourses;
+  const hasExcessSpecializationCourses = report.selected.excessSpecializationCourses.length > 0;
+  const hasFreeSpaceCourses = hasFreeElectives
+    || hasHomologationCourses
+    || hasExcessSpecializationCourses;
 
   return `
     <article class="summary-report">
@@ -111,7 +120,21 @@ const focusArea = focusLabel(report.selected.extraFocus);
 
       <section class="summary-section">
         <h3>Free electives and homologation</h3>
+        ${renderDetailsTable([
+          ["Homologation included", yesNo(data.homologation)],
+          ...(isTrue(data.homologation)
+            ? [["Self-chosen homologation included", yesNo(data.self_chosen_homologation)]]
+            : []),
+        ])}
         ${renderReportTable(["Type", "Course code", "Course title", "Credits"], [
+          ...report.selected.excessSpecializationCourses.map((course) => ({
+            cells: [
+              "Additional specialization elective",
+              courseCode(course),
+              courseTitle(course),
+              formatCourseCredits(course),
+            ],
+          })),
           ...report.selected.freeRows.map((row) => ({
             cells: [
               "Free elective",
@@ -190,12 +213,18 @@ function renderSubtotalsTable(report) {
   return `
     <table class="summary-table summary-table--subtotals">
       <tbody>
-        ${SUBTOTAL_ROWS.map(
+        ${visibleSummarySubtotalRows(report).map(
           ([key, label]) => `<tr><th scope="row">${escapeHtml(label)}</th><td>${escapeHtml(formatCredits(report.subtotals[key]))}</td></tr>`,
         ).join("")}
       </tbody>
     </table>
   `;
+}
+
+function visibleSummarySubtotalRows(report) {
+  return SUMMARY_SUBTOTAL_ROWS.filter(
+    ([key]) => key !== "specializationExcess" || report.subtotals.specializationExcess > 0,
+  );
 }
 
 function renderDetailsTable(rows) {

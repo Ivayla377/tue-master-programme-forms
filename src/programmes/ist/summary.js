@@ -154,6 +154,9 @@ export function renderIstSummary(report, data, _choiceLookup, labels = {}) {
         <h3>Free electives and homologation</h3>
         ${renderDetailsTable([
           ["Homologation included", yesNo(safeData.homologation)],
+          ...(booleanValue(safeData.homologation) === true
+            ? [["Self-chosen homologation included", yesNo(safeData.self_chosen_homologation)]]
+            : []),
         ])}
         ${renderReportTable(
           ["Type", "Course code", "Course title", "Credits"],

@@ -129,14 +129,13 @@
               "type": "boolean",
               "name": "previous",
               "title": "Is this a change to a previously approved program?",
-              "description": "If yes, describe every change below.",
               "isRequired": true
             },
             {
               "type": "comment",
               "name": "changes",
               "visibleIf": "{previous} = true",
-              "title": "Changes to the previously approved program",
+              "title": "What has changed in the program?",
               "description": "List each change clearly.",
               "isRequired": true,
               "requiredIf": "{previous} = true"
@@ -322,12 +321,11 @@
             {
               "type": "tagbox",
               "name": "stream_electives_systems_on_chip",
-              "title": "Choose three stream electives · 15 ECTS",
+              "title": "Choose at least three stream electives · 15 ECTS required",
               "description": "2IMNT1 requires secondary enrollment at the University of Twente. Seminar courses can be taken from Q4.",
               "isRequired": true,
               "requiredIf": "{stream} = 'systems_on_chip'",
               "minSelectedChoices": 3,
-              "maxSelectedChoices": 3,
               "choices": [
                 {
                   "value": "5cca0",
@@ -380,6 +378,12 @@
                   "credits": 5
                 }
               ]
+            },
+            {
+              "type": "html",
+              "name": "stream_electives_systems_on_chip_excess_notice",
+              "visibleIf": "{stream_elective_excess_free_electives.length} > 0",
+              "html": "<p class='elective-allocation-note'>The required three courses are filled. Additional selected courses count towards your free-elective space and appear on the next page.</p>"
             }
           ]
         },
@@ -417,12 +421,11 @@
             {
               "type": "tagbox",
               "name": "stream_electives_embedded_software",
-              "title": "Choose three stream electives · 15 ECTS",
+              "title": "Choose at least three stream electives · 15 ECTS required",
               "description": "Seminar courses can be taken from Q4.",
               "isRequired": true,
               "requiredIf": "{stream} = 'embedded_software'",
               "minSelectedChoices": 3,
-              "maxSelectedChoices": 3,
               "choices": [
                 {
                   "value": "2imn10",
@@ -495,6 +498,12 @@
                   "credits": 5
                 }
               ]
+            },
+            {
+              "type": "html",
+              "name": "stream_electives_embedded_software_excess_notice",
+              "visibleIf": "{stream_elective_excess_free_electives.length} > 0",
+              "html": "<p class='elective-allocation-note'>The required three courses are filled. Additional selected courses count towards your free-elective space and appear on the next page.</p>"
             }
           ]
         },
@@ -532,12 +541,11 @@
             {
               "type": "tagbox",
               "name": "stream_electives_embedded_networking",
-              "title": "Choose three stream electives · 15 ECTS",
+              "title": "Choose at least three stream electives · 15 ECTS required",
               "description": "Seminar courses can be taken from Q4.",
               "isRequired": true,
               "requiredIf": "{stream} = 'embedded_networking'",
               "minSelectedChoices": 3,
-              "maxSelectedChoices": 3,
               "choices": [
                 {
                   "value": "2imf25",
@@ -600,6 +608,12 @@
                   "credits": 5
                 }
               ]
+            },
+            {
+              "type": "html",
+              "name": "stream_electives_embedded_networking_excess_notice",
+              "visibleIf": "{stream_elective_excess_free_electives.length} > 0",
+              "html": "<p class='elective-allocation-note'>The required three courses are filled. Additional selected courses count towards your free-elective space and appear on the next page.</p>"
             }
           ]
         },
@@ -637,11 +651,10 @@
             {
               "type": "tagbox",
               "name": "stream_electives_cyber_physical_systems",
-              "title": "Choose three stream electives · 15 ECTS",
+              "title": "Choose at least three stream electives · 15 ECTS required",
               "isRequired": true,
               "requiredIf": "{stream} = 'cyber_physical_systems'",
               "minSelectedChoices": 3,
-              "maxSelectedChoices": 3,
               "choices": [
                 {
                   "value": "2imn10",
@@ -704,6 +717,12 @@
                   "credits": 5
                 }
               ]
+            },
+            {
+              "type": "html",
+              "name": "stream_electives_cyber_physical_systems_excess_notice",
+              "visibleIf": "{stream_elective_excess_free_electives.length} > 0",
+              "html": "<p class='elective-allocation-note'>The required three courses are filled. Additional selected courses count towards your free-elective space and appear on the next page.</p>"
             }
           ]
         }
@@ -712,18 +731,61 @@
     {
       "name": "free_space",
       "title": "Free-elective space",
-      "description": "The free-elective space is 25 ECTS. It can be filled with free electives, homologation courses or an internship.",
+      "description": "The free-elective space is 25 ECTS. It can be filled with additional stream electives, other free electives, homologation courses or an internship.",
       "elements": [
         {
           "type": "panel",
           "name": "free_electives_panel",
-          "title": "Free electives",
-          "description": "Free elective courses can be any master-level courses from the TU/e or another university. In case a free elective was followed at another university, please add its name between parentheses to the course name.",
+          "title": "Free elective courses",
+          "description": "In case a free elective was followed at another university, please add its name between parentheses to the course name.",
           "elements": [
+            {
+              "type": "matrixdynamic",
+              "name": "stream_elective_excess_free_electives",
+              "visibleIf": "{stream_elective_excess_free_electives.length} > 0",
+              "title": "Additional stream electives in your free-elective space",
+              "description": "As you selected more than the required stream electives, the following courses count as free electives. You can remove one here or change your selection on the previous page.",
+              "columns": [
+                {
+                  "name": "code",
+                  "title": "Course code",
+                  "cellType": "text",
+                  "readOnly": true,
+                  "width": "8em"
+                },
+                {
+                  "name": "title",
+                  "title": "Course title",
+                  "cellType": "text",
+                  "readOnly": true
+                },
+                {
+                  "name": "credits",
+                  "title": "ECTS",
+                  "cellType": "text",
+                  "readOnly": true,
+                  "totalType": "sum",
+                  "totalDisplayStyle": "decimal",
+                  "width": "6em"
+                }
+              ],
+              "rowCount": 0,
+              "allowAddRows": false,
+              "allowRemoveRows": true,
+              "confirmDelete": true,
+              "confirmDeleteText": "Remove this course from your stream-elective selection?"
+            },
+            {
+              "type": "html",
+              "name": "stream_other_free_electives_heading",
+              "visibleIf": "{stream_elective_excess_free_electives.length} > 0",
+              "html": "<h3 class='free-electives-subheading'>Other free electives</h3>"
+            },
             {
               "type": "matrixdynamic",
               "name": "free_electives",
               "title": "Free elective courses",
+              "titleLocation": "hidden",
               "columns": [
                 {
                   "name": "code",
@@ -811,59 +873,17 @@
               "type": "boolean",
               "name": "homologation",
               "title": "Do you include homologation courses?",
-              "description": "Please check your admission letter to see if you have homologation courses. Self-chosen bachelor courses are recorded separately below.",
+              "description": "Please check your admission letter to see whether homologation courses are included.",
               "isRequired": true
             },
             {
               "type": "matrixdynamic",
-              "name": "assigned_homologation_courses",
+              "name": "homologation_courses",
               "visibleIf": "{homologation} = true",
-              "title": "Assigned homologation courses",
-              "columns": [
-                {
-                  "name": "code",
-                  "title": "Course code",
-                  "isRequired": true,
-                  "isUnique": true,
-                  "width": "8em",
-                  "cellType": "text"
-                },
-                {
-                  "name": "title",
-                  "title": "Course title",
-                  "isRequired": true,
-                  "cellType": "text"
-                },
-                {
-                  "name": "credits",
-                  "title": "ECTS",
-                  "isRequired": true,
-                  "width": "6em",
-                  "cellType": "text"
-                }
-              ],
-              "rowCount": 0,
-              "confirmDelete": true,
-              "addRowText": "Add assigned course",
-              "confirmDeleteText": "Remove this assigned course?"
-            },
-            {
-              "type": "boolean",
-              "name": "self_chosen_homologation",
-              "visibleIf": "{homologation} = true",
-              "title": "Do you include self-chosen bachelor courses to compensate deficiencies?",
-              "description": "A maximum of three self-chosen bachelor courses are allowed. Please write a motivation for choosing each.",
+              "title": "Included homologation courses",
+              "description": "Add all homologation courses here, whether assigned in your admission letter or chosen by you.",
               "isRequired": true,
-              "requiredIf": "{homologation} = true"
-            },
-            {
-              "type": "matrixdynamic",
-              "name": "self_chosen_homologation_courses",
-              "visibleIf": "{homologation} = true and {self_chosen_homologation} = true",
-              "title": "Self-chosen homologation courses",
-              "description": "Add no more than three courses.",
-              "isRequired": true,
-              "requiredIf": "{homologation} = true and {self_chosen_homologation} = true",
+              "requiredIf": "{homologation} = true",
               "columns": [
                 {
                   "name": "code",
@@ -890,8 +910,16 @@
               "rowCount": 0,
               "maxRowCount": 3,
               "confirmDelete": true,
-              "addRowText": "Add self-chosen course",
-              "confirmDeleteText": "Remove this self-chosen course?"
+              "addRowText": "Add homologation course",
+              "confirmDeleteText": "Remove this homologation course?"
+            },
+            {
+              "type": "boolean",
+              "name": "self_chosen_homologation",
+              "visibleIf": "{homologation} = true",
+              "title": "Are any homologation courses self-chosen rather than assigned in the admission letter?",
+              "isRequired": true,
+              "requiredIf": "{homologation} = true"
             },
             {
               "type": "comment",
