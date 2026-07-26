@@ -30,3 +30,20 @@ export function minimumCreditValidation(label, value, target, successDetail, war
   }
   return { label, status: "success", detail: successDetail };
 }
+
+export function validationState(validations = []) {
+  return {
+    hasErrors: validations.some(
+      (validation) => validation.status === "error",
+    ),
+    hasWarnings: validations.some(
+      (validation) => validation.status === "warning",
+    ),
+    isValid: validations.every(
+      (validation) => validation.status !== "error",
+    ),
+    isComplete: validations.every(
+      (validation) => validation.status === "success",
+    ),
+  };
+}

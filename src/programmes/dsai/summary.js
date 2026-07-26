@@ -222,7 +222,7 @@ function renderFreeRows(rows) {
     cells: [
       "Free elective",
       [row.code, row.name].filter(Boolean).join(" "),
-      row.validCredits && row.counted !== false ? formatCredits(row.credits) : "Not counted",
+      row.validCredits ? formatCredits(row.credits) : "Not counted",
     ],
   }));
 }
@@ -253,7 +253,7 @@ function renderValidationItem(validation) {
 }
 
 function formatCourseCredits(course) {
-  return course?.counted === false ? "Not counted" : formatCredits(course?.credits ?? 0);
+  return formatCredits(course?.credits ?? 0);
 }
 
 function displayCourseLabel(course) {

@@ -229,23 +229,28 @@
                                                                 "choices":  [
                                                                                 {
                                                                                     "value":  "2amm20",
-                                                                                    "text":  "2AMM20 Research Topics in Data Mining"
+                                                                                    "text":  "2AMM20 Research Topics in Data Mining (5 ECTS)",
+                                                                                    "credits":  5
                                                                                 },
                                                                                 {
                                                                                     "value":  "2ams11",
-                                                                                    "text":  "2AMS11 Survival Analysis for Data Scientists"
+                                                                                    "text":  "2AMS11 Survival Analysis for Data Scientists (5 ECTS)",
+                                                                                    "credits":  5
                                                                                 },
                                                                                 {
                                                                                     "value":  "0lm190",
-                                                                                    "text":  "0LM190 Philosophy and ethics of AI"
+                                                                                    "text":  "0LM190 Philosophy and ethics of AI (5 ECTS)",
+                                                                                    "credits":  5
                                                                                 },
                                                                                 {
                                                                                     "value":  "2amu10",
-                                                                                    "text":  "2AMU10 Foundations of Artificial Intelligence"
+                                                                                    "text":  "2AMU10 Foundations of Artificial Intelligence (5 ECTS)",
+                                                                                    "credits":  5
                                                                                 },
                                                                                 {
                                                                                     "value":  "2amd15",
-                                                                                    "text":  "2AMD15 Big Data Management"
+                                                                                    "text":  "2AMD15 Big Data Management (5 ECTS)",
+                                                                                    "credits":  5
                                                                                 }
                                                                             ]
                                                             },
@@ -264,15 +269,18 @@
                                                                 "choices":  [
                                                                                 {
                                                                                     "value":  "2ami10",
-                                                                                    "text":  "2AMI10 Foundations of Process Mining"
+                                                                                    "text":  "2AMI10 Foundations of Process Mining (5 ECTS)",
+                                                                                    "credits":  5
                                                                                 },
                                                                                 {
                                                                                     "value":  "2amv10",
-                                                                                    "text":  "2AMV10 Visual Analytics"
+                                                                                    "text":  "2AMV10 Visual Analytics (5 ECTS)",
+                                                                                    "credits":  5
                                                                                 },
                                                                                 {
                                                                                     "value":  "2ams50",
-                                                                                    "text":  "2AMS50 Optimization for Data Science"
+                                                                                    "text":  "2AMS50 Optimization for Data Science (5 ECTS)",
+                                                                                    "credits":  5
                                                                                 }
                                                                             ],
                                                                 "choicesOrder":  "asc"
@@ -293,7 +301,8 @@
                                                                 "choices":  [
                                                                                 {
                                                                                     "value":  "2imp40",
-                                                                                    "text":  "2IMP40 Empirical Methods in Software Engineering"
+                                                                                    "text":  "2IMP40 Empirical Methods in Software Engineering (5 ECTS)",
+                                                                                    "credits":  5
                                                                                 }
                                                                             ]
                                                             },
@@ -304,15 +313,18 @@
                                                                 "choices":  [
                                                                                 {
                                                                                     "value":  "2mms80",
-                                                                                    "text":  "2MMS80 Statistical Learning Theory"
+                                                                                    "text":  "2MMS80 Statistical Learning Theory (5 ECTS)",
+                                                                                    "credits":  5
                                                                                 },
                                                                                 {
                                                                                     "value":  "2dd23",
-                                                                                    "text":  "2DD23 Time Series \u0026 Forecasting"
+                                                                                    "text":  "2DD23 Time Series \u0026 Forecasting (5 ECTS)",
+                                                                                    "credits":  5
                                                                                 },
                                                                                 {
                                                                                     "value":  "2ams30",
-                                                                                    "text":  "2AMS30 Network Statistics for Data Science"
+                                                                                    "text":  "2AMS30 Network Statistics for Data Science (5 ECTS)",
+                                                                                    "credits":  5
                                                                                 }
                                                                             ]
                                                             },
@@ -323,15 +335,18 @@
                                                                 "choices":  [
                                                                                 {
                                                                                     "value":  "2imd10",
-                                                                                    "text":  "2IMD10 Engineering Data-Intensive Systems"
+                                                                                    "text":  "2IMD10 Engineering Data-Intensive Systems (5 ECTS)",
+                                                                                    "credits":  5
                                                                                 },
                                                                                 {
                                                                                     "value":  "2ims25",
-                                                                                    "text":  "2IMS25 Principles of Data Protection"
+                                                                                    "text":  "2IMS25 Principles of Data Protection (5 ECTS)",
+                                                                                    "credits":  5
                                                                                 },
                                                                                 {
                                                                                     "value":  "2amd20",
-                                                                                    "text":  "2AMD20 Knowledge Engineering"
+                                                                                    "text":  "2AMD20 Knowledge Engineering (5 ECTS)",
+                                                                                    "credits":  5
                                                                                 }
                                                                             ]
                                                             },
@@ -342,23 +357,28 @@
                                                                 "choices":  [
                                                                                 {
                                                                                     "value":  "2amu20",
-                                                                                    "text":  "2AMU20 Generative AI Models"
+                                                                                    "text":  "2AMU20 Generative AI Models (5 ECTS)",
+                                                                                    "credits":  5
                                                                                 },
                                                                                 {
                                                                                     "value":  "2amu30",
-                                                                                    "text":  "2AMU30 Uncertainty Representation and Reasoning"
+                                                                                    "text":  "2AMU30 Uncertainty Representation and Reasoning (5 ECTS)",
+                                                                                    "credits":  5
                                                                                 },
                                                                                 {
                                                                                     "value":  "2amm40",
-                                                                                    "text":  "2AMM40 Advanced Topics in Artificial Intelligence"
+                                                                                    "text":  "2AMM40 Advanced Topics in Artificial Intelligence (5 ECTS)",
+                                                                                    "credits":  5
                                                                                 },
                                                                                 {
                                                                                     "value":  "2ams40",
-                                                                                    "text":  "2AMS40 Optimal Decision Making \u0026 Reinforcement Learning"
+                                                                                    "text":  "2AMS40 Optimal Decision Making \u0026 Reinforcement Learning (5 ECTS)",
+                                                                                    "credits":  5
                                                                                 },
                                                                                 {
                                                                                     "value":  "2amc15",
-                                                                                    "text":  "2AMC15 Reinforcement Learning in Practice"
+                                                                                    "text":  "2AMC15 Reinforcement Learning in Practice (5 ECTS)",
+                                                                                    "credits":  5
                                                                                 }
                                                                             ]
                                                             },
@@ -369,11 +389,13 @@
                                                                 "choices":  [
                                                                                 {
                                                                                     "value":  "2amm15",
-                                                                                    "text":  "2AMM15 Machine Learning Engineering"
+                                                                                    "text":  "2AMM15 Machine Learning Engineering (5 ECTS)",
+                                                                                    "credits":  5
                                                                                 },
                                                                                 {
                                                                                     "value":  "2amm10",
-                                                                                    "text":  "2AMM10 Deep Learning"
+                                                                                    "text":  "2AMM10 Deep Learning (5 ECTS)",
+                                                                                    "credits":  5
                                                                                 }
                                                                             ]
                                                             },
@@ -384,21 +406,25 @@
                                                                 "choices":  [
                                                                                 {
                                                                                     "value":  "2ami10",
-                                                                                    "text":  "2AMI10 Foundations of Process Mining",
+                                                                                    "text":  "2AMI10 Foundations of Process Mining (5 ECTS)",
+                                                                                    "credits":  5,
                                                                                     "visibleIf":  "{core_elective} \u003c\u003e \u00272ami10\u0027",
                                                                                     "enableIf":  "{core_elective} \u003c\u003e \u00272ami10\u0027"
                                                                                 },
                                                                                 {
                                                                                     "value":  "2ami20",
-                                                                                    "text":  "2AMI20 Advanced Process Mining"
+                                                                                    "text":  "2AMI20 Advanced Process Mining (5 ECTS)",
+                                                                                    "credits":  5
                                                                                 },
                                                                                 {
                                                                                     "value":  "2ami30",
-                                                                                    "text":  "2AMI30 Process Intelligence in Action"
+                                                                                    "text":  "2AMI30 Process Intelligence in Action (5 ECTS)",
+                                                                                    "credits":  5
                                                                                 },
                                                                                 {
                                                                                     "value":  "2amv11",
-                                                                                    "text":  "2AMV11 Visual Analytics",
+                                                                                    "text":  "2AMV11 Visual Analytics (5 ECTS)",
+                                                                                    "credits":  5,
                                                                                     "visibleIf":  "{core_elective} \u003c\u003e \u00272amv10\u0027",
                                                                                     "enableIf":  "{core_elective} \u003c\u003e \u00272amv10\u0027"
                                                                                 }
@@ -411,17 +437,60 @@
                                                                 "choices":  [
                                                                                 {
                                                                                     "value":  "2ams50",
-                                                                                    "text":  "2AMS50 Optimization for Data Science",
+                                                                                    "text":  "2AMS50 Optimization for Data Science (5 ECTS)",
+                                                                                    "credits":  5,
                                                                                     "visibleIf":  "{core_elective} \u003c\u003e \u00272ams50\u0027",
                                                                                     "enableIf":  "{core_elective} \u003c\u003e \u00272ams50\u0027"
                                                                                 },
                                                                                 {
                                                                                     "value":  "2ima20",
-                                                                                    "text":  "2IMA20 Algorithms for Geovisualization"
+                                                                                    "text":  "2IMA20 Algorithms for Geovisualization (5 ECTS)",
+                                                                                    "credits":  5
                                                                                 },
                                                                                 {
                                                                                     "value":  "2ima30",
-                                                                                    "text":  "2IMA30 Topological Data Analysis"
+                                                                                    "text":  "2IMA30 Topological Data Analysis (5 ECTS)",
+                                                                                    "credits":  5
+                                                                                }
+                                                                            ]
+                                                            },
+                                                            {
+                                                                "type":  "checkbox",
+                                                                "name":  "project_course_metadata",
+                                                                "visible":  false,
+                                                                "defaultValue":  [
+                                                                                     "2amv10",
+                                                                                     "2amv11",
+                                                                                     "2amd20",
+                                                                                     "2ami30",
+                                                                                     "2amc15"
+                                                                                 ],
+                                                                "readOnly":  true,
+                                                                "choices":  [
+                                                                                {
+                                                                                    "value":  "2amv10",
+                                                                                    "text":  "2AMV10 Visual Analytics (5 ECTS)",
+                                                                                    "credits":  5
+                                                                                },
+                                                                                {
+                                                                                    "value":  "2amv11",
+                                                                                    "text":  "2AMV11 Visual Analytics (5 ECTS)",
+                                                                                    "credits":  5
+                                                                                },
+                                                                                {
+                                                                                    "value":  "2amd20",
+                                                                                    "text":  "2AMD20 Knowledge Engineering (5 ECTS)",
+                                                                                    "credits":  5
+                                                                                },
+                                                                                {
+                                                                                    "value":  "2ami30",
+                                                                                    "text":  "2AMI30 Process Intelligence in Action (5 ECTS)",
+                                                                                    "credits":  5
+                                                                                },
+                                                                                {
+                                                                                    "value":  "2amc15",
+                                                                                    "text":  "2AMC15 Reinforcement Learning in Practice (5 ECTS)",
+                                                                                    "credits":  5
                                                                                 }
                                                                             ]
                                                             }
@@ -450,6 +519,22 @@
                                                                 "description":  "An internship is optional (course code 2IMC10, counts for 15 EC). Keep in mind, when you do an external internship (e.g. at a company), your graduation project needs to be executed internally (within TU/e), when you do an internal internship you cannot graduate with the same supervisor.",
                                                                 "defaultValue":  "false",
                                                                 "isRequired":  true
+                                                            },
+                                                            {
+                                                                "type":  "checkbox",
+                                                                "name":  "internship_course_display",
+                                                                "visible":  false,
+                                                                "defaultValue":  [
+                                                                                     "2imc10"
+                                                                                 ],
+                                                                "readOnly":  true,
+                                                                "choices":  [
+                                                                                {
+                                                                                    "value":  "2imc10",
+                                                                                    "text":  "2IMC10 Internship (15 ECTS)",
+                                                                                    "credits":  15
+                                                                                }
+                                                                            ]
                                                             },
                                                             {
                                                                 "type":  "text",
@@ -548,55 +633,66 @@
                                                                 "requiredIf":  "{matched} = true",
                                                                 "choices":  [
                                                                                 {
-                                                                                    "value":  "algo",
-                                                                                    "text":  "2IMA00 Seminar Algorithms (ALGO)"
+                                                                                    "value":  "2ima00",
+                                                                                    "text":  "2IMA00 Seminar Algorithms (ALGO) (5 ECTS)",
+                                                                                    "credits":  5
                                                                                 },
                                                                                 {
-                                                                                    "value":  "db",
-                                                                                    "text":  "2IMD00 Seminar Datamanagement (DAI-DB)"
+                                                                                    "value":  "2imd00",
+                                                                                    "text":  "2IMD00 Seminar Datamanagement (DAI-DB) (5 ECTS)",
+                                                                                    "credits":  5
                                                                                 },
                                                                                 {
-                                                                                    "value":  "pa",
-                                                                                    "text":  "2IMI00 Seminar Process Analytics (PA)"
+                                                                                    "value":  "2imi00",
+                                                                                    "text":  "2IMI00 Seminar Process Analytics (PA) (5 ECTS)",
+                                                                                    "credits":  5
                                                                                 },
                                                                                 {
-                                                                                    "value":  "dm",
-                                                                                    "text":  "2IMM00 Seminar Data Mining (DAI-DM)"
+                                                                                    "value":  "2imm00",
+                                                                                    "text":  "2IMM00 Seminar Data Mining (DAI-DM) (5 ECTS)",
+                                                                                    "credits":  5
                                                                                 },
                                                                                 {
-                                                                                    "value":  "sec",
-                                                                                    "text":  "2IMS00 Seminar Information Security Technology (SEC)"
+                                                                                    "value":  "2ims00",
+                                                                                    "text":  "2IMS00 Seminar Information Security Technology (SEC) (5 ECTS)",
+                                                                                    "credits":  5
                                                                                 },
                                                                                 {
-                                                                                    "value":  "uai",
-                                                                                    "text":  "2AMU00 Seminar Uncertainty in AI (DAI-UAI)"
+                                                                                    "value":  "2amu00",
+                                                                                    "text":  "2AMU00 Seminar Uncertainty in AI (DAI-UAI) (5 ECTS)",
+                                                                                    "credits":  5
                                                                                 },
                                                                                 {
-                                                                                    "value":  "vis",
-                                                                                    "text":  "2IMV00 Seminar Visualization (VIS)"
+                                                                                    "value":  "2imv00",
+                                                                                    "text":  "2IMV00 Seminar Visualization (VIS) (5 ECTS)",
+                                                                                    "credits":  5
                                                                                 },
                                                                                 {
-                                                                                    "value":  "spor",
-                                                                                    "text":  "2AMS00 Seminar Statistics, Probability and Operations Research (SPOR)"
+                                                                                    "value":  "2ams00",
+                                                                                    "text":  "2AMS00 Seminar Statistics, Probability and Operations Research (SPOR) (5 ECTS)",
+                                                                                    "credits":  5
                                                                                 },
                                                                                 {
-                                                                                    "value":  "iris",
-                                                                                    "text":  "2IMN00 Seminar Interconnected Resource-aware Intelligent Systems (IRIS)"
+                                                                                    "value":  "2imn00",
+                                                                                    "text":  "2IMN00 Seminar Interconnected Resource-aware Intelligent Systems (IRIS) (5 ECTS)",
+                                                                                    "credits":  5
                                                                                 },
                                                                                 {
-                                                                                    "value":  "set",
-                                                                                    "text":  "2IMP00 Seminar Software Engineering and Technology (SET)"
+                                                                                    "value":  "2imp00",
+                                                                                    "text":  "2IMP00 Seminar Software Engineering and Technology (SET) (5 ECTS)",
+                                                                                    "credits":  5
                                                                                 },
                                                                                 {
-                                                                                    "value":  "fsa",
-                                                                                    "text":  "2IMF00 Seminar Formal System Analysis (FSA)"
+                                                                                    "value":  "2imf00",
+                                                                                    "text":  "2IMF00 Seminar Formal System Analysis (FSA) (5 ECTS)",
+                                                                                    "credits":  5
                                                                                 }
                                                                             ]
                                                             },
                                                             {
                                                                 "type":  "comment",
                                                                 "name":  "mismatch",
-                                                                "visibleIf":  "{seminar} notempty and {matched} = true and {grad_group} \u003c\u003e {seminar}",
+                                                                "visibleIf":  "{seminar} notempty and {matched} = true and {grad_group} \u003c\u003e {seminar_group}",
                                                                 "title":  "Your seminar does not correspond to the graduation group to which you are matched!",
                                                                 "description":  "Please explain why this is the case",
                                                                 "isRequired":  true
@@ -620,11 +716,13 @@
                                            "choices":  [
                                                            {
                                                                "value":  "2amc05",
-                                                               "text":  "2AMC05 Graduation Preparation Project [10 EC]"
+                                                               "text":  "2AMC05 Graduation Preparation Project (10 ECTS)",
+                                                               "credits":  10
                                                            },
                                                            {
                                                                "value":  "2amc00",
-                                                               "text":  "2AMC00 Master Project [30 EC]"
+                                                               "text":  "2AMC00 Master Project (30 ECTS)",
+                                                               "credits":  30
                                                            }
                                                        ]
                                        }
@@ -637,6 +735,76 @@
               ],
     "calculatedValues":  [
                              {
+                                 "name":  "rule_programme_target",
+                                 "expression":  "120",
+                                 "includeIntoResult":  true
+                             },
+                             {
+                                 "name":  "rule_standard_course_credits",
+                                 "expression":  "5",
+                                 "includeIntoResult":  true
+                             },
+                             {
+                                 "name":  "rule_core_credits",
+                                 "expression":  "30",
+                                 "includeIntoResult":  true
+                             },
+                             {
+                                 "name":  "rule_specialization_min_credits",
+                                 "expression":  "30",
+                                 "includeIntoResult":  true
+                             },
+                             {
+                                 "name":  "rule_specialization_min_count",
+                                 "expression":  "6",
+                                 "includeIntoResult":  true
+                             },
+                             {
+                                 "name":  "rule_major_min_credits",
+                                 "expression":  "10",
+                                 "includeIntoResult":  true
+                             },
+                             {
+                                 "name":  "rule_major_min_count",
+                                 "expression":  "2",
+                                 "includeIntoResult":  true
+                             },
+                             {
+                                 "name":  "rule_minor_min_credits",
+                                 "expression":  "10",
+                                 "includeIntoResult":  true
+                             },
+                             {
+                                 "name":  "rule_project_min_count",
+                                 "expression":  "1",
+                                 "includeIntoResult":  true
+                             },
+                             {
+                                 "name":  "rule_seminar_credits",
+                                 "expression":  "5",
+                                 "includeIntoResult":  true
+                             },
+                             {
+                                 "name":  "rule_internship_credits",
+                                 "expression":  "15",
+                                 "includeIntoResult":  true
+                             },
+                             {
+                                 "name":  "rule_free_elective_space_credits",
+                                 "expression":  "15",
+                                 "includeIntoResult":  true
+                             },
+                             {
+                                 "name":  "rule_graduation_credits",
+                                 "expression":  "40",
+                                 "includeIntoResult":  true
+                             },
+                             {
+                                 "name":  "seminar_group",
+                                 "expression":  "iif({seminar} = '2ima00', 'algo', iif({seminar} = '2imd00', 'db', iif({seminar} = '2imi00', 'pa', iif({seminar} = '2imm00', 'dm', iif({seminar} = '2ims00', 'sec', iif({seminar} = '2amu00', 'uai', iif({seminar} = '2imv00', 'vis', iif({seminar} = '2ams00', 'spor', iif({seminar} = '2imn00', 'iris', iif({seminar} = '2imp00', 'set', iif({seminar} = '2imf00', 'fsa', '')))))))))))",
+                                 "includeIntoResult":  true
+                             },
+                             {
                                  "name":  "number_of_context_electives",
                                  "expression":  "count({context})",
                                  "includeIntoResult":  true
@@ -648,7 +816,8 @@
                              },
                              {
                                  "name":  "number_of_db_electives",
-                                 "expression":  "count({db})"
+                                 "expression":  "count({db})",
+                                 "includeIntoResult":  true
                              },
                              {
                                  "name":  "number_of_aiml_electives",
@@ -671,18 +840,93 @@
                                  "includeIntoResult":  true
                              },
                              {
-                                 "name":  "trajectory_numbers",
-                                 "expression":  "[{number_of_context_electives}, {number_of_stat_electives}, {number_of_db_electives}, {number_of_aiml_electives}, {number_of_dmml_electives}, {number_of_pmva_electives}, {number_of_ada_electives}]",
+                                 "name":  "number_of_core_courses",
+                                 "expression":  "count({core}) + iif({core_elective} notempty, 1, 0)",
                                  "includeIntoResult":  true
                              },
                              {
-                                 "name":  "major_candidates",
-                                 "expression":  "[{number_of_context_electives} \u003e 1, {number_of_stat_electives} \u003e 1, {number_of_db_electives} \u003e 1, {number_of_aiml_electives} \u003e 1, {number_of_dmml_electives} \u003e 1, {number_of_pmva_electives} \u003e 1, {number_of_ada_electives} \u003e 1]",
+                                 "name":  "credits_core",
+                                 "expression":  "{number_of_core_courses} * {rule_standard_course_credits}",
                                  "includeIntoResult":  true
                              },
                              {
-                                 "name":  "minor_candidates",
-                                 "expression":  "[{number_of_context_electives} \u003e 0, {number_of_stat_electives} \u003e 0, {number_of_db_electives} \u003e 0, {number_of_aiml_electives} \u003e 0, {number_of_dmml_electives} \u003e 0, {number_of_pmva_electives} \u003e 0, {number_of_ada_electives} \u003e 0]",
+                                 "name":  "credits_context_electives",
+                                 "expression":  "{number_of_context_electives} * {rule_standard_course_credits}",
+                                 "includeIntoResult":  true
+                             },
+                             {
+                                 "name":  "credits_stat_electives",
+                                 "expression":  "{number_of_stat_electives} * {rule_standard_course_credits}",
+                                 "includeIntoResult":  true
+                             },
+                             {
+                                 "name":  "credits_db_electives",
+                                 "expression":  "{number_of_db_electives} * {rule_standard_course_credits}",
+                                 "includeIntoResult":  true
+                             },
+                             {
+                                 "name":  "credits_aiml_electives",
+                                 "expression":  "{number_of_aiml_electives} * {rule_standard_course_credits}",
+                                 "includeIntoResult":  true
+                             },
+                             {
+                                 "name":  "credits_dmml_electives",
+                                 "expression":  "{number_of_dmml_electives} * {rule_standard_course_credits}",
+                                 "includeIntoResult":  true
+                             },
+                             {
+                                 "name":  "credits_pmva_electives",
+                                 "expression":  "{number_of_pmva_electives} * {rule_standard_course_credits}",
+                                 "includeIntoResult":  true
+                             },
+                             {
+                                 "name":  "credits_ada_electives",
+                                 "expression":  "{number_of_ada_electives} * {rule_standard_course_credits}",
+                                 "includeIntoResult":  true
+                             },
+                             {
+                                 "name":  "number_of_specialization_electives",
+                                 "expression":  "{number_of_context_electives} + {number_of_stat_electives} + {number_of_db_electives} + {number_of_aiml_electives} + {number_of_dmml_electives} + {number_of_pmva_electives} + {number_of_ada_electives}",
+                                 "includeIntoResult":  true
+                             },
+                             {
+                                 "name":  "credits_specialization",
+                                 "expression":  "{number_of_specialization_electives} * {rule_standard_course_credits}",
+                                 "includeIntoResult":  true
+                             },
+                             {
+                                 "name":  "credits_seminar",
+                                 "expression":  "iif({seminar} notempty, {rule_seminar_credits}, 0)",
+                                 "includeIntoResult":  true
+                             },
+                             {
+                                 "name":  "credits_free_rows",
+                                 "expression":  "sumInArray({free}, 'credits')",
+                                 "includeIntoResult":  true
+                             },
+                             {
+                                 "name":  "credits_homologation",
+                                 "expression":  "iif({homologation} = true, count({homologation_courses}) * {rule_standard_course_credits}, 0)",
+                                 "includeIntoResult":  true
+                             },
+                             {
+                                 "name":  "credits_internship",
+                                 "expression":  "iif({internship} = true, {rule_internship_credits}, 0)",
+                                 "includeIntoResult":  true
+                             },
+                             {
+                                 "name":  "credits_free_space",
+                                 "expression":  "{credits_free_rows} + {credits_homologation} + {credits_internship}",
+                                 "includeIntoResult":  true
+                             },
+                             {
+                                 "name":  "credits_graduation",
+                                 "expression":  "{rule_graduation_credits}",
+                                 "includeIntoResult":  true
+                             },
+                             {
+                                 "name":  "credits_total",
+                                 "expression":  "{credits_core} + {credits_specialization} + {credits_seminar} + {credits_free_space} + {credits_graduation}",
                                  "includeIntoResult":  true
                              }
                          ],

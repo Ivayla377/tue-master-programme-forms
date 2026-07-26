@@ -1,14 +1,22 @@
-import surveySource from "../../../forms/dsai/form.json";
 import logoUrl from "../../../tue_logo.jpg";
+import { Serializer } from "survey-core";
+
+import { registerCourseChoiceMetadata } from "../../shared/survey-choice-metadata.js";
 import {
   calculateEcts,
-  createChoiceLookup,
   removeBlockedSpecializationSelections,
 } from "./calculator.js";
+import {
+  DSAI_SURVEY_SOURCE,
+  createChoiceLookup,
+} from "./form-config.js";
 import { renderEctsPanel, renderSummary } from "./summary.js";
 
 export const dsaiFormConfig = {
-  surveySource,
+  surveySource: DSAI_SURVEY_SOURCE,
+  registerSurveyMetadata() {
+    registerCourseChoiceMetadata(Serializer);
+  },
   logoUrl,
   logoType: "image/jpeg",
   labels: {

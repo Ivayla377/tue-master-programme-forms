@@ -1,7 +1,11 @@
 import surveySource from "../../../forms/ist/form.json" with { type: "json" };
 import { Serializer } from "survey-core";
 
-import { createChoiceLookup as createSharedChoiceLookup, walkElements } from "../../shared/course-utils.js";
+import {
+  createChoiceLookup as createSharedChoiceLookup,
+  defaultCourseCodes,
+  walkElements,
+} from "../../shared/course-utils.js";
 import { formatCredits, isTrue } from "../../shared/credit-utils.js";
 import { registerCourseChoiceMetadata } from "./survey-metadata.js";
 
@@ -78,7 +82,7 @@ export function calculateIst(data = {}, choiceLookup = createIstChoiceLookup()) 
   const duplicates = [];
   const claimed = new Map();
 
-  const mandatoryCodes = defaultCodesFor(
+  const mandatoryCodes = defaultCourseCodes(
     choiceLookup,
     QUESTION_NAMES.mandatory,
     MANDATORY_CODES,
@@ -523,7 +527,7 @@ function resolveGraduation(data, choiceLookup, claimed, duplicates) {
   );
   const valid = selectedPath !== "" && allowedPaths.has(selectedPath);
   const codes = valid
-    ? defaultCodesFor(choiceLookup, selectedPath, [])
+    ? defaultCourseCodes(choiceLookup, selectedPath, [])
     : [];
   const courses = codes.map((code) =>
     makeCourse(code, choiceLookup, selectedPath),
@@ -547,7 +551,7 @@ function resolveGraduation(data, choiceLookup, claimed, duplicates) {
 
 function resolveInternship(data, choiceLookup) {
   const selected = isAffirmative(data.internship);
-  const code = defaultCodesFor(
+  const code = defaultCourseCodes(
     choiceLookup,
     QUESTION_NAMES.internship,
     INTERNSHIP_CODE ? [INTERNSHIP_CODE] : [],
@@ -955,11 +959,6 @@ function choicesForQuestion(courseData, questionName) {
   return Object.freeze([
     ...(courseData.choicesByQuestion.get(questionName) ?? []),
   ]);
-}
-
-function defaultCodesFor(choiceLookup, questionName, fallback) {
-  const codes = choiceLookup?.getDefaultCodes?.(questionName);
-  return Array.isArray(codes) && codes.length > 0 ? codes : fallback;
 }
 
 function choiceValuesFor(choiceLookup, questionName, fallback) {
