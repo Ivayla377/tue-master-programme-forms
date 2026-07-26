@@ -46,8 +46,6 @@
               "title": "Month and year of enrollment",
               "isRequired": true,
               "inputType": "month",
-              "min": "2010-01",
-              "max": "2035-12",
               "validators": [
                 {
                   "type": "regex",
@@ -119,33 +117,27 @@
               "choices": [
                 {
                   "value": "2mmc10",
-                  "text": "2MMC10 Cryptology (5 ECTS)",
-                  "credits": 5
+                  "text": "2MMC10 Cryptology (5 ECTS)"
                 },
                 {
                   "value": "2ims25",
-                  "text": "2IMS25 Principles of Data Protection (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMS25 Principles of Data Protection (5 ECTS)"
                 },
                 {
                   "value": "2dmi20",
-                  "text": "2DMI20 Software Security (5 ECTS)",
-                  "credits": 5
+                  "text": "2DMI20 Software Security (5 ECTS)"
                 },
                 {
                   "value": "2ims20",
-                  "text": "2IMS20 Cyberattacks, Crime and Defenses (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMS20 Cyberattacks, Crime and Defenses (5 ECTS)"
                 },
                 {
                   "value": "2ims30",
-                  "text": "2IMS30 Advanced Network Security (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMS30 Advanced Network Security (5 ECTS)"
                 },
                 {
                   "value": "2ims00",
-                  "text": "2IMS00 Seminar Information Security Technology (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMS00 Seminar Information Security Technology (5 ECTS)"
                 }
               ]
             },
@@ -178,13 +170,11 @@
               "choices": [
                 {
                   "value": "2imc05",
-                  "text": "2IMC05 Preparation Graduation Project (10 ECTS)",
-                  "credits": 10
+                  "text": "2IMC05 Preparation Graduation Project (10 ECTS)"
                 },
                 {
                   "value": "2imc00",
-                  "text": "2IMC00 Master Project (30 ECTS)",
-                  "credits": 30
+                  "text": "2IMC00 Master Project (30 ECTS)"
                 }
               ],
               "visibleIf": "{graduation_course_set} = 'graduation_computer_science_courses'"
@@ -201,13 +191,11 @@
               "choices": [
                 {
                   "value": "2mmr05",
-                  "text": "2MMR05 Preparation Graduation Project (10 ECTS)",
-                  "credits": 10
+                  "text": "2MMR05 Preparation Graduation Project (10 ECTS)"
                 },
                 {
                   "value": "2mmr30",
-                  "text": "2MMR30 Final Project (30 ECTS)",
-                  "credits": 30
+                  "text": "2MMR30 Final Project (30 ECTS)"
                 }
               ],
               "visibleIf": "{graduation_course_set} = 'graduation_mathematics_courses'"
@@ -228,38 +216,31 @@
               "choices": [
                 {
                   "value": "2ims10",
-                  "text": "2IMS10 Physical Aspects of Digital Security (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMS10 Physical Aspects of Digital Security (5 ECTS)"
                 },
                 {
                   "value": "2dmi10",
-                  "text": "2DMI10 Applied Cryptography (5 ECTS)",
-                  "credits": 5
+                  "text": "2DMI10 Applied Cryptography (5 ECTS)"
                 },
                 {
                   "value": "2dmi00",
-                  "text": "2DMI00 Cryptographic Protocols (5 ECTS)",
-                  "credits": 5
+                  "text": "2DMI00 Cryptographic Protocols (5 ECTS)"
                 },
                 {
                   "value": "2ims15",
-                  "text": "2IMS15 Verification of Security Protocols (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMS15 Verification of Security Protocols (5 ECTS)"
                 },
                 {
                   "value": "2ims40",
-                  "text": "2IMS40 Intrusion Detection Laboratory (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMS40 Intrusion Detection Laboratory (5 ECTS)"
                 },
                 {
                   "value": "2ims50",
-                  "text": "2IMS50 Introduction to Quantum Computing and Security (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMS50 Introduction to Quantum Computing and Security (5 ECTS)"
                 },
                 {
                   "value": "2ims60",
-                  "text": "2IMS60 Provable Security (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMS60 Provable Security (5 ECTS)"
                 }
               ]
             }
@@ -285,303 +266,243 @@
               "choices": [
                 {
                   "value": "2amd15",
-                  "text": "2AMD15 Big Data Management (5 ECTS)",
-                  "credits": 5
+                  "text": "2AMD15 Big Data Management (5 ECTS)"
                 },
                 {
                   "value": "2ami10",
-                  "text": "2AMI10 Foundations of Process Mining (5 ECTS)",
-                  "credits": 5
+                  "text": "2AMI10 Foundations of Process Mining (5 ECTS)"
                 },
                 {
                   "value": "2amm10",
-                  "text": "2AMM10 Deep Learning (5 ECTS)",
-                  "credits": 5
+                  "text": "2AMM10 Deep Learning (5 ECTS)"
                 },
                 {
                   "value": "2amm15",
-                  "text": "2AMM15 Machine Learning Engineering (5 ECTS)",
-                  "credits": 5
+                  "text": "2AMM15 Machine Learning Engineering (5 ECTS)"
                 },
                 {
                   "value": "2amm20",
-                  "text": "2AMM20 Research Topics in Data Mining (5 ECTS)",
-                  "credits": 5
+                  "text": "2AMM20 Research Topics in Data Mining (5 ECTS)"
                 },
                 {
                   "value": "2dd23",
-                  "text": "2DD23 Time Series & Forecasting (5 ECTS)",
-                  "credits": 5
+                  "text": "2DD23 Time Series & Forecasting (5 ECTS)"
                 },
                 {
                   "value": "2ima10",
-                  "text": "2IMA10 Advanced Algorithms (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMA10 Advanced Algorithms (5 ECTS)"
                 },
                 {
                   "value": "2ima15",
-                  "text": "2IMA15 Geometric Algorithms (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMA15 Geometric Algorithms (5 ECTS)"
                 },
                 {
                   "value": "2ima20",
-                  "text": "2IMA20 Algorithms for Geovisualization (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMA20 Algorithms for Geovisualization (5 ECTS)"
                 },
                 {
                   "value": "2ima25",
-                  "text": "2IMA25 Exact Algorithms for NP-hard Problems (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMA25 Exact Algorithms for NP-hard Problems (5 ECTS)"
                 },
                 {
                   "value": "2ima30",
-                  "text": "2IMA30 Topological Data Analysis (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMA30 Topological Data Analysis (5 ECTS)"
                 },
                 {
                   "value": "2ima35",
-                  "text": "2IMA35 Massively Parallel Algorithms (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMA35 Massively Parallel Algorithms (5 ECTS)"
                 },
                 {
                   "value": "2ima50",
-                  "text": "2IMA50 Algorithms for Collective Decision Making (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMA50 Algorithms for Collective Decision Making (5 ECTS)"
                 },
                 {
                   "value": "2imd10",
-                  "text": "2IMD10 Engineering Data-Intensive Systems (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMD10 Engineering Data-Intensive Systems (5 ECTS)"
                 },
                 {
                   "value": "2imd20",
-                  "text": "2IMD20 Language Virtual Machines Design and Implementation (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMD20 Language Virtual Machines Design and Implementation (5 ECTS)"
                 },
                 {
                   "value": "2imf10",
-                  "text": "2IMF10 Process Algebra (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMF10 Process Algebra (5 ECTS)"
                 },
                 {
                   "value": "2imf15",
-                  "text": "2IMF15 Proving with Computer Assistance (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMF15 Proving with Computer Assistance (5 ECTS)"
                 },
                 {
                   "value": "2imf25",
-                  "text": "2IMF25 Automated Reasoning (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMF25 Automated Reasoning (5 ECTS)"
                 },
                 {
                   "value": "2imf30",
-                  "text": "2IMF30 System Validation (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMF30 System Validation (5 ECTS)"
                 },
                 {
                   "value": "2imf35",
-                  "text": "2IMF35 Algorithms for Model Checking (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMF35 Algorithms for Model Checking (5 ECTS)"
                 },
                 {
                   "value": "2imn10",
-                  "text": "2IMN10 Architecture of Distributed Systems (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMN10 Architecture of Distributed Systems (5 ECTS)"
                 },
                 {
                   "value": "2imn15",
-                  "text": "2IMN15 Internet of Things (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMN15 Internet of Things (5 ECTS)"
                 },
                 {
                   "value": "2imn20",
-                  "text": "2IMN20 Real-Time Systems (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMN20 Real-Time Systems (5 ECTS)"
                 },
                 {
                   "value": "2imn25",
-                  "text": "2IMN25 Quantitative Evaluation of Cyber Physical Systems (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMN25 Quantitative Evaluation of Cyber Physical Systems (5 ECTS)"
                 },
                 {
                   "value": "2imn30",
-                  "text": "2IMN30 Machine Learning for Industry (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMN30 Machine Learning for Industry (5 ECTS)"
                 },
                 {
                   "value": "2imn35",
-                  "text": "2IMN35 VLSI Programming (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMN35 VLSI Programming (5 ECTS)"
                 },
                 {
                   "value": "2imp10",
-                  "text": "2IMP10 Program Verification Techniques (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMP10 Program Verification Techniques (5 ECTS)"
                 },
                 {
                   "value": "2imp15",
-                  "text": "2IMP15 Software Project Management (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMP15 Software Project Management (5 ECTS)"
                 },
                 {
                   "value": "2imp20",
-                  "text": "2IMP20 Domain Specific Language Design (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMP20 Domain Specific Language Design (5 ECTS)"
                 },
                 {
                   "value": "2imp25",
-                  "text": "2IMP25 Software Evolution (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMP25 Software Evolution (5 ECTS)"
                 },
                 {
                   "value": "2imp30",
-                  "text": "2IMP30 System Design Engineering (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMP30 System Design Engineering (5 ECTS)"
                 },
                 {
                   "value": "2imp40",
-                  "text": "2IMP40 Empirical Methods in Software Engineering (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMP40 Empirical Methods in Software Engineering (5 ECTS)"
                 },
                 {
                   "value": "2imp60",
-                  "text": "2IMP60 Human-Computer Interaction (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMP60 Human-Computer Interaction (5 ECTS)"
                 },
                 {
                   "value": "2imv10",
-                  "text": "2IMV10 Visual Computing Project (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMV10 Visual Computing Project (5 ECTS)"
                 },
                 {
                   "value": "2imv15",
-                  "text": "2IMV15 Simulation in Computer Graphics (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMV15 Simulation in Computer Graphics (5 ECTS)"
                 },
                 {
                   "value": "2imv25",
-                  "text": "2IMV25 Interactive Virtual Environments (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMV25 Interactive Virtual Environments (5 ECTS)"
                 },
                 {
                   "value": "2mma10",
-                  "text": "2MMA10 Applied Functional Analysis (5 ECTS)",
-                  "credits": 5
+                  "text": "2MMA10 Applied Functional Analysis (5 ECTS)"
                 },
                 {
                   "value": "2mma20",
-                  "text": "2MMA20 Partial Differential Equations (5 ECTS)",
-                  "credits": 5
+                  "text": "2MMA20 Partial Differential Equations (5 ECTS)"
                 },
                 {
                   "value": "2mma40",
-                  "text": "2MMA40 Evolution Equations (5 ECTS)",
-                  "credits": 5
+                  "text": "2MMA40 Evolution Equations (5 ECTS)"
                 },
                 {
                   "value": "2mma70",
-                  "text": "2MMA70 Differential Geometry for Image Processing (5 ECTS)",
-                  "credits": 5
+                  "text": "2MMA70 Differential Geometry for Image Processing (5 ECTS)"
                 },
                 {
                   "value": "2mma80",
-                  "text": "2MMA80 Mathematics of Neural Networks (5 ECTS)",
-                  "credits": 5
+                  "text": "2MMA80 Mathematics of Neural Networks (5 ECTS)"
                 },
                 {
                   "value": "2mmd10",
-                  "text": "2MMD10 Optimization (5 ECTS)",
-                  "credits": 5
+                  "text": "2MMD10 Optimization (5 ECTS)"
                 },
                 {
                   "value": "2mmd20",
-                  "text": "2MMD20 Multilinear Algebra and Applications (5 ECTS)",
-                  "credits": 5
+                  "text": "2MMD20 Multilinear Algebra and Applications (5 ECTS)"
                 },
                 {
                   "value": "2mmd30",
-                  "text": "2MMD30 Graphs and Algorithms (5 ECTS)",
-                  "credits": 5
+                  "text": "2MMD30 Graphs and Algorithms (5 ECTS)"
                 },
                 {
                   "value": "2mmd40",
-                  "text": "2MMD40 Integer Programming (5 ECTS)",
-                  "credits": 5
+                  "text": "2MMD40 Integer Programming (5 ECTS)"
                 },
                 {
                   "value": "2mmd50",
-                  "text": "2MMD50 Algebraic Combinatorics (5 ECTS)",
-                  "credits": 5
+                  "text": "2MMD50 Algebraic Combinatorics (5 ECTS)"
                 },
                 {
                   "value": "2mmn10",
-                  "text": "2MMN10 Scientific Computing (5 ECTS)",
-                  "credits": 5
+                  "text": "2MMN10 Scientific Computing (5 ECTS)"
                 },
                 {
                   "value": "2mmn20",
-                  "text": "2MMN20 Scientific Programming (5 ECTS)",
-                  "credits": 5
+                  "text": "2MMN20 Scientific Programming (5 ECTS)"
                 },
                 {
                   "value": "2mmn30",
-                  "text": "2MMN30 Scientific Computing in Partial Differential Equations (5 ECTS)",
-                  "credits": 5
+                  "text": "2MMN30 Scientific Computing in Partial Differential Equations (5 ECTS)"
                 },
                 {
                   "value": "2mmr40",
-                  "text": "2MMR40 Research Topic 1 (Capita Selecta) (5 ECTS)",
-                  "credits": 5
+                  "text": "2MMR40 Research Topic 1 (Capita Selecta) (5 ECTS)"
                 },
                 {
                   "value": "2mmr50",
-                  "text": "2MMR50 Research Topic 2 (Capita Selecta) (5 ECTS)",
-                  "credits": 5
+                  "text": "2MMR50 Research Topic 2 (Capita Selecta) (5 ECTS)"
                 },
                 {
                   "value": "2mmr60",
-                  "text": "2MMR60 Research Topic 3 (Capita Selecta) (5 ECTS)",
-                  "credits": 5
+                  "text": "2MMR60 Research Topic 3 (Capita Selecta) (5 ECTS)"
                 },
                 {
                   "value": "2mms10",
-                  "text": "2MMS10 Probability and Stochastics 1 (5 ECTS)",
-                  "credits": 5
+                  "text": "2MMS10 Probability and Stochastics 1 (5 ECTS)"
                 },
                 {
                   "value": "2mms30",
-                  "text": "2MMS30 Probability and Stochastics 2 (5 ECTS)",
-                  "credits": 5
+                  "text": "2MMS30 Probability and Stochastics 2 (5 ECTS)"
                 },
                 {
                   "value": "2mms40",
-                  "text": "2MMS40 Stochastic Networks (5 ECTS)",
-                  "credits": 5
+                  "text": "2MMS40 Stochastic Networks (5 ECTS)"
                 },
                 {
                   "value": "2mms50",
-                  "text": "2MMS50 Stochastic Decision Theory (5 ECTS)",
-                  "credits": 5
+                  "text": "2MMS50 Stochastic Decision Theory (5 ECTS)"
                 },
                 {
                   "value": "2mms60",
-                  "text": "2MMS60 Random Graphs (5 ECTS)",
-                  "credits": 5
+                  "text": "2MMS60 Random Graphs (5 ECTS)"
                 },
                 {
                   "value": "2mms80",
-                  "text": "2MMS80 Statistical Learning Theory (5 ECTS)",
-                  "credits": 5
+                  "text": "2MMS80 Statistical Learning Theory (5 ECTS)"
                 },
                 {
                   "value": "2mms90",
-                  "text": "2MMS90 Sequential and Nonparametric Statistics (5 ECTS)",
-                  "credits": 5
+                  "text": "2MMS90 Sequential and Nonparametric Statistics (5 ECTS)"
                 },
                 {
                   "value": "5lma0",
-                  "text": "5LMA0 Model Reduction (5 ECTS)",
-                  "credits": 5
+                  "text": "5LMA0 Model Reduction (5 ECTS)"
                 }
               ]
             },
@@ -657,8 +578,7 @@
               "choices": [
                 {
                   "value": "2imc10",
-                  "text": "2IMC10 Internship (15 ECTS)",
-                  "credits": 15
+                  "text": "2IMC10 Internship (15 ECTS)"
                 }
               ]
             },

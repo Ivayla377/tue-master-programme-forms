@@ -46,8 +46,6 @@
               "title": "Month and year of enrollment",
               "isRequired": true,
               "inputType": "month",
-              "min": "2010-01",
-              "max": "2035-12",
               "validators": [
                 {
                   "type": "regex",
@@ -329,53 +327,43 @@
               "choices": [
                 {
                   "value": "5cca0",
-                  "text": "5CCA0 Semiconductor Physics and Materials (5 ECTS)",
-                  "credits": 5
+                  "text": "5CCA0 Semiconductor Physics and Materials (5 ECTS)"
                 },
                 {
                   "value": "2imnt1",
-                  "text": "2IMNT1 Embedded Computer Architectures 2 (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMNT1 Embedded Computer Architectures 2 (5 ECTS)"
                 },
                 {
                   "value": "5lig0",
-                  "text": "5LIG0 Applied Combinatorial Algorithms (5 ECTS)",
-                  "credits": 5
+                  "text": "5LIG0 Applied Combinatorial Algorithms (5 ECTS)"
                 },
                 {
                   "value": "5lil0",
-                  "text": "5LIL0 Intelligent Architectures (5 ECTS)",
-                  "credits": 5
+                  "text": "5LIL0 Intelligent Architectures (5 ECTS)"
                 },
                 {
                   "value": "5lie0",
-                  "text": "5LIE0 Multiprocessors (5 ECTS)",
-                  "credits": 5
+                  "text": "5LIE0 Multiprocessors (5 ECTS)"
                 },
                 {
                   "value": "5lim0",
-                  "text": "5LIM0 Parallelization, Compilers and Platforms (5 ECTS)",
-                  "credits": 5
+                  "text": "5LIM0 Parallelization, Compilers and Platforms (5 ECTS)"
                 },
                 {
                   "value": "5sib0",
-                  "text": "5SIB0 Electronic Design Automation (5 ECTS)",
-                  "credits": 5
+                  "text": "5SIB0 Electronic Design Automation (5 ECTS)"
                 },
                 {
                   "value": "5lij0",
-                  "text": "5LIJ0 Embedded Control Systems (5 ECTS)",
-                  "credits": 5
+                  "text": "5LIJ0 Embedded Control Systems (5 ECTS)"
                 },
                 {
                   "value": "5lia0",
-                  "text": "5LIA0 Embedded Visual Control (5 ECTS)",
-                  "credits": 5
+                  "text": "5LIA0 Embedded Visual Control (5 ECTS)"
                 },
                 {
                   "value": "2imf00",
-                  "text": "2IMF00 Seminar Formal System Analysis (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMF00 Seminar Formal System Analysis (5 ECTS)"
                 }
               ]
             },
@@ -429,73 +417,59 @@
               "choices": [
                 {
                   "value": "2imn10",
-                  "text": "2IMN10 Architecture of Distributed Systems (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMN10 Architecture of Distributed Systems (5 ECTS)"
                 },
                 {
                   "value": "2dmi20",
-                  "text": "2DMI20 Software Security (5 ECTS)",
-                  "credits": 5
+                  "text": "2DMI20 Software Security (5 ECTS)"
                 },
                 {
                   "value": "2imp10",
-                  "text": "2IMP10 Program Verification Techniques (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMP10 Program Verification Techniques (5 ECTS)"
                 },
                 {
                   "value": "5lig0",
-                  "text": "5LIG0 Applied Combinatorial Algorithms (5 ECTS)",
-                  "credits": 5
+                  "text": "5LIG0 Applied Combinatorial Algorithms (5 ECTS)"
                 },
                 {
                   "value": "2imf35",
-                  "text": "2IMF35 Algorithms for Model Checking (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMF35 Algorithms for Model Checking (5 ECTS)"
                 },
                 {
                   "value": "2imp25",
-                  "text": "2IMP25 Software Evolution (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMP25 Software Evolution (5 ECTS)"
                 },
                 {
                   "value": "5lie0",
-                  "text": "5LIE0 Multiprocessors (5 ECTS)",
-                  "credits": 5
+                  "text": "5LIE0 Multiprocessors (5 ECTS)"
                 },
                 {
                   "value": "5lij0",
-                  "text": "5LIJ0 Embedded Control Systems (5 ECTS)",
-                  "credits": 5
+                  "text": "5LIJ0 Embedded Control Systems (5 ECTS)"
                 },
                 {
                   "value": "5lil0",
-                  "text": "5LIL0 Intelligent Architectures (5 ECTS)",
-                  "credits": 5
+                  "text": "5LIL0 Intelligent Architectures (5 ECTS)"
                 },
                 {
                   "value": "2imp20",
-                  "text": "2IMP20 Domain Specific Language Design (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMP20 Domain Specific Language Design (5 ECTS)"
                 },
                 {
                   "value": "5lik0",
-                  "text": "5LIK0 Embedded Signal Processing Systems (5 ECTS)",
-                  "credits": 5
+                  "text": "5LIK0 Embedded Signal Processing Systems (5 ECTS)"
                 },
                 {
                   "value": "2imf00",
-                  "text": "2IMF00 Seminar Formal System Analysis (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMF00 Seminar Formal System Analysis (5 ECTS)"
                 },
                 {
                   "value": "2imn00",
-                  "text": "2IMN00 Seminar Interconnected Resource-aware Intelligent Systems (IRIS) (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMN00 Seminar Interconnected Resource-aware Intelligent Systems (IRIS) (5 ECTS)"
                 },
                 {
                   "value": "2imp00",
-                  "text": "2IMP00 Seminar Software Engineering and Technology (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMP00 Seminar Software Engineering and Technology (5 ECTS)"
                 }
               ]
             },
@@ -549,63 +523,51 @@
               "choices": [
                 {
                   "value": "2imf25",
-                  "text": "2IMF25 Automated Reasoning (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMF25 Automated Reasoning (5 ECTS)"
                 },
                 {
                   "value": "5lih0",
-                  "text": "5LIH0 Digital Integrated Circuit Design (5 ECTS)",
-                  "credits": 5
+                  "text": "5LIH0 Digital Integrated Circuit Design (5 ECTS)"
                 },
                 {
                   "value": "2ims20",
-                  "text": "2IMS20 Cyberattacks, Crime and Defenses (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMS20 Cyberattacks, Crime and Defenses (5 ECTS)"
                 },
                 {
                   "value": "2ims30",
-                  "text": "2IMS30 Advanced Network Security (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMS30 Advanced Network Security (5 ECTS)"
                 },
                 {
                   "value": "2ims15",
-                  "text": "2IMS15 Verification of Security Protocols (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMS15 Verification of Security Protocols (5 ECTS)"
                 },
                 {
                   "value": "5sib0",
-                  "text": "5SIB0 Electronic Design Automation (5 ECTS)",
-                  "credits": 5
+                  "text": "5SIB0 Electronic Design Automation (5 ECTS)"
                 },
                 {
                   "value": "5lik0",
-                  "text": "5LIK0 Embedded Signal Processing Systems (5 ECTS)",
-                  "credits": 5
+                  "text": "5LIK0 Embedded Signal Processing Systems (5 ECTS)"
                 },
                 {
                   "value": "5lia0",
-                  "text": "5LIA0 Embedded Visual Control (5 ECTS)",
-                  "credits": 5
+                  "text": "5LIA0 Embedded Visual Control (5 ECTS)"
                 },
                 {
                   "value": "5lid0",
-                  "text": "5LID0 Systems on Silicon (5 ECTS)",
-                  "credits": 5
+                  "text": "5LID0 Systems on Silicon (5 ECTS)"
                 },
                 {
                   "value": "2imp30",
-                  "text": "2IMP30 System Design Engineering (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMP30 System Design Engineering (5 ECTS)"
                 },
                 {
                   "value": "2imf00",
-                  "text": "2IMF00 Seminar Formal System Analysis (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMF00 Seminar Formal System Analysis (5 ECTS)"
                 },
                 {
                   "value": "2imn00",
-                  "text": "2IMN00 Seminar Interconnected Resource-aware Intelligent Systems (IRIS) (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMN00 Seminar Interconnected Resource-aware Intelligent Systems (IRIS) (5 ECTS)"
                 }
               ]
             },
@@ -658,63 +620,51 @@
               "choices": [
                 {
                   "value": "2imn10",
-                  "text": "2IMN10 Architecture of Distributed Systems (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMN10 Architecture of Distributed Systems (5 ECTS)"
                 },
                 {
                   "value": "5csa0",
-                  "text": "5CSA0 Modeling Dynamics (5 ECTS)",
-                  "credits": 5
+                  "text": "5CSA0 Modeling Dynamics (5 ECTS)"
                 },
                 {
                   "value": "5lic0",
-                  "text": "5LIC0 Networked Embedded Systems (5 ECTS)",
-                  "credits": 5
+                  "text": "5LIC0 Networked Embedded Systems (5 ECTS)"
                 },
                 {
                   "value": "5lig0",
-                  "text": "5LIG0 Applied Combinatorial Algorithms (5 ECTS)",
-                  "credits": 5
+                  "text": "5LIG0 Applied Combinatorial Algorithms (5 ECTS)"
                 },
                 {
                   "value": "2imp25",
-                  "text": "2IMP25 Software Evolution (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMP25 Software Evolution (5 ECTS)"
                 },
                 {
                   "value": "5lim0",
-                  "text": "5LIM0 Parallelization, Compilers and Platforms (5 ECTS)",
-                  "credits": 5
+                  "text": "5LIM0 Parallelization, Compilers and Platforms (5 ECTS)"
                 },
                 {
                   "value": "5lie0",
-                  "text": "5LIE0 Multiprocessors (5 ECTS)",
-                  "credits": 5
+                  "text": "5LIE0 Multiprocessors (5 ECTS)"
                 },
                 {
                   "value": "5lil0",
-                  "text": "5LIL0 Intelligent Architectures (5 ECTS)",
-                  "credits": 5
+                  "text": "5LIL0 Intelligent Architectures (5 ECTS)"
                 },
                 {
                   "value": "5sib0",
-                  "text": "5SIB0 Electronic Design Automation (5 ECTS)",
-                  "credits": 5
+                  "text": "5SIB0 Electronic Design Automation (5 ECTS)"
                 },
                 {
                   "value": "5lia0",
-                  "text": "5LIA0 Embedded Visual Control (5 ECTS)",
-                  "credits": 5
+                  "text": "5LIA0 Embedded Visual Control (5 ECTS)"
                 },
                 {
                   "value": "2imp30",
-                  "text": "2IMP30 System Design Engineering (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMP30 System Design Engineering (5 ECTS)"
                 },
                 {
                   "value": "2imp20",
-                  "text": "2IMP20 Domain Specific Language Design (5 ECTS)",
-                  "credits": 5
+                  "text": "2IMP20 Domain Specific Language Design (5 ECTS)"
                 }
               ]
             },

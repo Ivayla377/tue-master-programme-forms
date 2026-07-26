@@ -10,6 +10,7 @@ import {
   sumCourses,
 } from "../../shared/course-selection.js";
 import { isTrue } from "../../shared/credit-utils.js";
+import { readNumericValue } from "../../shared/survey-rules.js";
 import { validationState } from "../../shared/validation-utils.js";
 import {
   CORE_MANDATORY_CODES,
@@ -64,15 +65,25 @@ export function calculateEcts(
   const graduation = buildGraduation(context);
 
   const freeElectives = buildFreeElectives(context);
-  const freeSpaceTotal =
+  const freeSpaceFallback =
     freeElectives.credits + homologation.credits + internship.credits;
-  const totalCredits = sumCourses([
+  const freeSpaceTotal = readNumericValue(
+    data,
+    "credits_free_space",
+    freeSpaceFallback,
+  );
+  const totalFallback = sumCourses([
     core,
     specialization,
     seminar,
     { credits: freeSpaceTotal },
     graduation,
   ]);
+  const totalCredits = readNumericValue(
+    data,
+    "credits_total",
+    totalFallback,
+  );
   const projectCourses = findProjectCourses(
     core,
     specialization,
@@ -145,13 +156,19 @@ function buildCore({ data, choiceLookup, readCourse }) {
     ? readCourse(QUESTION_NAMES.coreElective)(electiveCode)
     : null;
 
-  return {
-    courses,
-    elective,
-    credits: sumCourses([
+  const credits = readNumericValue(
+    data,
+    "credits_core",
+    sumCourses([
       ...courses,
       ...(elective ? [elective] : []),
     ]),
+  );
+
+  return {
+    courses,
+    elective,
+    credits,
   };
 }
 
@@ -159,17 +176,26 @@ function buildSpecialization({ data, rules, readCourse }) {
   const trajectories = TRAJECTORIES.map((trajectory) => {
     const courses = selectedCodes(data, trajectory.name)
       .map(readCourse(trajectory.name));
+    const credits = readNumericValue(
+      data,
+      "credits_" + trajectory.name + "_electives",
+      sumCourses(courses),
+    );
     return {
       ...trajectory,
       courses,
-      credits: sumCourses(courses),
+      credits,
       count: courses.length,
     };
   });
   const courses = trajectories.flatMap(
     (trajectory) => trajectory.courses,
   );
-  const credits = sumCourses(courses);
+  const credits = readNumericValue(
+    data,
+    "credits_specialization",
+    sumCourses(courses),
+  );
   const majorTrajectories = chooseMajorTrajectories(
     trajectories,
     credits,
@@ -202,7 +228,11 @@ function buildSeminar({ data, readCourse }) {
     : null;
   return {
     course,
-    credits: course?.credits ?? 0,
+    credits: readNumericValue(
+      data,
+      "credits_seminar",
+      course?.credits ?? 0,
+    ),
   };
 }
 
@@ -213,7 +243,11 @@ function buildHomologation({ data, readCourse }) {
     : [];
   return {
     courses,
-    credits: sumCourses(courses),
+    credits: readNumericValue(
+      data,
+      "credits_homologation",
+      sumCourses(courses),
+    ),
   };
 }
 
@@ -231,7 +265,11 @@ function buildInternship({ data, choiceLookup, readCourse }) {
   return {
     selected,
     supervisor: data.internship_supervisor ?? "",
-    credits: course?.credits ?? 0,
+    credits: readNumericValue(
+      data,
+      "credits_internship",
+      course?.credits ?? 0,
+    ),
     course,
   };
 }
@@ -244,7 +282,11 @@ function buildGraduation({ data, choiceLookup, readCourse }) {
   ).map(readCourse(QUESTION_NAMES.graduation));
   return {
     courses,
-    credits: sumCourses(courses),
+    credits: readNumericValue(
+      data,
+      "credits_graduation",
+      sumCourses(courses),
+    ),
   };
 }
 
@@ -259,7 +301,11 @@ function buildFreeElectives({ data }) {
   return {
     rows,
     invalidRows: rows.filter((row) => !row.validCredits),
-    credits: sumCourses(rows),
+    credits: readNumericValue(
+      data,
+      "credits_free_rows",
+      sumCourses(rows),
+    ),
   };
 }
 

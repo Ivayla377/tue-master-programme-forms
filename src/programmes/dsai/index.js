@@ -1,7 +1,5 @@
 import logoUrl from "../../../tue_logo.jpg";
-import { Serializer } from "survey-core";
 
-import { registerCourseChoiceMetadata } from "../../shared/survey-choice-metadata.js";
 import {
   calculateEcts,
   removeBlockedSpecializationSelections,
@@ -14,9 +12,6 @@ import { renderEctsPanel, renderSummary } from "./summary.js";
 
 export const dsaiFormConfig = {
   surveySource: DSAI_SURVEY_SOURCE,
-  registerSurveyMetadata() {
-    registerCourseChoiceMetadata(Serializer);
-  },
   logoUrl,
   logoType: "image/jpeg",
   labels: {

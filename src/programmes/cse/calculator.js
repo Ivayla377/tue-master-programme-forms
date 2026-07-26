@@ -408,6 +408,9 @@ function buildCourseCatalog(surveyJson) {
   const catalog = new Map();
   walkElements(surveyJson.pages ?? [], (element) => {
     if (!Array.isArray(element.choices)) return;
+    const questionFocus = CSE_FOCUS_AREAS.find(
+      ({ value }) => element.name?.endsWith("_" + value),
+    )?.value;
 
     for (const choice of element.choices) {
       if (!choice || typeof choice !== "object" || choice.value === undefined) continue;
@@ -419,10 +422,7 @@ function buildCourseCatalog(surveyJson) {
         label: choice.text ?? choice.value,
         focuses: new Set(),
       };
-      const focuses = Array.isArray(choice.focus) ? choice.focus : [choice.focus];
-      for (const focus of focuses) {
-        if (focus) current.focuses.add(focus);
-      }
+      if (questionFocus) current.focuses.add(questionFocus);
       catalog.set(code, current);
     }
   });

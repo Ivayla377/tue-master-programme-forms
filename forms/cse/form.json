@@ -46,8 +46,6 @@
               "title": "Month and year of enrollment",
               "isRequired": true,
               "inputType": "month",
-              "min": "2010-01",
-              "max": "2035-12",
               "validators": [
                 {
                   "type": "regex",
@@ -161,18 +159,15 @@
               "choices": [
                 {
                   "value": "2ima10",
-                  "text": "2IMA10 Advanced Algorithms (5 ECTS)",
-                  "focus": "algorithms"
+                  "text": "2IMA10 Advanced Algorithms (5 ECTS)"
                 },
                 {
                   "value": "2imf25",
-                  "text": "2IMF25 Automated Reasoning (5 ECTS)",
-                  "focus": "algorithms"
+                  "text": "2IMF25 Automated Reasoning (5 ECTS)"
                 },
                 {
                   "value": "2imf10",
-                  "text": "2IMF10 Process Algebra (5 ECTS)",
-                  "focus": "algorithms"
+                  "text": "2IMF10 Process Algebra (5 ECTS)"
                 }
               ]
             },
@@ -184,18 +179,15 @@
               "choices": [
                 {
                   "value": "2imn10",
-                  "text": "2IMN10 Architecture of Distributed Systems (5 ECTS)",
-                  "focus": "architectures"
+                  "text": "2IMN10 Architecture of Distributed Systems (5 ECTS)"
                 },
                 {
                   "value": "2imf30",
-                  "text": "2IMF30 System Validation (5 ECTS)",
-                  "focus": "architectures"
+                  "text": "2IMF30 System Validation (5 ECTS)"
                 },
                 {
                   "value": "2imd10",
-                  "text": "2IMD10 Engineering Data-Intensive Systems (5 ECTS)",
-                  "focus": "architectures"
+                  "text": "2IMD10 Engineering Data-Intensive Systems (5 ECTS)"
                 }
               ]
             },
@@ -207,18 +199,15 @@
               "choices": [
                 {
                   "value": "2imp25",
-                  "text": "2IMP25 Software Evolution (5 ECTS)",
-                  "focus": "software"
+                  "text": "2IMP25 Software Evolution (5 ECTS)"
                 },
                 {
                   "value": "2ami10",
-                  "text": "2AMI10 Foundations of Process Mining (5 ECTS)",
-                  "focus": "software"
+                  "text": "2AMI10 Foundations of Process Mining (5 ECTS)"
                 },
                 {
                   "value": "2imp10",
-                  "text": "2IMP10 Program Verification Techniques (5 ECTS)",
-                  "focus": "software"
+                  "text": "2IMP10 Program Verification Techniques (5 ECTS)"
                 }
               ]
             }
@@ -262,53 +251,43 @@
               "choices": [
                 {
                   "value": "2ima10",
-                  "text": "2IMA10 Advanced Algorithms (5 ECTS)",
-                  "focus": "algorithms"
+                  "text": "2IMA10 Advanced Algorithms (5 ECTS)"
                 },
                 {
                   "value": "2imf25",
-                  "text": "2IMF25 Automated Reasoning (5 ECTS)",
-                  "focus": "algorithms"
+                  "text": "2IMF25 Automated Reasoning (5 ECTS)"
                 },
                 {
                   "value": "2imf10",
-                  "text": "2IMF10 Process Algebra (5 ECTS)",
-                  "focus": "algorithms"
+                  "text": "2IMF10 Process Algebra (5 ECTS)"
                 },
                 {
                   "value": "2ima20",
-                  "text": "2IMA20 Algorithms for Geovisualization (5 ECTS)",
-                  "focus": "algorithms"
+                  "text": "2IMA20 Algorithms for Geovisualization (5 ECTS)"
                 },
                 {
                   "value": "2ima15",
-                  "text": "2IMA15 Geometric Algorithms (5 ECTS)",
-                  "focus": "algorithms"
+                  "text": "2IMA15 Geometric Algorithms (5 ECTS)"
                 },
                 {
                   "value": "2ima35",
-                  "text": "2IMA35 Massively Parallel Algorithms (5 ECTS)",
-                  "focus": "algorithms"
+                  "text": "2IMA35 Massively Parallel Algorithms (5 ECTS)"
                 },
                 {
                   "value": "2ima25",
-                  "text": "2IMA25 Exact Algorithms for NP-hard Problems (5 ECTS)",
-                  "focus": "algorithms"
+                  "text": "2IMA25 Exact Algorithms for NP-hard Problems (5 ECTS)"
                 },
                 {
                   "value": "2imf15",
-                  "text": "2IMF15 Proving with Computer Assistance (5 ECTS)",
-                  "focus": "algorithms"
+                  "text": "2IMF15 Proving with Computer Assistance (5 ECTS)"
                 },
                 {
                   "value": "2ima30",
-                  "text": "2IMA30 Topological Data Analysis (5 ECTS)",
-                  "focus": "algorithms"
+                  "text": "2IMA30 Topological Data Analysis (5 ECTS)"
                 },
                 {
                   "value": "2ima50",
-                  "text": "2IMA50 Algorithms for Collective Decision Making (5 ECTS)",
-                  "focus": "algorithms"
+                  "text": "2IMA50 Algorithms for Collective Decision Making (5 ECTS)"
                 }
               ],
               "choicesVisibleIf": "{item} <> {foundational_algorithms}"
@@ -325,48 +304,39 @@
               "choices": [
                 {
                   "value": "2imn10",
-                  "text": "2IMN10 Architecture of Distributed Systems (5 ECTS)",
-                  "focus": "architectures"
+                  "text": "2IMN10 Architecture of Distributed Systems (5 ECTS)"
                 },
                 {
                   "value": "2imf30",
-                  "text": "2IMF30 System Validation (5 ECTS)",
-                  "focus": "architectures"
+                  "text": "2IMF30 System Validation (5 ECTS)"
                 },
                 {
                   "value": "2imd10",
-                  "text": "2IMD10 Engineering Data-Intensive Systems (5 ECTS)",
-                  "focus": "architectures"
+                  "text": "2IMD10 Engineering Data-Intensive Systems (5 ECTS)"
                 },
                 {
                   "value": "2imf35",
-                  "text": "2IMF35 Algorithms for Model Checking (5 ECTS)",
-                  "focus": "architectures"
+                  "text": "2IMF35 Algorithms for Model Checking (5 ECTS)"
                 },
                 {
                   "value": "2imn15",
-                  "text": "2IMN15 Internet of Things (5 ECTS)",
-                  "focus": "architectures"
+                  "text": "2IMN15 Internet of Things (5 ECTS)"
                 },
                 {
                   "value": "2imn20",
-                  "text": "2IMN20 Real-Time Systems (5 ECTS)",
-                  "focus": "architectures"
+                  "text": "2IMN20 Real-Time Systems (5 ECTS)"
                 },
                 {
                   "value": "2imn25",
-                  "text": "2IMN25 Quantitative Evaluation of Cyber Physical Systems (5 ECTS)",
-                  "focus": "architectures"
+                  "text": "2IMN25 Quantitative Evaluation of Cyber Physical Systems (5 ECTS)"
                 },
                 {
                   "value": "2imn35",
-                  "text": "2IMN35 VLSI Programming (5 ECTS)",
-                  "focus": "architectures"
+                  "text": "2IMN35 VLSI Programming (5 ECTS)"
                 },
                 {
                   "value": "2imn30",
-                  "text": "2IMN30 Machine Learning for Industry (5 ECTS)",
-                  "focus": "architectures"
+                  "text": "2IMN30 Machine Learning for Industry (5 ECTS)"
                 }
               ],
               "choicesVisibleIf": "{item} <> {foundational_architectures}"
@@ -383,58 +353,47 @@
               "choices": [
                 {
                   "value": "2imp25",
-                  "text": "2IMP25 Software Evolution (5 ECTS)",
-                  "focus": "software"
+                  "text": "2IMP25 Software Evolution (5 ECTS)"
                 },
                 {
                   "value": "2ami10",
-                  "text": "2AMI10 Foundations of Process Mining (5 ECTS)",
-                  "focus": "software"
+                  "text": "2AMI10 Foundations of Process Mining (5 ECTS)"
                 },
                 {
                   "value": "2imp10",
-                  "text": "2IMP10 Program Verification Techniques (5 ECTS)",
-                  "focus": "software"
+                  "text": "2IMP10 Program Verification Techniques (5 ECTS)"
                 },
                 {
                   "value": "2amm10",
-                  "text": "2AMM10 Deep Learning (5 ECTS)",
-                  "focus": "software"
+                  "text": "2AMM10 Deep Learning (5 ECTS)"
                 },
                 {
                   "value": "2amm20",
-                  "text": "2AMM20 Research Topics in Data Mining (5 ECTS)",
-                  "focus": "software"
+                  "text": "2AMM20 Research Topics in Data Mining (5 ECTS)"
                 },
                 {
                   "value": "2imn30",
-                  "text": "2IMN30 Machine Learning for Industry (5 ECTS)",
-                  "focus": "software"
+                  "text": "2IMN30 Machine Learning for Industry (5 ECTS)"
                 },
                 {
                   "value": "2imp40",
-                  "text": "2IMP40 Empirical Methods in Software Engineering (5 ECTS)",
-                  "focus": "software"
+                  "text": "2IMP40 Empirical Methods in Software Engineering (5 ECTS)"
                 },
                 {
                   "value": "2amd15",
-                  "text": "2AMD15 Big Data Management (5 ECTS)",
-                  "focus": "software"
+                  "text": "2AMD15 Big Data Management (5 ECTS)"
                 },
                 {
                   "value": "2imp30",
-                  "text": "2IMP30 System Design Engineering (5 ECTS)",
-                  "focus": "software"
+                  "text": "2IMP30 System Design Engineering (5 ECTS)"
                 },
                 {
                   "value": "2imp20",
-                  "text": "2IMP20 Domain Specific Language Design (5 ECTS)",
-                  "focus": "software"
+                  "text": "2IMP20 Domain Specific Language Design (5 ECTS)"
                 },
                 {
                   "value": "2imp60",
-                  "text": "2IMP60 Human-Computer Interaction (5 ECTS)",
-                  "focus": "software"
+                  "text": "2IMP60 Human-Computer Interaction (5 ECTS)"
                 }
               ],
               "choicesVisibleIf": "{item} <> {foundational_software}"
@@ -461,53 +420,43 @@
               "choices": [
                 {
                   "value": "2ima10",
-                  "text": "2IMA10 Advanced Algorithms (5 ECTS)",
-                  "focus": "algorithms"
+                  "text": "2IMA10 Advanced Algorithms (5 ECTS)"
                 },
                 {
                   "value": "2imf25",
-                  "text": "2IMF25 Automated Reasoning (5 ECTS)",
-                  "focus": "algorithms"
+                  "text": "2IMF25 Automated Reasoning (5 ECTS)"
                 },
                 {
                   "value": "2imf10",
-                  "text": "2IMF10 Process Algebra (5 ECTS)",
-                  "focus": "algorithms"
+                  "text": "2IMF10 Process Algebra (5 ECTS)"
                 },
                 {
                   "value": "2ima20",
-                  "text": "2IMA20 Algorithms for Geovisualization (5 ECTS)",
-                  "focus": "algorithms"
+                  "text": "2IMA20 Algorithms for Geovisualization (5 ECTS)"
                 },
                 {
                   "value": "2ima15",
-                  "text": "2IMA15 Geometric Algorithms (5 ECTS)",
-                  "focus": "algorithms"
+                  "text": "2IMA15 Geometric Algorithms (5 ECTS)"
                 },
                 {
                   "value": "2ima35",
-                  "text": "2IMA35 Massively Parallel Algorithms (5 ECTS)",
-                  "focus": "algorithms"
+                  "text": "2IMA35 Massively Parallel Algorithms (5 ECTS)"
                 },
                 {
                   "value": "2ima25",
-                  "text": "2IMA25 Exact Algorithms for NP-hard Problems (5 ECTS)",
-                  "focus": "algorithms"
+                  "text": "2IMA25 Exact Algorithms for NP-hard Problems (5 ECTS)"
                 },
                 {
                   "value": "2imf15",
-                  "text": "2IMF15 Proving with Computer Assistance (5 ECTS)",
-                  "focus": "algorithms"
+                  "text": "2IMF15 Proving with Computer Assistance (5 ECTS)"
                 },
                 {
                   "value": "2ima30",
-                  "text": "2IMA30 Topological Data Analysis (5 ECTS)",
-                  "focus": "algorithms"
+                  "text": "2IMA30 Topological Data Analysis (5 ECTS)"
                 },
                 {
                   "value": "2ima50",
-                  "text": "2IMA50 Algorithms for Collective Decision Making (5 ECTS)",
-                  "focus": "algorithms"
+                  "text": "2IMA50 Algorithms for Collective Decision Making (5 ECTS)"
                 }
               ],
               "choicesVisibleIf": "{item} <> {foundational_algorithms} and {extra_algorithms} notcontains {item}"
@@ -519,48 +468,39 @@
               "choices": [
                 {
                   "value": "2imn10",
-                  "text": "2IMN10 Architecture of Distributed Systems (5 ECTS)",
-                  "focus": "architectures"
+                  "text": "2IMN10 Architecture of Distributed Systems (5 ECTS)"
                 },
                 {
                   "value": "2imf30",
-                  "text": "2IMF30 System Validation (5 ECTS)",
-                  "focus": "architectures"
+                  "text": "2IMF30 System Validation (5 ECTS)"
                 },
                 {
                   "value": "2imd10",
-                  "text": "2IMD10 Engineering Data-Intensive Systems (5 ECTS)",
-                  "focus": "architectures"
+                  "text": "2IMD10 Engineering Data-Intensive Systems (5 ECTS)"
                 },
                 {
                   "value": "2imf35",
-                  "text": "2IMF35 Algorithms for Model Checking (5 ECTS)",
-                  "focus": "architectures"
+                  "text": "2IMF35 Algorithms for Model Checking (5 ECTS)"
                 },
                 {
                   "value": "2imn15",
-                  "text": "2IMN15 Internet of Things (5 ECTS)",
-                  "focus": "architectures"
+                  "text": "2IMN15 Internet of Things (5 ECTS)"
                 },
                 {
                   "value": "2imn20",
-                  "text": "2IMN20 Real-Time Systems (5 ECTS)",
-                  "focus": "architectures"
+                  "text": "2IMN20 Real-Time Systems (5 ECTS)"
                 },
                 {
                   "value": "2imn25",
-                  "text": "2IMN25 Quantitative Evaluation of Cyber Physical Systems (5 ECTS)",
-                  "focus": "architectures"
+                  "text": "2IMN25 Quantitative Evaluation of Cyber Physical Systems (5 ECTS)"
                 },
                 {
                   "value": "2imn35",
-                  "text": "2IMN35 VLSI Programming (5 ECTS)",
-                  "focus": "architectures"
+                  "text": "2IMN35 VLSI Programming (5 ECTS)"
                 },
                 {
                   "value": "2imn30",
-                  "text": "2IMN30 Machine Learning for Industry (5 ECTS)",
-                  "focus": "architectures"
+                  "text": "2IMN30 Machine Learning for Industry (5 ECTS)"
                 }
               ],
               "choicesVisibleIf": "{item} <> {foundational_architectures} and {extra_architectures} notcontains {item}"
@@ -572,58 +512,47 @@
               "choices": [
                 {
                   "value": "2imp25",
-                  "text": "2IMP25 Software Evolution (5 ECTS)",
-                  "focus": "software"
+                  "text": "2IMP25 Software Evolution (5 ECTS)"
                 },
                 {
                   "value": "2ami10",
-                  "text": "2AMI10 Foundations of Process Mining (5 ECTS)",
-                  "focus": "software"
+                  "text": "2AMI10 Foundations of Process Mining (5 ECTS)"
                 },
                 {
                   "value": "2imp10",
-                  "text": "2IMP10 Program Verification Techniques (5 ECTS)",
-                  "focus": "software"
+                  "text": "2IMP10 Program Verification Techniques (5 ECTS)"
                 },
                 {
                   "value": "2amm10",
-                  "text": "2AMM10 Deep Learning (5 ECTS)",
-                  "focus": "software"
+                  "text": "2AMM10 Deep Learning (5 ECTS)"
                 },
                 {
                   "value": "2amm20",
-                  "text": "2AMM20 Research Topics in Data Mining (5 ECTS)",
-                  "focus": "software"
+                  "text": "2AMM20 Research Topics in Data Mining (5 ECTS)"
                 },
                 {
                   "value": "2imn30",
-                  "text": "2IMN30 Machine Learning for Industry (5 ECTS)",
-                  "focus": "software"
+                  "text": "2IMN30 Machine Learning for Industry (5 ECTS)"
                 },
                 {
                   "value": "2imp40",
-                  "text": "2IMP40 Empirical Methods in Software Engineering (5 ECTS)",
-                  "focus": "software"
+                  "text": "2IMP40 Empirical Methods in Software Engineering (5 ECTS)"
                 },
                 {
                   "value": "2amd15",
-                  "text": "2AMD15 Big Data Management (5 ECTS)",
-                  "focus": "software"
+                  "text": "2AMD15 Big Data Management (5 ECTS)"
                 },
                 {
                   "value": "2imp30",
-                  "text": "2IMP30 System Design Engineering (5 ECTS)",
-                  "focus": "software"
+                  "text": "2IMP30 System Design Engineering (5 ECTS)"
                 },
                 {
                   "value": "2imp20",
-                  "text": "2IMP20 Domain Specific Language Design (5 ECTS)",
-                  "focus": "software"
+                  "text": "2IMP20 Domain Specific Language Design (5 ECTS)"
                 },
                 {
                   "value": "2imp60",
-                  "text": "2IMP60 Human-Computer Interaction (5 ECTS)",
-                  "focus": "software"
+                  "text": "2IMP60 Human-Computer Interaction (5 ECTS)"
                 }
               ],
               "choicesVisibleIf": "{item} <> {foundational_software} and {extra_software} notcontains {item}"

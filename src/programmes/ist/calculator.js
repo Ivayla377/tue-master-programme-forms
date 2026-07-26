@@ -1,5 +1,4 @@
 import surveySource from "../../../forms/ist/form.json" with { type: "json" };
-import { Serializer } from "survey-core";
 
 import {
   createChoiceLookup as createSharedChoiceLookup,
@@ -7,9 +6,7 @@ import {
   walkElements,
 } from "../../shared/course-utils.js";
 import { formatCredits, isTrue } from "../../shared/credit-utils.js";
-import { registerCourseChoiceMetadata } from "./survey-metadata.js";
-
-registerCourseChoiceMetadata(Serializer);
+import { readNumericValue } from "../../shared/survey-rules.js";
 
 const RULE_FIELD_NAMES = Object.freeze({
   programmeTarget: "rule_programme_target",
@@ -159,25 +156,76 @@ export function calculateIst(data = {}, choiceLookup = createIstChoiceLookup()) 
     duplicates,
   );
 
-  const mandatoryFixed = sumCourses(mandatoryFixedCourses);
-  const graduationCredits = sumCourses(graduation.courses);
-  const mandatory = roundCredits(mandatoryFixed + graduationCredits);
-  const istElectives = sumCourses(istSelection.courses);
-  const mcsCourseElectives = sumCourses(mcsSelection.courses);
-  const manualMcsElectives = sumCountedRows(mcsRows);
-  const internshipCredits =
+  const useCalculatedValues =
+    duplicates.length === 0
+    && istSelection.invalidCourses.length === 0
+    && mcsSelection.invalidCourses.length === 0
+    && (!data.graduation_course_set || graduation.valid);
+  const subtotal = (name, fallback) =>
+    useCalculatedValues
+      ? readNumericValue(data, name, fallback)
+      : fallback;
+
+  const mandatoryFixed = subtotal(
+    "mandatory_fixed_credits",
+    sumCourses(mandatoryFixedCourses),
+  );
+  const graduationCredits = subtotal(
+    "graduation_credits",
+    sumCourses(graduation.courses),
+  );
+  const mandatory = subtotal(
+    "mandatory_credits",
+    roundCredits(mandatoryFixed + graduationCredits),
+  );
+  const istElectives = subtotal(
+    "ist_elective_credits",
+    sumCourses(istSelection.courses),
+  );
+  const mcsCourseElectives = subtotal(
+    "mcs_course_credits",
+    sumCourses(mcsSelection.courses),
+  );
+  const manualMcsElectives = subtotal(
+    "manual_mcs_elective_credits",
+    sumCountedRows(mcsRows),
+  );
+  const internshipFallback =
     internship.selected && internship.counted ? internship.credits : 0;
-  const mcsElectives = roundCredits(
-    mcsCourseElectives + manualMcsElectives + internshipCredits,
+  const internshipCredits = subtotal(
+    "internship_credits",
+    internshipFallback,
   );
-  const homologationCourses = sumCountedRows(homologationRows);
-  const homologation = homologationCourses;
-  const manualFreeElectives = sumCountedRows(freeElectiveRows);
-  const otherFreeElectives = roundCredits(
-    manualFreeElectives + homologation,
+  const mcsElectives = subtotal(
+    "mcs_elective_credits",
+    roundCredits(
+      mcsCourseElectives + manualMcsElectives + internshipCredits,
+    ),
   );
-  const freeElectiveSpace = roundCredits(mcsElectives + otherFreeElectives);
-  const total = roundCredits(mandatory + istElectives + freeElectiveSpace);
+  const homologationCourses = subtotal(
+    "homologation_course_credits",
+    sumCountedRows(homologationRows),
+  );
+  const homologation = subtotal(
+    "homologation_credits",
+    homologationCourses,
+  );
+  const manualFreeElectives = subtotal(
+    "manual_free_elective_credits",
+    sumCountedRows(freeElectiveRows),
+  );
+  const otherFreeElectives = subtotal(
+    "other_free_elective_credits",
+    roundCredits(manualFreeElectives + homologation),
+  );
+  const freeElectiveSpace = subtotal(
+    "free_elective_space_credits",
+    roundCredits(mcsElectives + otherFreeElectives),
+  );
+  const total = subtotal(
+    "total_programme_credits",
+    roundCredits(mandatory + istElectives + freeElectiveSpace),
+  );
 
   const invalidManualRows = [
     ...mcsRows,

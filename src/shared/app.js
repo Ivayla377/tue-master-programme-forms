@@ -29,8 +29,6 @@ const defaultLabels = {
 };
 
 export function mountProgramForm(config) {
-  config.registerSurveyMetadata?.();
-
   const labels = { ...defaultLabels, ...(config.labels ?? {}) };
   const surveyJson = prepareSurveyDefinition(config.surveySource, labels);
   const choiceLookup = config.createChoiceLookup(surveyJson);

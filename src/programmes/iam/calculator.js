@@ -1,11 +1,8 @@
 import surveySource from "../../../forms/iam/form.json" with { type: "json" };
-import { Serializer } from "survey-core";
 
 import { createChoiceLookup as createSharedChoiceLookup, walkElements } from "../../shared/course-utils.js";
 import { formatCredits, isTrue } from "../../shared/credit-utils.js";
-import { registerCourseChoiceMetadata } from "./survey-metadata.js";
-
-registerCourseChoiceMetadata(Serializer);
+import { readNumericValue } from "../../shared/survey-rules.js";
 
 const RULE_FIELD_NAMES = Object.freeze({
   programmeTarget: "rule_programme_target",
@@ -128,26 +125,89 @@ export function calculateIam(data = {}, choiceLookup = createIamChoiceLookup()) 
     duplicates,
   );
 
-  const mandatory = sumCourses(mandatoryCourses);
-  const professionalPortfolio = creditFor(mandatoryCourses, "2MMR10");
-  const finalProject = creditFor(mandatoryCourses, "2MMR30");
-  const coreElectives = sumCourses(coreSelection.courses);
-  const listedSpecialization = sumCourses(specializationSelection.courses);
-  const mastermathSpecialization = sumCountedRows(mastermathRows);
-  const specializationElectives = roundCredits(listedSpecialization + mastermathSpecialization);
-  const coreAndSpecialization = roundCredits(coreElectives + specializationElectives);
-  const officialFreeElectives = sumCourses(officialFreeSelection.courses);
-  const internshipCredits = internship.selected && internship.counted
+  const useCalculatedValues =
+    duplicates.length === 0
+    && coreSelection.invalidCourses.length === 0
+    && specializationSelection.invalidCourses.length === 0
+    && officialFreeSelection.invalidCourses.length === 0
+    && selfChosenHomologationRows.length === 0;
+  const subtotal = (name, fallback) =>
+    useCalculatedValues
+      ? readNumericValue(data, name, fallback)
+      : fallback;
+
+  const professionalPortfolio = subtotal(
+    "professional_portfolio_credits",
+    creditFor(mandatoryCourses, "2MMR10"),
+  );
+  const finalProject = subtotal(
+    "final_project_credits",
+    creditFor(mandatoryCourses, "2MMR30"),
+  );
+  const mandatory = subtotal(
+    "mandatory_credits",
+    sumCourses(mandatoryCourses),
+  );
+  const coreElectives = subtotal(
+    "core_elective_credits",
+    sumCourses(coreSelection.courses),
+  );
+  const listedSpecialization = subtotal(
+    "listed_specialization_credits",
+    sumCourses(specializationSelection.courses),
+  );
+  const mastermathSpecialization = subtotal(
+    "mastermath_specialization_credits",
+    sumCountedRows(mastermathRows),
+  );
+  const specializationElectives = subtotal(
+    "specialization_credits",
+    roundCredits(listedSpecialization + mastermathSpecialization),
+  );
+  const coreAndSpecialization = subtotal(
+    "core_and_specialization_credits",
+    roundCredits(coreElectives + specializationElectives),
+  );
+  const officialFreeElectives = subtotal(
+    "official_free_elective_credits",
+    sumCourses(officialFreeSelection.courses),
+  );
+  const internshipFallback = internship.selected && internship.counted
     ? internship.credits
     : 0;
-  const assignedHomologation = sumCountedRows(homologationRows);
-  const selfChosenHomologation = sumCountedRows(selfChosenHomologationRows);
-  const homologation = roundCredits(assignedHomologation + selfChosenHomologation);
-  const freeElectiveRowsCredits = sumCountedRows(freeElectiveRows);
-  const freeElectiveSpace = roundCredits(
-    officialFreeElectives + internshipCredits + homologation + freeElectiveRowsCredits,
+  const internshipCredits = subtotal(
+    "internship_credits",
+    internshipFallback,
   );
-  const total = roundCredits(mandatory + coreAndSpecialization + freeElectiveSpace);
+  const assignedHomologation = subtotal(
+    "assigned_homologation_credits",
+    sumCountedRows(homologationRows),
+  );
+  const selfChosenHomologation = subtotal(
+    "self_chosen_homologation_credits",
+    sumCountedRows(selfChosenHomologationRows),
+  );
+  const homologation = subtotal(
+    "homologation_credits",
+    roundCredits(assignedHomologation + selfChosenHomologation),
+  );
+  const freeElectiveRowsCredits = subtotal(
+    "manual_free_elective_credits",
+    sumCountedRows(freeElectiveRows),
+  );
+  const freeElectiveSpace = subtotal(
+    "free_elective_space_credits",
+    roundCredits(
+      officialFreeElectives
+      + internshipCredits
+      + homologation
+      + freeElectiveRowsCredits,
+    ),
+  );
+  const total = subtotal(
+    "total_programme_credits",
+    roundCredits(mandatory + coreAndSpecialization + freeElectiveSpace),
+  );
 
   const invalidManualRows = [
     ...mastermathRows,
