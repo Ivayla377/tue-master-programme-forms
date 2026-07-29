@@ -21,10 +21,10 @@ import {
   resolveDsaiRules,
 } from "./form-config.js";
 import {
+  buildDsaiValidations,
   chooseMajorTrajectories,
   getBlockedSpecializationByField,
-} from "./trajectory-rules.js";
-import { buildDsaiValidations } from "./validation.js";
+} from "./rules.js";
 
 export {
   CORE_MANDATORY_CODES,
