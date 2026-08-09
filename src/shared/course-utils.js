@@ -1,3 +1,4 @@
+// Indexes SurveyJS questions and resolves normalized course metadata from choices.
 export function createChoiceLookup(surveyJson = {}) {
   const questions = indexSurveyQuestions(surveyJson);
   const choicesByQuestion = new Map();
@@ -64,6 +65,9 @@ export function createChoiceLookup(surveyJson = {}) {
       return (choicesByQuestion.get(questionName)?.list ?? [])
         .map((choice) => choice.value)
         .filter(Boolean);
+    },
+    getCourses() {
+      return Object.freeze([...coursesByCode.values()]);
     },
     getDefaultCodes(questionName) {
       return selectedValues(questions.get(questionName)?.defaultValue)

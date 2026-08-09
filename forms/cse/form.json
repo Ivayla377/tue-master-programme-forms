@@ -632,8 +632,8 @@
             {
               "type": "html",
               "name": "specialization_excess_notice",
-              "visibleIf": "{specialization_excess_free_electives.length} > 0",
-              "html": "<p class='elective-allocation-note'>The specialization requirement is filled. Additional selected courses count towards your free-elective space and appear on the next page.</p>"
+              "visibleIf": "{credits_specialization_excess} > 0",
+              "html": "<p class='elective-allocation-note'>*The specialization requirement is filled. Additional selected courses count towards your free-elective space. Edit the choices above to change them.</p>"
             }
           ]
         },
@@ -648,6 +648,22 @@
               "name": "internship",
               "title": "Do you include 2IMC10 Internship in your program?",
               "isRequired": true
+            },
+            {
+              "type": "checkbox",
+              "name": "internship_course_display",
+              "title": "Fixed internship course metadata",
+              "visible": false,
+              "readOnly": true,
+              "defaultValue": [
+                "2imc10"
+              ],
+              "choices": [
+                {
+                  "value": "2imc10",
+                  "text": "2IMC10 Internship (15 ECTS)"
+                }
+              ]
             },
             {
               "type": "text",
@@ -672,46 +688,10 @@
           "description": "In case a free elective was followed at another university, please add its name between parentheses to the course name.",
           "elements": [
         {
-          "type": "matrixdynamic",
-          "name": "specialization_excess_free_electives",
-          "visibleIf": "{specialization_excess_free_electives.length} > 0",
-          "title": "Specialization courses in your free-elective space",
-          "description": "As you selected more than the required specialization courses, the following courses count as free electives. You can remove one here or change your selection on the previous page.",
-          "columns": [
-            {
-              "name": "code",
-              "title": "Course code",
-              "cellType": "text",
-              "readOnly": true,
-              "width": "7em"
-            },
-            {
-              "name": "title",
-              "title": "Course title",
-              "cellType": "text",
-              "readOnly": true
-            },
-            {
-              "name": "credits",
-              "title": "Credits",
-              "cellType": "text",
-              "readOnly": true,
-              "totalType": "sum",
-              "totalDisplayStyle": "decimal",
-              "width": "5em"
-            }
-          ],
-          "rowCount": 0,
-          "allowAddRows": false,
-          "allowRemoveRows": true,
-          "confirmDelete": true,
-          "confirmDeleteText": "Remove this course from your specialization selection?"
-        },
-        {
           "type": "html",
-          "name": "specialization_other_free_electives_heading",
-          "visibleIf": "{specialization_excess_free_electives.length} > 0",
-          "html": "<h3 class='free-electives-subheading'>Other free electives</h3>"
+          "name": "specialization_excess_free_electives_notice",
+          "visibleIf": "{credits_specialization_excess} > 0",
+          "html": "<p class='elective-allocation-note'><strong>Note:</strong> Additional specialization courses already count towards this free-elective space. To change them, return to the previous Specialization page and edit your selection.</p>"
         },
         {
           "type": "matrixdynamic",
@@ -945,5 +925,67 @@
       "title": "Review and print"
     }
   ],
-  "headerView": "advanced"
+  "headerView": "advanced",
+  "calculatedValues": [
+    {
+      "name": "rule_programme_target",
+      "expression": "120",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_standard_course_credits",
+      "expression": "5",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_foundational_course_count",
+      "expression": "3",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_extra_course_count",
+      "expression": "3",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_specialization_target",
+      "expression": "30",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_free_elective_space_target",
+      "expression": "15",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_seminar_credits",
+      "expression": "5",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_graduation_credits",
+      "expression": "40",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_internship_credits",
+      "expression": "15",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_specialization_courses_selected",
+      "expression": "(count({specialization_algorithms}) + count({specialization_architectures}) + count({specialization_software}) + count({specialization_additional})) * {rule_standard_course_credits}",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_specialization_course_target",
+      "expression": "{rule_specialization_target} - iif({internship} = true, {rule_internship_credits}, 0)",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_specialization_excess",
+      "expression": "iif({credits_specialization_courses_selected} > {credits_specialization_course_target}, {credits_specialization_courses_selected} - {credits_specialization_course_target}, 0)",
+      "includeIntoResult": true
+    }
+  ]
 }

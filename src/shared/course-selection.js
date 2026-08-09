@@ -1,4 +1,8 @@
-import { normalizeCourseCode } from "./course-utils.js";
+// Normalizes manual course rows and provides reusable course aggregation helpers.
+import {
+  normalizeCourseCode,
+  selectedValues,
+} from "./course-utils.js";
 
 export function normalizeManualCourseRows(rows, options = {}) {
   if (!Array.isArray(rows)) return [];
@@ -48,6 +52,89 @@ export function parseCourseCredits(value, allowZero = false) {
 
 export function roundCredits(value) {
   return Math.round((Number(value) + Number.EPSILON) * 1000) / 1000;
+}
+
+export function uniqueCourseCodes(values) {
+  return [...new Set(
+    selectedValues(values).map(normalizeCourseCode).filter(Boolean),
+  )];
+}
+
+export function repeatedCourseCodes(values) {
+  const seen = new Set();
+  const repeated = new Set();
+  for (const value of values) {
+    const code = normalizeCourseCode(value);
+    if (seen.has(code)) repeated.add(code);
+    seen.add(code);
+  }
+  return [...repeated];
+}
+
+export function claimCourse(item, component, claimed, duplicates) {
+  if (!item?.code) return false;
+  const prior = claimed.get(item.code);
+  if (prior) {
+    recordCourseDuplicate(item, component, prior, duplicates);
+    return false;
+  }
+  claimed.set(item.code, { component, item });
+  return true;
+}
+
+export function recordCourseDuplicate(
+  item,
+  component,
+  prior,
+  duplicates,
+) {
+  duplicates.push({
+    ...item,
+    keptComponent: prior.component,
+    excludedComponent: component,
+    exclusionReason: `Already counted as ${prior.component}.`,
+  });
+}
+
+export function renameCourseClaim(item, component, claimed) {
+  if (!item?.code || !claimed.has(item.code)) return;
+  claimed.set(item.code, { component, item });
+}
+
+export function claimManualCourseRows(
+  rows,
+  component,
+  claimed,
+  duplicates,
+) {
+  return rows.map((row) => {
+    if (!row.validCredits) return row;
+    const displayCode = row.displayCode || row.normalizedCode.toUpperCase();
+    const item = {
+      code: row.normalizedCode,
+      value: row.code,
+      displayCode,
+      title: row.title,
+      label: [displayCode, row.title].filter(Boolean).join(" "),
+      credits: row.credits,
+    };
+    const counted = claimCourse(item, component, claimed, duplicates);
+    return {
+      ...row,
+      counted,
+      exclusionReason: counted
+        ? ""
+        : "Duplicate course; excluded from totals.",
+    };
+  });
+}
+
+export function sumCountedCourses(items) {
+  return sumCourses(items.filter((item) => item.counted !== false));
+}
+
+export function sumCountedRows(rows) {
+  return sumCourses(rows.filter((row) => row.validCredits && row.counted));
 }
 
 function normalizeManualRow(sourceRow, index, settings) {

@@ -1,3 +1,4 @@
+// Renders CSE credit panels and printable programme summaries.
 import { CSE_FOCUS_AREAS, CSE_GRADUATION_GROUPS } from "./calculator.js";
 import { formatCredits, isTrue } from "../../shared/credit-utils.js";
 import { renderEctsPanel as renderSharedEctsPanel } from "../../shared/summary-layout.js";
@@ -26,12 +27,14 @@ export function renderCseEctsPanel(report) {
   return renderSharedEctsPanel(report, PANEL_SUBTOTAL_ROWS);
 }
 
-export function renderCseSummary(report, data, _choiceLookup, labels = {}) {
+export function renderCseSummary(report, data, choiceLookup, labels = {}) {
   const personalInfo = data.personal_info ?? {};
   const summaryEyebrow = labels.summaryEyebrow ?? "CSE Program of Examinations";
   const summaryTitle = labels.summaryTitle ?? "Form 1: CSE Program of Examinations";
   const generatedOn = formatCurrentDate();
-  const focusArea = focusLabel(report.selected.extraFocus);
+  const focusAreas = choiceLookup?.cseConfig?.focusAreas
+    ?? CSE_FOCUS_AREAS;
+  const focusArea = focusLabel(report.selected.extraFocus, choiceLookup);
   const hasFreeElectives = report.selected.freeRows.length > 0;
   const hasHomologationCourses = report.selected.homologationRows.length > 0;
   const hasExcessSpecializationCourses = report.selected.excessSpecializationCourses.length > 0;
@@ -58,7 +61,10 @@ export function renderCseSummary(report, data, _choiceLookup, labels = {}) {
           ["Name", personalInfo.name],
           ["Student ID", personalInfo.id],
           ["Month and year of enrollment", personalInfo.enrollment],
-          ["Intended graduation group", graduationGroupLabel(data.graduation_group)],
+          ["Intended graduation group", graduationGroupLabel(
+            data.graduation_group,
+            choiceLookup,
+          )],
           ["Representative research cluster", data.research_cluster],
           ["Change to previous program", yesNo(data.previous)],
         ])}
@@ -68,7 +74,7 @@ export function renderCseSummary(report, data, _choiceLookup, labels = {}) {
         <h3>Foundational courses</h3>
         ${renderReportTable(
           ["Area", "Course code", "Course title", "Credits"],
-          CSE_FOCUS_AREAS.flatMap((area) => {
+          focusAreas.flatMap((area) => {
             const course = report.selected.foundationAssignment.get(area.value);
             return course
               ? [{ cells: [area.label, courseCode(course), courseTitle(course), formatCourseCredits(course)] }]
@@ -299,11 +305,15 @@ function escapeRegExp(value) {
   return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-function graduationGroupLabel(value) {
+function graduationGroupLabel(value, choiceLookup) {
+  const configured = choiceLookup?.getLabel?.("graduation_group", value);
+  if (configured && configured !== value) return configured;
   return CSE_GRADUATION_GROUPS.find((group) => group.value === value)?.label ?? value ?? "";
 }
 
-function focusLabel(value) {
+function focusLabel(value, choiceLookup) {
+  const configured = choiceLookup?.getLabel?.("extra_focus_area", value);
+  if (configured && configured !== value) return configured;
   return CSE_FOCUS_AREAS.find((area) => area.value === value)?.label ?? "Not selected";
 }
 

@@ -1,10 +1,7 @@
-import surveySource from "../../../forms/cse/form.json";
+// Defines the CSE form configuration used by the shared application shell.
+import surveySource from "../../../forms/cse/form.json" with { type: "json" };
 import logoUrl from "../../../tue_logo.jpg";
 import { calculateCse, createCseChoiceLookup } from "./calculator.js";
-import {
-  handleCseElectiveRowRemoving,
-  synchronizeCseElectiveRows,
-} from "./elective-survey.js";
 import { renderCseEctsPanel, renderCseSummary } from "./summary.js";
 
 export const cseFormConfig = {
@@ -23,8 +20,6 @@ export const cseFormConfig = {
   },
   createChoiceLookup: createCseChoiceLookup,
   calculateReport: calculateCse,
-  afterCalculate: synchronizeCseElectiveRows,
-  onMatrixRowRemoving: handleCseElectiveRowRemoving,
   renderEctsPanel: renderCseEctsPanel,
   renderSummary: renderCseSummary,
   // validateQuestion(_survey, options) {
