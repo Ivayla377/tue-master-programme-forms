@@ -370,8 +370,8 @@
             {
               "type": "html",
               "name": "stream_electives_systems_on_chip_excess_notice",
-              "visibleIf": "{stream_elective_excess_free_electives.length} > 0",
-              "html": "<p class='elective-allocation-note'>The required three courses are filled. Additional selected courses count towards your free-elective space and appear on the next page.</p>"
+              "visibleIf": "{credits_stream_electives_excess} > 0",
+              "html": "<p class='elective-allocation-note'>The required three courses are filled. Additional selected courses count towards your free-elective space. Edit the choices above to change them.</p>"
             }
           ]
         },
@@ -476,8 +476,8 @@
             {
               "type": "html",
               "name": "stream_electives_embedded_software_excess_notice",
-              "visibleIf": "{stream_elective_excess_free_electives.length} > 0",
-              "html": "<p class='elective-allocation-note'>The required three courses are filled. Additional selected courses count towards your free-elective space and appear on the next page.</p>"
+              "visibleIf": "{credits_stream_electives_excess} > 0",
+              "html": "<p class='elective-allocation-note'>The required three courses are filled. Additional selected courses count towards your free-elective space. Edit the choices above to change them.</p>"
             }
           ]
         },
@@ -574,8 +574,8 @@
             {
               "type": "html",
               "name": "stream_electives_embedded_networking_excess_notice",
-              "visibleIf": "{stream_elective_excess_free_electives.length} > 0",
-              "html": "<p class='elective-allocation-note'>The required three courses are filled. Additional selected courses count towards your free-elective space and appear on the next page.</p>"
+              "visibleIf": "{credits_stream_electives_excess} > 0",
+              "html": "<p class='elective-allocation-note'>The required three courses are filled. Additional selected courses count towards your free-elective space. Edit the choices above to change them.</p>"
             }
           ]
         },
@@ -671,8 +671,8 @@
             {
               "type": "html",
               "name": "stream_electives_cyber_physical_systems_excess_notice",
-              "visibleIf": "{stream_elective_excess_free_electives.length} > 0",
-              "html": "<p class='elective-allocation-note'>The required three courses are filled. Additional selected courses count towards your free-elective space and appear on the next page.</p>"
+              "visibleIf": "{credits_stream_electives_excess} > 0",
+              "html": "<p class='elective-allocation-note'>The required three courses are filled. Additional selected courses count towards your free-elective space. Edit the choices above to change them.</p>"
             }
           ]
         }
@@ -690,46 +690,10 @@
           "description": "In case a free elective was followed at another university, please add its name between parentheses to the course name.",
           "elements": [
             {
-              "type": "matrixdynamic",
-              "name": "stream_elective_excess_free_electives",
-              "visibleIf": "{stream_elective_excess_free_electives.length} > 0",
-              "title": "Additional stream electives in your free-elective space",
-              "description": "As you selected more than the required stream electives, the following courses count as free electives. You can remove one here or change your selection on the previous page.",
-              "columns": [
-                {
-                  "name": "code",
-                  "title": "Course code",
-                  "cellType": "text",
-                  "readOnly": true,
-                  "width": "8em"
-                },
-                {
-                  "name": "title",
-                  "title": "Course title",
-                  "cellType": "text",
-                  "readOnly": true
-                },
-                {
-                  "name": "credits",
-                  "title": "ECTS",
-                  "cellType": "text",
-                  "readOnly": true,
-                  "totalType": "sum",
-                  "totalDisplayStyle": "decimal",
-                  "width": "6em"
-                }
-              ],
-              "rowCount": 0,
-              "allowAddRows": false,
-              "allowRemoveRows": true,
-              "confirmDelete": true,
-              "confirmDeleteText": "Remove this course from your stream-elective selection?"
-            },
-            {
               "type": "html",
-              "name": "stream_other_free_electives_heading",
-              "visibleIf": "{stream_elective_excess_free_electives.length} > 0",
-              "html": "<h3 class='free-electives-subheading'>Other free electives</h3>"
+              "name": "stream_elective_excess_notice",
+              "visibleIf": "{credits_stream_electives_excess} > 0",
+              "html": "<p class='elective-allocation-note'><strong>Note:</strong> Stream electives above the required 15 ECTS already count towards this free-elective space. To change them, return to the previous Stream courses page and edit your selection.</p>"
             },
             {
               "type": "matrixdynamic",
@@ -947,6 +911,102 @@
       "title": "Additional information",
       "elements": [
         {
+          "type": "panel",
+          "name": "programme_metadata",
+          "visible": false,
+          "elements": [
+            {
+              "type": "text",
+              "name": "programme_academic_year",
+              "title": "Academic year used in form and report headings",
+              "visible": false,
+              "readOnly": true,
+              "defaultValue": "2025-2026"
+            },
+            {
+              "type": "text",
+              "name": "programme_header_kicker",
+              "title": "Programme name shown above the form",
+              "visible": false,
+              "readOnly": true,
+              "defaultValue": "TU/e MSc Embedded Systems"
+            },
+            {
+              "type": "checkbox",
+              "name": "legacy_stream_elective_metadata",
+              "title": "Legacy stream-elective course metadata",
+              "visible": false,
+              "readOnly": true,
+              "choices": [
+                {
+                  "value": "5lif0",
+                  "text": "5LIF0 Advanced Digital Circuit Design (5 ECTS)"
+                },
+                {
+                  "value": "5lin0",
+                  "text": "5LIN0 Video Processing (5 ECTS)"
+                },
+                {
+                  "value": "5liv0",
+                  "text": "5LIV0 Video Health Monitoring (5 ECTS)"
+                }
+              ]
+            },
+            {
+              "type": "checkbox",
+              "name": "seminar_course_metadata",
+              "title": "Stream-elective seminar metadata",
+              "visible": false,
+              "readOnly": true,
+              "choices": [
+                {
+                  "value": "2imf00",
+                  "text": "2IMF00 Seminar Formal System Analysis (5 ECTS)"
+                },
+                {
+                  "value": "2imn00",
+                  "text": "2IMN00 Seminar Interconnected Resource-aware Intelligent Systems (IRIS) (5 ECTS)"
+                },
+                {
+                  "value": "2imp00",
+                  "text": "2IMP00 Seminar Software Engineering and Technology (5 ECTS)"
+                }
+              ]
+            },
+            {
+              "type": "checkbox",
+              "name": "external_course_metadata",
+              "title": "Courses that require external-university information",
+              "visible": false,
+              "readOnly": true,
+              "choices": [
+                {
+                  "value": "2imnt1",
+                  "text": "2IMNT1 Embedded Computer Architectures 2 (5 ECTS)"
+                }
+              ]
+            },
+            {
+              "type": "checkbox",
+              "name": "prohibited_combination_5lih0_5lip0",
+              "title": "Prohibited course combination: 5LIH0 and 5LIP0",
+              "description": "Source: M&CS Master PER 2025-2026, p. 59",
+              "visible": false,
+              "readOnly": true,
+              "choices": [
+                {
+                  "value": "5lih0",
+                  "text": "5LIH0 Digital Integrated Circuit Design (5 ECTS)"
+                },
+                {
+                  "value": "5lip0",
+                  "text": "5LIP0 Digital Integrated Circuits: Fundamentals (5 ECTS)"
+                }
+              ]
+            }
+          ]
+        },
+        {
           "type": "comment",
           "name": "committee_notes",
           "title": "Additional notes for the examination committee",
@@ -959,5 +1019,137 @@
       "title": "Review and print"
     }
   ],
-  "headerView": "advanced"
+  "headerView": "advanced",
+  "calculatedValues": [
+    {
+      "name": "rule_programme_target",
+      "expression": "120",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_standard_course_credits",
+      "expression": "5",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_common_mandatory_credits",
+      "expression": "25",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_stream_mandatory_credits",
+      "expression": "15",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_stream_elective_target",
+      "expression": "15",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_free_elective_space_target",
+      "expression": "25",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_preparation_project_credits",
+      "expression": "10",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_graduation_project_credits",
+      "expression": "30",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_graduation_phase_credits",
+      "expression": "40",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_internship_credits",
+      "expression": "15",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_homologation_max_credits",
+      "expression": "15",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_self_chosen_homologation_max_courses",
+      "expression": "3",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_common_mandatory",
+      "expression": "{rule_common_mandatory_credits}",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_stream_mandatory",
+      "expression": "iif({stream} notempty, {rule_stream_mandatory_credits}, 0)",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_stream_electives_selected",
+      "expression": "iif({stream} = 'systems_on_chip', count({stream_electives_systems_on_chip}) * {rule_standard_course_credits}, iif({stream} = 'embedded_software', count({stream_electives_embedded_software}) * {rule_standard_course_credits}, iif({stream} = 'embedded_networking', count({stream_electives_embedded_networking}) * {rule_standard_course_credits}, iif({stream} = 'cyber_physical_systems', count({stream_electives_cyber_physical_systems}) * {rule_standard_course_credits}, 0))))",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_stream_electives_required",
+      "expression": "iif({credits_stream_electives_selected} > {rule_stream_elective_target}, {rule_stream_elective_target}, {credits_stream_electives_selected})",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_stream_electives_excess",
+      "expression": "{credits_stream_electives_selected} - {credits_stream_electives_required}",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_free_rows",
+      "expression": "sumInArray({free_electives}, 'credits', {code} notempty and {title} notempty and {credits} > 0)",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_homologation",
+      "expression": "iif({homologation} = true, sumInArray({homologation_courses}, 'credits', {code} notempty and {title} notempty and {credits} > 0), 0)",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_internship",
+      "expression": "iif({internship} = true and {internship_code} notempty and {internship_type} notempty, {rule_internship_credits}, 0)",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_free_space",
+      "expression": "{credits_stream_electives_excess} + {credits_free_rows} + {credits_homologation} + {credits_internship}",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_preparation_project",
+      "expression": "iif({graduation_context} notempty, {rule_preparation_project_credits}, 0)",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_graduation_project",
+      "expression": "iif({graduation_context} notempty, {rule_graduation_project_credits}, 0)",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_graduation_phase",
+      "expression": "{credits_preparation_project} + {credits_graduation_project}",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_mandatory_and_graduation",
+      "expression": "{credits_common_mandatory} + {credits_graduation_phase}",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_total",
+      "expression": "{credits_common_mandatory} + {credits_stream_mandatory} + {credits_stream_electives_required} + {credits_free_space} + {credits_graduation_phase}",
+      "includeIntoResult": true
+    }
+  ]
 }

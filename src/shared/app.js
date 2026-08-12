@@ -1,3 +1,4 @@
+// Mounts SurveyJS forms and coordinates calculation, validation, reporting, and printing.
 import { Model } from "survey-core";
 import { DefaultLight } from "survey-core/themes";
 import "survey-core/survey-core.min.css";
@@ -54,7 +55,6 @@ export function mountProgramForm(config) {
     try {
       config.beforeCalculate?.(survey);
       const report = config.calculateReport(survey.data, choiceLookup);
-      config.afterCalculate?.(survey, report, choiceLookup);
       const summaryHtml = config.renderSummary(report, survey.data, choiceLookup, labels);
 
       const ectsPanel = document.getElementById("ectsPanel");
@@ -84,16 +84,6 @@ export function mountProgramForm(config) {
 
   survey.onValidateQuestion.add((sender, options) => {
     config.validateQuestion?.(sender, options);
-  });
-
-  survey.onMatrixRowRemoving.add((sender, options) => {
-    if (isSyncing) return;
-    isSyncing = true;
-    try {
-      config.onMatrixRowRemoving?.(sender, options, choiceLookup);
-    } finally {
-      isSyncing = false;
-    }
   });
 
   survey.onValueChanged.add(syncSurveyState);

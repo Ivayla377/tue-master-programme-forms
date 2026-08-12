@@ -1,3 +1,4 @@
+// Renders the shared sidebar for credit totals and validation results.
 import { formatCredits } from "./credit-utils.js";
 
 export function renderEctsPanel(report, subtotalRows) {

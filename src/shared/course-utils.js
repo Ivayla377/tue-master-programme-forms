@@ -85,6 +85,17 @@ export function defaultCourseCodes(
   return Array.isArray(codes) && codes.length > 0 ? codes : fallback;
 }
 
+export function defaultQuestionValue(
+  choiceLookup,
+  questionName,
+  fallback = "",
+) {
+  const value = choiceLookup?.getQuestion?.(questionName)?.defaultValue;
+  return value === undefined || value === null || value === ""
+    ? fallback
+    : value;
+}
+
 export function indexSurveyQuestions(surveyJson = {}) {
   const questions = new Map();
 

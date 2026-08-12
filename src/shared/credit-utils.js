@@ -1,3 +1,4 @@
+// Provides shared credit formatting, summing, and boolean helpers.
 export const DEFAULT_CREDITS = 5;
 
 export function formatCredits(value) {

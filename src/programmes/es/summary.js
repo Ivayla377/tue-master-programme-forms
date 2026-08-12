@@ -1,5 +1,28 @@
+// Renders ES credit panels and printable programme summaries.
 import { formatCredits } from "../../shared/credit-utils.js";
 import { renderEctsPanel as renderSharedEctsPanel } from "../../shared/summary-layout.js";
+import {
+  asArray,
+  asRecord,
+  booleanValue,
+  coalesce,
+  coalesceNonBlank,
+  displayText,
+  escapeHtml,
+  escapeRegExp,
+  formatCurrentDate,
+  formatReportCell,
+  formatText,
+  hasText,
+  numericCredits,
+  parseCreditValue,
+  renderDetailsTable,
+  renderNotes,
+  renderReportTable,
+  renderValidationList,
+  validationStatus,
+} from "../../shared/summary-utils.js";
+import { DEFAULT_ES_CONFIG } from "./form-config.js";
 
 const PANEL_SUBTOTAL_ROWS = [
   ["commonMandatory", "Common mandatory courses"],
@@ -37,12 +60,10 @@ const SUBTOTAL_ALIASES = {
   streamElectivesRequired: [
     "streamElectivesRequired",
     "requiredStreamElectiveCredits",
-    "streamElectiveRequirement",
   ],
   streamElectivesExcess: [
     "streamElectivesExcess",
     "excessStreamElectiveCredits",
-    "streamElectiveExcess",
   ],
   freeElectiveRows: ["freeElectiveRows", "manualFreeElectiveCredits", "freeRows"],
   assignedHomologation: ["assignedHomologation", "assignedHomologationCredits"],
@@ -57,22 +78,21 @@ const SUBTOTAL_ALIASES = {
   total: ["total", "totalCredits"],
 };
 
-const STREAM_LABELS = {
-  systems_on_chip: "Systems on Chip",
-  embedded_software: "Embedded Software",
-  embedded_networking: "Embedded Networking",
-  cyber_physical_systems: "Cyber-Physical Systems",
-};
+const STREAM_LABELS = Object.fromEntries(
+  DEFAULT_ES_CONFIG.streams.map(({ value, label }) => [value, label]),
+);
 
-const GRADUATION_CONTEXT_LABELS = {
-  mcs: "Mathematics & Computer Science",
-  ee: "Electrical Engineering",
-};
+const GRADUATION_CONTEXT_LABELS = Object.fromEntries(
+  DEFAULT_ES_CONFIG.graduationContexts.map(
+    ({ value, label }) => [value, label],
+  ),
+);
 
-const INTERNSHIP_TYPE_LABELS = {
-  internal: "Internal internship",
-  external: "External internship",
-};
+const INTERNSHIP_TYPE_LABELS = Object.fromEntries(
+  DEFAULT_ES_CONFIG.internshipTypeOptions.map(
+    ({ value, label }) => [value, label],
+  ),
+);
 
 export function renderEsEctsPanel(report) {
   const safeReport = normalizeReport(report);
@@ -95,7 +115,6 @@ const SIDEBAR_ALWAYS_VISIBLE = new Set([
 ]);
 
 const SIDEBAR_ERROR_ONLY = new Set([
-  "Double counting",
   "Course incompatibilities",
   "Stream-elective eligibility",
 ]);
@@ -138,6 +157,7 @@ export function selectEsSidebarValidations(validations) {
 }
 
 export function renderEsSummary(report, data, choiceLookup, labels = {}) {
+  const config = choiceLookup?.esConfig ?? DEFAULT_ES_CONFIG;
   const safeReport = normalizeReport(report);
   const safeData = asRecord(data);
   const selected = safeReport.selected;
@@ -216,7 +236,7 @@ export function renderEsSummary(report, data, choiceLookup, labels = {}) {
   const internshipSelected = booleanValue(coalesce(internship.selected, safeData.internship));
   const internshipCourse = internshipSelected === false
     ? null
-    : internship.course ?? internshipCourseFromData(internship, safeData);
+    : internship.course ?? internshipCourseFromData(internship, safeData, config);
   const internshipType = choiceLabel(
     choiceLookup,
     "internship_type",
@@ -228,18 +248,27 @@ export function renderEsSummary(report, data, choiceLookup, labels = {}) {
   const preparationCourses = courseArray(selected.preparationProject);
   const graduationCourses = courseArray(selected.graduationProject);
   const contextValue = choiceValue(graduationContext);
-  if (preparationCourses.length === 0) preparationCourses.push(...fallbackProjectCourses(contextValue, "preparation"));
-  if (graduationCourses.length === 0) graduationCourses.push(...fallbackProjectCourses(contextValue, "graduation"));
-  const scopeCourses = courseArray(selected.scopeCourse);
-  if (scopeCourses.length === 0 && requiresScopeFromEnrollment(personalInfo.enrollment)) {
-    scopeCourses.push({ code: "2IMR10", title: "SCOP/e", credits: 0 });
+  if (preparationCourses.length === 0) {
+    preparationCourses.push(...fallbackProjectCourses(
+      contextValue,
+      "preparation",
+      config,
+    ));
   }
-
+  if (graduationCourses.length === 0) {
+    graduationCourses.push(...fallbackProjectCourses(
+      contextValue,
+      "graduation",
+      config,
+    ));
+  }
   const previousState = booleanValue(safeData.previous);
   const externalState = booleanValue(safeData.external_courses);
   const selectedExternalCourse = selected.streamElectiveCourses.some(
-    (course) => normalizeCourseCode(course) === "2imnt1",
+    (course) => config.externalCourseCodes.has(normalizeCourseCode(course)),
   );
+  const externalCourseDisplayCodes =
+    config.externalCourseDisplayCodes.join(", ");
   const externalDetailsEntered = hasAnyText([
     safeData.external_course_university,
     safeData.external_course_links,
@@ -292,7 +321,7 @@ export function renderEsSummary(report, data, choiceLookup, labels = {}) {
       <section class="summary-section summary-section--allow-break">
         <h3>Stream electives</h3>
         <p class="summary-inline-detail">
-          <strong>Allocated:</strong> ${escapeHtml(formatCredits(safeReport.subtotals.streamElectivesRequired))} / 15 ECTS
+          <strong>Allocated:</strong> ${escapeHtml(formatCredits(safeReport.subtotals.streamElectivesRequired))} / ${escapeHtml(formatCredits(config.rules.streamElectiveTarget))}
         </p>
         ${renderReportTable(
           ["Course code", "Course title", "Credits"],
@@ -343,7 +372,6 @@ export function renderEsSummary(report, data, choiceLookup, labels = {}) {
           ["Component", "Course code", "Course title", "Credits"],
           [
             ...preparationCourses.map((course) => ({ cells: ["Preparation graduation project", courseCode(course), courseTitle(course), courseCredits(course)] })),
-            ...scopeCourses.map((course) => ({ cells: ["SCOP/e within preparation phase", courseCode(course), courseTitle(course), courseCredits(course)] })),
             ...graduationCourses.map((course) => ({ cells: ["Graduation project", courseCode(course), courseTitle(course), courseCredits(course)] })),
           ],
           "No valid graduation-department course alternatives were reported.",
@@ -352,27 +380,12 @@ export function renderEsSummary(report, data, choiceLookup, labels = {}) {
         ${renderInvalidGraduationSelections(selected.invalidGraduationSelections)}
       </section>
 
-      ${selected.duplicates.length > 0
-        ? `<section class="summary-section summary-section--allow-break">
-            <h3>Duplicate selections excluded from counting</h3>
-            ${renderReportTable(
-              ["Course code", "Duplicate handling"],
-              selected.duplicates.map((duplicate) => ({
-                cells: [duplicateCode(duplicate), duplicateDetail(duplicate)],
-                className: "summary-row--not-counted",
-              })),
-              "",
-              "summary-table--es-duplicates",
-            )}
-          </section>`
-        : ""}
-
       <section class="summary-section">
         <h3>External university courses</h3>
         ${renderDetailsTable([
           ["External university courses declared", yesNo(safeData.external_courses)],
           ...(selectedExternalCourse
-            ? [["External-course evidence required by selected 2IMNT1", "Yes"]]
+            ? [[`External-course evidence required by selected ${externalCourseDisplayCodes}`, "Yes"]]
             : []),
           ...(externalDetailsActive
             ? [
@@ -406,6 +419,8 @@ export function renderEsSummary(report, data, choiceLookup, labels = {}) {
           hasHomologation: hasHomologationCourses,
           hasSelfChosenHomologation: hasSelfChosenHomologationCourses,
           hasExternalCourses: externalDetailsActive,
+          graduationCredits: config.rules.graduationPhaseCredits,
+          homologationMaximum: config.rules.homologationMaximum,
         }), "No validation results were reported.")}
       </section>
 
@@ -451,7 +466,7 @@ export function compactEsSummaryValidations(validations, options = {}) {
       "Programme coherence review",
     ].includes(label)) {
       continue;
-    } else if (["Double counting", "Course incompatibilities"].includes(label)
+    } else if (label === "Course incompatibilities"
       && validationStatus(validation) !== "error") {
       continue;
     } else if (label === "External course information"
@@ -467,6 +482,7 @@ export function compactEsSummaryValidations(validations, options = {}) {
     const graduationValidation = compactGraduationValidation(
       graduation,
       options.graduationDepartment,
+      options.graduationCredits,
     );
     const totalIndex = ordinary.findIndex((validation) =>
       String(asRecord(validation).label ?? "") === "Total credits");
@@ -476,7 +492,10 @@ export function compactEsSummaryValidations(validations, options = {}) {
     ordinary.push(compactValidationGroup(
       "Homologation",
       homologation,
-      "Selection, course entries and the 15 ECTS limit are valid.",
+      `Selection, course entries and the ${formatCredits(
+        options.homologationMaximum
+          ?? DEFAULT_ES_CONFIG.rules.homologationMaximum,
+      )} limit are valid.`,
     ));
   }
   if (options.hasSelfChosenHomologation && selfChosen.length > 0) {
@@ -490,11 +509,17 @@ export function compactEsSummaryValidations(validations, options = {}) {
   return ordinary;
 }
 
-function compactGraduationValidation(validations, department) {
+function compactGraduationValidation(
+  validations,
+  department,
+  graduationCredits = DEFAULT_ES_CONFIG.rules.graduationPhaseCredits,
+) {
   const compact = compactValidationGroup(
     "Graduation phase",
     validations,
-    `${displayText(department || "Department not selected")} (40 ECTS).`,
+    `${displayText(department || "Department not selected")} (${formatCredits(
+      graduationCredits,
+    )}).`,
   );
   if (compact.status !== "success" && hasText(department)) {
     compact.detail = `${displayText(department)}. ${compact.detail}`;
@@ -561,8 +586,6 @@ function normalizeReport(report) {
       internship: coalesce(sourceSelected.internship, {}),
       preparationProject: coalesce(sourceSelected.preparationProject, sourceSelected.preparationCourse),
       graduationProject: coalesce(sourceSelected.graduationProject, sourceSelected.masterProject),
-      scopeCourse: coalesce(sourceSelected.scopeCourse, sourceSelected.scope),
-      duplicates: arrayFromAliases(sourceSelected, ["duplicates", "duplicateCourses"]),
       invalidGraduationSelections: arrayFromAliases(sourceSelected, ["invalidGraduationSelections"]),
       graduationContext: coalesce(sourceSelected.graduationContext, sourceSelected.context),
     },
@@ -589,20 +612,9 @@ function renderSubtotalsTable(report) {
 
 function visibleSubtotalRows(rows, report) {
   return rows.filter(
-    ([key]) => key !== "streamElectivesExcess" || report.subtotals.streamElectivesExcess > 0,
+    ([key]) => key !== "streamElectivesExcess"
+      || report.subtotals.streamElectivesExcess > 0,
   );
-}
-
-function renderDetailsTable(rows) {
-  return `
-    <table class="summary-table summary-table--details">
-      <tbody>
-        ${rows.map(([label, value]) => `
-          <tr><th scope="row">${escapeHtml(label)}</th><td>${formatText(value)}</td></tr>
-        `).join("")}
-      </tbody>
-    </table>
-  `;
 }
 
 function renderCourseTable(courses, emptyText, modifier = "summary-table--three-course") {
@@ -616,57 +628,10 @@ function renderCourseTable(courses, emptyText, modifier = "summary-table--three-
   );
 }
 
-function renderReportTable(headers, rows, emptyText = "None selected.", modifier = "") {
-  if (!rows.length) return `<p class="summary-footnote">${escapeHtml(emptyText)}</p>`;
-  return `
-    <table class="summary-table summary-table--report${modifier ? ` ${modifier}` : ""}">
-      <thead><tr>${headers.map((header) => `<th>${escapeHtml(header)}</th>`).join("")}</tr></thead>
-      <tbody>
-        ${rows.map((row) => `
-          <tr${row.className ? ` class="${escapeHtml(row.className)}"` : ""}>
-            ${row.cells.map((cell) => `<td>${formatReportCell(cell)}</td>`).join("")}
-          </tr>
-        `).join("")}
-      </tbody>
-    </table>
-  `;
-}
-
-function renderNotes(notes) {
-  const visibleNotes = notes.filter(([, value]) => hasText(value));
-  if (visibleNotes.length === 0) return '<p class="empty-state">No changes, motivations or additional notes entered.</p>';
-  return visibleNotes.map(([label, value]) => `
-    <div class="note-block"><h4>${escapeHtml(label)}</h4><p>${formatText(value)}</p></div>
-  `).join("");
-}
-
-function renderValidationList(validations, emptyText = "") {
-  const items = asArray(validations);
-  if (items.length === 0) return `<p class="empty-state">${escapeHtml(emptyText)}</p>`;
-  return `<ul class="validation-list">${items.map(renderValidationItem).join("")}</ul>`;
-}
-
-function renderValidationItem(validation) {
-  const item = asRecord(validation);
-  const label = typeof validation === "string"
-    ? "Review item"
-    : coalesce(item.label, item.title, "Validation result");
-  const detail = typeof validation === "string"
-    ? validation
-    : coalesce(item.detail, item.message, item.reason, "No detail reported.");
-  const status = validationStatus(validation);
-  return `
-    <li class="validation-item validation-item--${status}">
-      <strong>${escapeHtml(displayText(label))}</strong>
-      <span>${escapeHtml(displayText(detail))}</span>
-    </li>
-  `;
-}
-
 function manualSummaryRows(type, rows) {
   return asArray(rows).map((row) => ({
     cells: [type, courseCode(row), courseTitle(row, "Not entered"), manualCredits(row)],
-    className: manualRowIsCounted(row) ? "" : "summary-row--not-counted",
+    className: manualRowIsValid(row) ? "" : "summary-row--not-counted",
   }));
 }
 
@@ -683,19 +648,15 @@ function hasEnteredManualRow(row) {
   return hasAnyText([item.code, item.title, item.name, item.credits]);
 }
 
-function manualRowIsCounted(row) {
+function manualRowIsValid(row) {
   const item = asRecord(row);
-  if (item.counted === true) return true;
   if (
-    item.counted === false
-    || item.validCredits === false
+    item.validCredits === false
     || item.valid === false
     || item.isValid === false
     || item.complete === false
-    || item.duplicate === true
-    || item.isDuplicate === true
   ) return false;
-  return null;
+  return true;
 }
 
 function manualCredits(row) {
@@ -736,67 +697,34 @@ function courseCredits(course) {
   return parsed === null ? displayText(value) : formatCredits(parsed);
 }
 
-function internshipCourseFromData(internship, data) {
+function internshipCourseFromData(internship, data, config) {
   const code = coalesceNonBlank(internship.code, data.internship_code);
   if (code === undefined) return null;
+  const metadata = config.courseCatalog[normalizeChoiceValue(code)];
   return {
-    code,
-    title: "Internship",
-    credits: coalesceNonBlank(internship.credits, 15),
+    code: metadata?.code ?? code,
+    title: metadata?.title ?? "Internship",
+    credits: coalesceNonBlank(
+      internship.credits,
+      metadata?.credits,
+      config.rules.internshipCredits,
+    ),
   };
 }
 
-function fallbackProjectCourses(context, component) {
-  const definitions = {
-    mcs: {
-      preparation: { code: "2IMC05", title: "Preparation Graduation Project", credits: 10 },
-      graduation: { code: "2IMC00", title: "Master Project", credits: 30 },
-    },
-    ee: {
-      preparation: { code: "5T514", title: "Preparation Graduation Project ES 'Electrical Engineering'", credits: 10 },
-      graduation: { code: "5T746", title: "Graduation Project ES 'Electrical Engineering'", credits: 30 },
-    },
-  };
-  const course = definitions[normalizeChoiceValue(context)]?.[component];
-  return course ? [course] : [];
-}
-
-function requiresScopeFromEnrollment(enrollment) {
-  const academicYearStart = enrollmentAcademicYearStart(enrollment);
-  return academicYearStart !== null && academicYearStart >= 2023;
-}
-
-function enrollmentAcademicYearStart(enrollment) {
-  const value = String(enrollment ?? "").trim().toLowerCase();
-  if (!value) return null;
-
-  let year;
-  let month;
-  let match = value.match(/(?:^|\D)((?:19|20)\d{2})\s*[-/.]\s*(0?[1-9]|1[0-2])(?:\D|$)/);
-  if (match) {
-    year = Number(match[1]);
-    month = Number(match[2]);
-  } else {
-    match = value.match(/(?:^|\D)(0?[1-9]|1[0-2])\s*[-/.]\s*((?:19|20)\d{2})(?:\D|$)/);
-    if (match) {
-      month = Number(match[1]);
-      year = Number(match[2]);
-    }
-  }
-
-  if (year === undefined) {
-    const monthNames = [
-      "january", "february", "march", "april", "may", "june",
-      "july", "august", "september", "october", "november", "december",
-    ];
-    const namedMonth = monthNames.findIndex((name) => value.includes(name));
-    const yearMatch = value.match(/(?:^|\D)((?:19|20)\d{2})(?:\D|$)/);
-    if (yearMatch) year = Number(yearMatch[1]);
-    if (namedMonth >= 0) month = namedMonth + 1;
-  }
-
-  if (year === undefined) return null;
-  return month !== undefined && month <= 8 ? year - 1 : year;
+function fallbackProjectCourses(context, component, config) {
+  const definition = config.graduationContexts.find(
+    ({ value }) => value === normalizeChoiceValue(context),
+  );
+  const code = component === "preparation"
+    ? definition?.preparationCode
+    : definition?.graduationCode;
+  const metadata = config.courseCatalog[normalizeChoiceValue(code)];
+  return metadata ? [{
+    code: metadata.code,
+    title: metadata.title,
+    credits: metadata.credits,
+  }] : [];
 }
 
 function normalizeCourseCode(course) {
@@ -813,27 +741,6 @@ function renderInvalidGraduationSelections(selections) {
     return `${displayText(component)}: ${displayText(value)}`;
   }).join("; ");
   return `<p class="summary-footnote"><strong>Ignored malformed project selections:</strong> ${escapeHtml(detail)}</p>`;
-}
-
-function duplicateCode(duplicate) {
-  if (typeof duplicate === "string" || typeof duplicate === "number") return duplicate;
-  return courseCode(duplicate);
-}
-
-function duplicateDetail(duplicate) {
-  if (typeof duplicate === "string" || typeof duplicate === "number") {
-    return "Repeated course code; the lower-priority occurrence was excluded.";
-  }
-  const item = asRecord(duplicate);
-  const details = [];
-  if (hasText(item.excludedComponent)) details.push(`Excluded from ${displayText(item.excludedComponent)}`);
-  const locations = coalesce(item.locations, item.components, item.occurrences);
-  if (hasText(locations)) details.push(`Occurrences: ${displayText(locations)}`);
-  if (hasText(item.exclusionReason)) details.push(displayText(item.exclusionReason));
-  if (hasText(item.detail)) details.push(displayText(item.detail));
-  return details.length > 0
-    ? details.join(". ")
-    : "Repeated course code; the lower-priority occurrence was excluded.";
 }
 
 function choiceLabel(choiceLookup, questionName, value, fallbackLabels = {}, emptyLabel = "Not answered") {
@@ -871,57 +778,6 @@ function yesNo(value) {
   return hasText(value) ? displayText(value) : "Not answered";
 }
 
-function booleanValue(value) {
-  if (value === true || value === 1) return true;
-  if (value === false || value === 0) return false;
-  const normalized = String(value ?? "").trim().toLowerCase();
-  if (["true", "1", "yes", "y", "on"].includes(normalized)) return true;
-  if (["false", "0", "no", "n", "off"].includes(normalized)) return false;
-  return null;
-}
-
-function validationStatus(validation) {
-  const status = String(asRecord(validation).status ?? "").trim().toLowerCase();
-  return ["success", "warning", "error"].includes(status) ? status : "warning";
-}
-
-function numericCredits(value) {
-  return parseCreditValue(value) ?? 0;
-}
-
-function parseCreditValue(value) {
-  if (typeof value === "number") return Number.isFinite(value) ? value : null;
-  const normalized = String(value ?? "").trim().replace(",", ".");
-  if (normalized === "") return null;
-  const parsed = Number(normalized);
-  return Number.isFinite(parsed) ? parsed : null;
-}
-
-function formatText(value) {
-  if (!hasText(value)) return '<span class="muted">Not answered</span>';
-  return escapeHtml(displayText(value)).replace(/\r?\n/g, "<br>");
-}
-
-function formatReportCell(value) {
-  if (value === undefined || value === null || value === "") return "";
-  return escapeHtml(displayText(value)).replace(/\r?\n/g, "<br>");
-}
-
-function displayText(value) {
-  if (Array.isArray(value)) return value.map(displayText).filter(Boolean).join("\n");
-  if (value && typeof value === "object") {
-    const item = asRecord(value);
-    const preferred = coalesceNonBlank(item.label, item.title, item.name, item.value, item.code);
-    if (preferred !== undefined) return displayText(preferred);
-    try {
-      return JSON.stringify(value);
-    } catch {
-      return "Unprintable value";
-    }
-  }
-  return String(value ?? "");
-}
-
 function arrayFromAliases(record, aliases) {
   for (const alias of aliases) {
     if (Array.isArray(record[alias])) return record[alias];
@@ -934,48 +790,6 @@ function courseArray(value) {
   return Array.isArray(value) ? [...value] : [value];
 }
 
-function asArray(value) {
-  return Array.isArray(value) ? value : [];
-}
-
-function asRecord(value) {
-  return value && typeof value === "object" && !Array.isArray(value) ? value : {};
-}
-
-function coalesce(...values) {
-  return values.find((value) => value !== undefined && value !== null);
-}
-
-function coalesceNonBlank(...values) {
-  return values.find((value) => value !== undefined && value !== null && String(value).trim() !== "");
-}
-
-function hasText(value) {
-  if (Array.isArray(value)) return value.some(hasText);
-  return value !== undefined && value !== null && displayText(value).trim() !== "";
-}
-
 function hasAnyText(values) {
   return values.some(hasText);
-}
-
-function formatCurrentDate() {
-  return new Intl.DateTimeFormat("en-GB", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-  }).format(new Date());
-}
-
-function escapeRegExp(value) {
-  return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-}
-
-function escapeHtml(value) {
-  return String(value)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
 }
