@@ -1,3 +1,4 @@
+// Reads numeric programme rules and calculated values from SurveyJS data.
 export function readNumericRulesFromSurvey(
   surveyJson,
   fields,

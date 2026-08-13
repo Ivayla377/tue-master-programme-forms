@@ -1,10 +1,11 @@
+// Calculates normalized DS&AI selections, credit totals, and validation inputs.
 import {
   courseFromValue,
   defaultCourseCodes,
   normalizeCourseCode,
   selectedCodes,
   selectedValues,
-} from "../../shared/course-utils.js";
+} from "../../shared/course-catalog.js";
 import {
   normalizeManualCourseRows,
   sumCourses,

@@ -7,7 +7,7 @@ import {
   defaultQuestionValue,
   indexSurveyQuestions,
   normalizeCourseCode,
-} from "../../shared/course-utils.js";
+} from "../../shared/course-catalog.js";
 import {
   readNumericRulesFromSurvey,
   resolveNumericRules,

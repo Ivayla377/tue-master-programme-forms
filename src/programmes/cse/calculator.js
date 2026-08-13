@@ -3,7 +3,7 @@ import {
   courseFromValue,
   normalizeCourseCode as normalizeCode,
   selectedValues,
-} from "../../shared/course-utils.js";
+} from "../../shared/course-catalog.js";
 import {
   isTrue,
   sumCredits as sumSharedCredits,

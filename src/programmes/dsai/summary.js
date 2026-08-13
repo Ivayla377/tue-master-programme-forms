@@ -1,5 +1,13 @@
+// Renders DS&AI credit panels and printable programme summaries.
 import { formatCredits, isTrue } from "../../shared/credit-utils.js";
-import { renderEctsPanel as renderSharedEctsPanel } from "../../shared/summary-layout.js";
+import {
+  escapeHtml,
+  formatCurrentDate,
+  formatText,
+  renderDetailsTable,
+  renderEctsPanel as renderSharedEctsPanel,
+  renderReportTable,
+} from "../../shared/summary-rendering.js";
 
 const SUBTOTAL_ROWS = [
   ["core", "Core/core electives"],
@@ -156,49 +164,6 @@ function renderSubtotalsTable(report) {
   `;
 }
 
-function renderDetailsTable(rows) {
-  return `
-    <table class="summary-table summary-table--details">
-      <tbody>
-        ${rows
-          .map(
-            ([label, value]) => `
-              <tr>
-                <th scope="row">${escapeHtml(label)}</th>
-                <td>${formatText(value)}</td>
-              </tr>
-            `,
-          )
-          .join("")}
-      </tbody>
-    </table>
-  `;
-}
-
-function renderReportTable(headers, rows, emptyText = "None selected.") {
-  if (!rows.length) return `<p class="summary-footnote">${escapeHtml(emptyText)}</p>`;
-
-  return `
-    <table class="summary-table summary-table--report">
-      <thead>
-        <tr>
-          ${headers.map((header) => `<th>${escapeHtml(header)}</th>`).join("")}
-        </tr>
-      </thead>
-      <tbody>
-        ${rows
-          .map(
-            (row) => `
-              <tr${row.className ? ` class="${escapeHtml(row.className)}"` : ""}>
-                ${row.cells.map((cell) => `<td>${formatReportCell(cell)}</td>`).join("")}
-              </tr>
-            `,
-          )
-          .join("")}
-      </tbody>
-    </table>
-  `;
-}
 function renderCourseRows(category, courses) {
   return courses.map((course) => ({
     cells: [category, displayCourseLabel(course), formatCourseCredits(course)],
@@ -263,31 +228,4 @@ function displayCourseLabel(course) {
 function yesNo(value) {
   if (value === undefined || value === null || value === "") return "Not answered";
   return isTrue(value) ? "Yes" : "No";
-}
-
-function formatText(value) {
-  if (value === undefined || value === null || value === "") return '<span class="muted">Not answered</span>';
-  return escapeHtml(String(value)).replace(/\n/g, "<br>");
-}
-
-function formatReportCell(value) {
-  if (value === undefined || value === null || value === "") return "";
-  return formatText(value);
-}
-
-function formatCurrentDate() {
-  return new Intl.DateTimeFormat("en-GB", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-  }).format(new Date());
-}
-
-function escapeHtml(value) {
-  return String(value)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
 }

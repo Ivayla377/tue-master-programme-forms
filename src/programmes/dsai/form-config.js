@@ -1,4 +1,4 @@
-// Configuration of question names and form-derived metadata
+// Builds DS&AI metadata and programme rules from the SurveyJS form JSON.
 
 import surveySource from "../../../forms/dsai/form.json" with { type: "json" };
 
@@ -6,7 +6,7 @@ import {
   createChoiceLookup as createSharedChoiceLookup,
   defaultCourseCodes,
   normalizeCourseCode,
-} from "../../shared/course-utils.js";
+} from "../../shared/course-catalog.js";
 import {
   readNumericRulesFromSurvey,
   resolveNumericRules,

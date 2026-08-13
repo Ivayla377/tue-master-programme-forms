@@ -1,4 +1,5 @@
-import { normalizeCourseCode } from "../../shared/course-utils.js";
+// Builds DS&AI-specific trajectory and academic validation results.
+import { normalizeCourseCode } from "../../shared/course-catalog.js";
 import { sumCourses } from "../../shared/course-selection.js";
 import { formatCredits } from "../../shared/credit-utils.js";
 import {

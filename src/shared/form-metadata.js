@@ -2,7 +2,7 @@
 import {
   createChoiceLookup,
   defaultQuestionValue,
-} from "./course-utils.js";
+} from "./course-catalog.js";
 
 export const PROGRAMME_METADATA_QUESTIONS = Object.freeze({
   academicYear: "programme_academic_year",

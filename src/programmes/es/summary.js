@@ -1,6 +1,5 @@
 // Renders ES credit panels and printable programme summaries.
 import { formatCredits } from "../../shared/credit-utils.js";
-import { renderEctsPanel as renderSharedEctsPanel } from "../../shared/summary-layout.js";
 import {
   asArray,
   asRecord,
@@ -17,11 +16,12 @@ import {
   numericCredits,
   parseCreditValue,
   renderDetailsTable,
+  renderEctsPanel as renderSharedEctsPanel,
   renderNotes,
   renderReportTable,
   renderValidationList,
   validationStatus,
-} from "../../shared/summary-utils.js";
+} from "../../shared/summary-rendering.js";
 import { DEFAULT_ES_CONFIG } from "./form-config.js";
 
 const PANEL_SUBTOTAL_ROWS = [
