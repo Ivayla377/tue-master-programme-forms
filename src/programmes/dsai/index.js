@@ -1,4 +1,6 @@
+// Defines the DS&AI form configuration used by the shared application shell.
 import logoUrl from "../../../tue_logo.jpg";
+import { programmeFormLabels } from "../../shared/form-metadata.js";
 
 import {
   calculateEcts,
@@ -14,16 +16,7 @@ export const dsaiFormConfig = {
   surveySource: DSAI_SURVEY_SOURCE,
   logoUrl,
   logoType: "image/jpeg",
-  labels: {
-    pageTitle: "DS&AI Program of Examinations",
-    kicker: "TU/e MSc Data Science & Artificial Intelligence",
-    heading: "Program of Examinations",
-    year: "2025-2026",
-    ariaLabel: "DS&AI program form",
-    summaryEyebrow: "DS&AI Program of Examinations 2025-2026",
-    summaryTitle: "Form 1: DS&AI Program of Examinations",
-    reportingPageTitle: "Review and print",
-  },
+  labels: programmeFormLabels(DSAI_SURVEY_SOURCE),
   createChoiceLookup,
   calculateReport: calculateEcts,
   beforeCalculate: removeBlockedSpecializationSelections,

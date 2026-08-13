@@ -144,6 +144,29 @@
                                                                 "visibleIf":  "{previous} = true",
                                                                 "title":  "What has changed?",
                                                                 "isRequired":  true
+                                                            },
+                                                            {
+                                                                "type":  "panel",
+                                                                "name":  "programme_metadata",
+                                                                "visible":  false,
+                                                                "elements":  [
+                                                                                 {
+                                                                                     "type":  "text",
+                                                                                     "name":  "programme_academic_year",
+                                                                                     "title":  "Academic year used in form and report headings",
+                                                                                     "visible":  false,
+                                                                                     "readOnly":  true,
+                                                                                     "defaultValue":  "2025-2026"
+                                                                                 },
+                                                                                 {
+                                                                                     "type":  "text",
+                                                                                     "name":  "programme_header_kicker",
+                                                                                     "title":  "Programme name shown above the form",
+                                                                                     "visible":  false,
+                                                                                     "readOnly":  true,
+                                                                                     "defaultValue":  "TU/e MSc Data Science & Artificial Intelligence"
+                                                                                 }
+                                                                             ]
                                                             }
                                                         ]
                                        }
@@ -397,8 +420,8 @@
                                                                                     "text":  "2AMI30 Process Intelligence in Action (5 ECTS)"
                                                                                 },
                                                                                 {
-                                                                                    "value":  "2amv11",
-                                                                                    "text":  "2AMV11 Visual Analytics (5 ECTS)",
+                                                                                    "value":  "2amv10",
+                                                                                    "text":  "2AMV10 Visual Analytics (5 ECTS)",
                                                                                     "visibleIf":  "{core_elective} \u003c\u003e \u00272amv10\u0027",
                                                                                     "enableIf":  "{core_elective} \u003c\u003e \u00272amv10\u0027"
                                                                                 }
@@ -431,7 +454,6 @@
                                                                 "visible":  false,
                                                                 "defaultValue":  [
                                                                                      "2amv10",
-                                                                                     "2amv11",
                                                                                      "2amd20",
                                                                                      "2ami30",
                                                                                      "2amc15"
@@ -441,10 +463,6 @@
                                                                                 {
                                                                                     "value":  "2amv10",
                                                                                     "text":  "2AMV10 Visual Analytics (5 ECTS)"
-                                                                                },
-                                                                                {
-                                                                                    "value":  "2amv11",
-                                                                                    "text":  "2AMV11 Visual Analytics (5 ECTS)"
                                                                                 },
                                                                                 {
                                                                                     "value":  "2amd20",
@@ -465,7 +483,7 @@
                                        {
                                            "type":  "html",
                                            "name":  "project",
-                                           "visibleIf":  "{core_elective} \u003c\u003e \u00272amv10\u0027 and {db} notcontains \u00272amd20\u0027 and {aiml} notcontains \u00272amc15\u0027 and {pmva} notcontains \u00272ami30\u0027 and {pmva} notcontains \u00272amv11\u0027",
+                                           "visibleIf":  "{core_elective} \u003c\u003e \u00272amv10\u0027 and {db} notcontains \u00272amd20\u0027 and {aiml} notcontains \u00272amc15\u0027 and {pmva} notcontains \u00272ami30\u0027 and {pmva} notcontains \u00272amv10\u0027",
                                            "html":  "\u003cdiv class=\"project-warning\"\u003e\u003cp class=\"project-warning__title\"\u003eYou must choose at least one project course!\u003c/p\u003e\u003cp class=\"project-warning__description\"\u003eYour study program must include at least one project course. Below, we show the possible project courses. Select one of them above as a core elective or specialization elective.\u003c/p\u003e\u003cul class=\"project-course-list\"\u003e\u003cli\u003e2AMV10 Visual Analytics\u003c/li\u003e\u003cli\u003e2AMI30 Process Intelligence in Action\u003c/li\u003e\u003cli\u003e2AMC15 Reinforcement Learning in Practice\u003c/li\u003e\u003cli\u003e2AMD20 Knowledge Engineering\u003c/li\u003e\u003c/ul\u003e\u003c/div\u003e"
                                        }
                                    ]
@@ -682,7 +700,7 @@
                   },
                   {
                       "name":  "reporting",
-                      "title":  "Reporting"
+                      "title":  "Review and print"
                   }
               ],
     "calculatedValues":  [

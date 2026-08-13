@@ -1,23 +1,15 @@
 // Defines the CSE form configuration used by the shared application shell.
-import surveySource from "../../../forms/cse/form.json" with { type: "json" };
 import logoUrl from "../../../tue_logo.jpg";
+import { programmeFormLabels } from "../../shared/form-metadata.js";
 import { calculateCse, createCseChoiceLookup } from "./calculator.js";
+import { CSE_SURVEY_SOURCE } from "./form-config.js";
 import { renderCseEctsPanel, renderCseSummary } from "./summary.js";
 
 export const cseFormConfig = {
-  surveySource,
+  surveySource: CSE_SURVEY_SOURCE,
   logoUrl,
   logoType: "image/jpeg",
-  labels: {
-    pageTitle: "CSE Program of Examinations",
-    kicker: "TU/e MSc Computer Science and Engineering",
-    heading: "Program of Examinations",
-    year: "2025-2026",
-    ariaLabel: "CSE program form",
-    summaryEyebrow: "CSE Program of Examinations",
-    summaryTitle: "Form 1: CSE Program of Examinations",
-    reportingPageTitle: "Review and print",
-  },
+  labels: programmeFormLabels(CSE_SURVEY_SOURCE),
   createChoiceLookup: createCseChoiceLookup,
   calculateReport: calculateCse,
   renderEctsPanel: renderCseEctsPanel,
