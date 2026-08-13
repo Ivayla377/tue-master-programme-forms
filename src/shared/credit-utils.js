@@ -12,5 +12,7 @@ export function sumCredits(items) {
 }
 
 export function isTrue(value) {
-  return value === true || value === "true" || value === 1 || value === "1";
+  return value === true
+    || value === 1
+    || ["true", "1", "yes"].includes(String(value ?? "").trim().toLowerCase());
 }

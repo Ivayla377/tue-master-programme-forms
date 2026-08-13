@@ -1,3 +1,4 @@
+// Summarizes validation states and builds shared minimum-credit validation results.
 import { formatCredits } from "./credit-utils.js";
 
 export function exactCreditValidation(label, value, target, successDetail) {
@@ -31,7 +32,8 @@ export function minimumCreditValidation(label, value, target, successDetail, war
   return { label, status: "success", detail: successDetail };
 }
 
-export function validationState(validations = []) {
+export function validationState(validations = [], options = {}) {
+  const warningsAreComplete = options.warningsAreComplete ?? false;
   return {
     hasErrors: validations.some(
       (validation) => validation.status === "error",
@@ -42,8 +44,9 @@ export function validationState(validations = []) {
     isValid: validations.every(
       (validation) => validation.status !== "error",
     ),
-    isComplete: validations.every(
-      (validation) => validation.status === "success",
+    isComplete: validations.every((validation) =>
+      validation.status === "success"
+      || (warningsAreComplete && validation.status === "warning"),
     ),
   };
 }

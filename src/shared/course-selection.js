@@ -1,8 +1,53 @@
-// Normalizes manual course rows and provides reusable course aggregation helpers.
+// Normalizes selected courses, handles duplicates, and calculates counted ECTS.
 import {
+  courseFromValue,
   normalizeCourseCode,
   selectedValues,
-} from "./course-utils.js";
+} from "./course-catalog.js";
+
+export function claimListedCourses({
+  values,
+  questionName,
+  component,
+  choiceLookup,
+  claimed,
+  duplicates,
+  allowedCodes = choiceLookup?.getCodes?.(questionName) ?? [],
+  invalidReason = "Not in the current form list.",
+}) {
+  const allowed = new Set(allowedCodes.map(normalizeCourseCode));
+  const seen = new Set();
+  const courses = [];
+  const invalidCourses = [];
+
+  for (const value of selectedValues(values)) {
+    const code = normalizeCourseCode(value);
+    if (!code || seen.has(code)) continue;
+    seen.add(code);
+
+    if (!allowed.has(code)) {
+      invalidCourses.push({
+        ...unknownCourse(value),
+        counted: false,
+        exclusionReason: invalidReason,
+      });
+      continue;
+    }
+
+    const course = courseFromValue(value, choiceLookup, questionName);
+    if (claimCourse(course, component, claimed, duplicates)) {
+      courses.push(course);
+    } else {
+      invalidCourses.push({
+        ...course,
+        counted: false,
+        exclusionReason: "Duplicate selection; excluded from totals.",
+      });
+    }
+  }
+
+  return { courses, invalidCourses };
+}
 
 export function normalizeManualCourseRows(rows, options = {}) {
   if (!Array.isArray(rows)) return [];
@@ -182,4 +227,16 @@ function firstFilledValue(row, fields) {
     if (value !== "") return value;
   }
   return "";
+}
+
+function unknownCourse(value) {
+  const displayCode = String(value ?? "").replace(/\s+/g, "").toUpperCase();
+  return {
+    value: displayCode,
+    code: normalizeCourseCode(value),
+    displayCode,
+    title: "Course title not available",
+    label: displayCode,
+    credits: 0,
+  };
 }

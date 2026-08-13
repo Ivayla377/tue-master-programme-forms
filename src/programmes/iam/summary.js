@@ -1,5 +1,25 @@
+// Renders IAM credit panels and printable programme summaries.
 import { formatCredits } from "../../shared/credit-utils.js";
-import { renderEctsPanel as renderSharedEctsPanel } from "../../shared/summary-layout.js";
+import {
+  asArray,
+  asRecord,
+  booleanValue,
+  coalesce,
+  coalesceNonBlank,
+  displayText,
+  escapeHtml,
+  escapeRegExp,
+  formatCurrentDate,
+  hasText,
+  numericCredits,
+  parseCreditValue,
+  renderDetailsTable,
+  renderEctsPanel as renderSharedEctsPanel,
+  renderNotes,
+  renderReportTable,
+  renderValidationList,
+  validationStatus,
+} from "../../shared/summary-rendering.js";
 
 const PANEL_SUBTOTAL_ROWS = [
   ["professionalPortfolio", "Professional Portfolio"],
@@ -310,18 +330,6 @@ function renderSubtotalsTable(report) {
   `;
 }
 
-function renderDetailsTable(rows) {
-  return `
-    <table class="summary-table summary-table--details">
-      <tbody>
-        ${rows.map(([label, value]) => `
-          <tr><th scope="row">${escapeHtml(label)}</th><td>${formatText(value)}</td></tr>
-        `).join("")}
-      </tbody>
-    </table>
-  `;
-}
-
 function renderCourseTable(courses, emptyText, modifier = "summary-table--three-course") {
   return renderReportTable(
     ["Course code", "Course title", "Credits"],
@@ -329,22 +337,6 @@ function renderCourseTable(courses, emptyText, modifier = "summary-table--three-
     emptyText,
     `summary-table--course-data ${modifier}`,
   );
-}
-
-function renderReportTable(headers, rows, emptyText = "None selected.", modifier = "") {
-  if (!rows.length) return `<p class="summary-footnote">${escapeHtml(emptyText)}</p>`;
-  return `
-    <table class="summary-table summary-table--report${modifier ? ` ${modifier}` : ""}">
-      <thead><tr>${headers.map((header) => `<th>${escapeHtml(header)}</th>`).join("")}</tr></thead>
-      <tbody>
-        ${rows.map((row) => `
-          <tr${row.className ? ` class="${escapeHtml(row.className)}"` : ""}>
-            ${row.cells.map((cell) => `<td>${formatReportCell(cell)}</td>`).join("")}
-          </tr>
-        `).join("")}
-      </tbody>
-    </table>
-  `;
 }
 
 function courseRow(course, className = "") {
@@ -373,30 +365,6 @@ function manualRows(type, rows, includeLink = false) {
     ],
     className: manualRowIsCounted(row) ? "" : "summary-row--not-counted",
   }));
-}
-
-function renderNotes(notes) {
-  const visibleNotes = notes.filter(([, value]) => hasText(value));
-  if (visibleNotes.length === 0) return '<p class="empty-state">No changes, motivations or additional notes entered.</p>';
-  return visibleNotes.map(([label, value]) => `
-    <div class="note-block"><h4>${escapeHtml(label)}</h4><p>${formatText(value)}</p></div>
-  `).join("");
-}
-
-function renderValidationList(validations, emptyText = "") {
-  const items = asArray(validations);
-  if (items.length === 0) return `<p class="empty-state">${escapeHtml(emptyText)}</p>`;
-  return `<ul class="validation-list">${items.map(renderValidationItem).join("")}</ul>`;
-}
-
-function renderValidationItem(validation) {
-  const item = asRecord(validation);
-  return `
-    <li class="validation-item validation-item--${validationStatus(validation)}">
-      <strong>${escapeHtml(displayText(coalesce(item.label, "Validation result")))}</strong>
-      <span>${escapeHtml(displayText(coalesce(item.detail, "No detail reported.")))}</span>
-    </li>
-  `;
 }
 
 function manualRowIsCounted(row) {
@@ -459,98 +427,4 @@ function yesNo(value) {
   if (state === true) return "Yes";
   if (state === false) return "No";
   return hasText(value) ? displayText(value) : "Not answered";
-}
-
-function booleanValue(value) {
-  if (value === true || value === 1) return true;
-  if (value === false || value === 0) return false;
-  const normalized = String(value ?? "").trim().toLowerCase();
-  if (["true", "1", "yes", "y", "on"].includes(normalized)) return true;
-  if (["false", "0", "no", "n", "off"].includes(normalized)) return false;
-  return null;
-}
-
-function validationStatus(validation) {
-  const status = String(asRecord(validation).status ?? "").trim().toLowerCase();
-  return ["success", "warning", "error"].includes(status) ? status : "warning";
-}
-
-function numericCredits(value) {
-  return parseCreditValue(value) ?? 0;
-}
-
-function parseCreditValue(value) {
-  if (typeof value === "number") return Number.isFinite(value) ? value : null;
-  const normalized = String(value ?? "").trim().replace(",", ".");
-  if (normalized === "") return null;
-  const parsed = Number(normalized);
-  return Number.isFinite(parsed) ? parsed : null;
-}
-
-function formatText(value) {
-  if (!hasText(value)) return '<span class="muted">Not answered</span>';
-  return escapeHtml(displayText(value)).replace(/\r?\n/g, "<br>");
-}
-
-function formatReportCell(value) {
-  if (value === undefined || value === null || value === "") return "";
-  return escapeHtml(displayText(value)).replace(/\r?\n/g, "<br>");
-}
-
-function displayText(value) {
-  if (Array.isArray(value)) return value.map(displayText).filter(Boolean).join("\n");
-  if (value && typeof value === "object") {
-    const item = asRecord(value);
-    const preferred = coalesceNonBlank(item.label, item.title, item.name, item.value, item.code);
-    if (preferred !== undefined) return displayText(preferred);
-    try {
-      return JSON.stringify(value);
-    } catch {
-      return "Unprintable value";
-    }
-  }
-  return String(value ?? "");
-}
-
-function asArray(value) {
-  return Array.isArray(value) ? value : [];
-}
-
-function asRecord(value) {
-  return value && typeof value === "object" && !Array.isArray(value) ? value : {};
-}
-
-function coalesce(...values) {
-  return values.find((value) => value !== undefined && value !== null);
-}
-
-function coalesceNonBlank(...values) {
-  return values.find((value) => value !== undefined && value !== null && String(value).trim() !== "");
-}
-
-function hasText(value) {
-  if (Array.isArray(value)) return value.some(hasText);
-  return value !== undefined && value !== null && displayText(value).trim() !== "";
-}
-
-
-function formatCurrentDate() {
-  return new Intl.DateTimeFormat("en-GB", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-  }).format(new Date());
-}
-
-function escapeRegExp(value) {
-  return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-}
-
-function escapeHtml(value) {
-  return String(value)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
 }
