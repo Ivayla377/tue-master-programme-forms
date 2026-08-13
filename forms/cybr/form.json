@@ -265,12 +265,24 @@
               "description": "Search for and select the courses included in your program.",
               "choices": [
                 {
+                  "value": "2amc15",
+                  "text": "2AMC15 Reinforcement Learning in Practice (5 ECTS)"
+                },
+                {
                   "value": "2amd15",
                   "text": "2AMD15 Big Data Management (5 ECTS)"
                 },
                 {
+                  "value": "2amd20",
+                  "text": "2AMD20 Knowledge Engineering (5 ECTS)"
+                },
+                {
                   "value": "2ami10",
                   "text": "2AMI10 Foundations of Process Mining (5 ECTS)"
+                },
+                {
+                  "value": "2ami30",
+                  "text": "2AMI30 Process Intelligence in Action (5 ECTS)"
                 },
                 {
                   "value": "2amm10",
@@ -283,6 +295,10 @@
                 {
                   "value": "2amm20",
                   "text": "2AMM20 Research Topics in Data Mining (5 ECTS)"
+                },
+                {
+                  "value": "2amv10",
+                  "text": "2AMV10 Visual Analytics (5 ECTS)"
                 },
                 {
                   "value": "2dd23",
