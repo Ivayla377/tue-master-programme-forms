@@ -1,22 +1,15 @@
-import surveySource from "../../../forms/ist/form.json" with { type: "json" };
+// Defines the IST form configuration used by the shared application shell.
 import logoUrl from "../../../tue_logo.jpg";
+import { programmeFormLabels } from "../../shared/form-metadata.js";
 import { calculateIst, createIstChoiceLookup } from "./calculator.js";
+import { IST_SURVEY_SOURCE } from "./form-config.js";
 import { renderIstEctsPanel, renderIstSummary } from "./summary.js";
 
 export const istFormConfig = {
-  surveySource,
+  surveySource: IST_SURVEY_SOURCE,
   logoUrl,
   logoType: "image/jpeg",
-  labels: {
-    pageTitle: "IST Program of Examinations",
-    kicker: "TU/e MSc Computer Science and Engineering",
-    heading: "Program of Examinations",
-    year: "2025-2026",
-    ariaLabel: "IST program form",
-    summaryEyebrow: "IST Program of Examinations 2025-2026",
-    summaryTitle: "Form 1: IST Program of Examinations",
-    reportingPageTitle: "Review and print",
-  },
+  labels: programmeFormLabels(IST_SURVEY_SOURCE),
   createChoiceLookup: createIstChoiceLookup,
   calculateReport: calculateIst,
   renderEctsPanel: renderIstEctsPanel,

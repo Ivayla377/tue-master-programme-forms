@@ -776,6 +776,29 @@
           "name": "committee_notes",
           "title": "Additional notes for the Examination Committee",
           "description": "Include any other information that should appear in the printable review."
+        },
+        {
+          "type": "panel",
+          "name": "programme_metadata",
+          "visible": false,
+          "elements": [
+            {
+              "type": "text",
+              "name": "programme_academic_year",
+              "title": "Academic year used in form and report headings",
+              "visible": false,
+              "readOnly": true,
+              "defaultValue": "2025-2026"
+            },
+            {
+              "type": "text",
+              "name": "programme_header_kicker",
+              "title": "Programme name shown above the form",
+              "visible": false,
+              "readOnly": true,
+              "defaultValue": "TU/e MSc Computer Science and Engineering"
+            }
+          ]
         }
       ]
     },
