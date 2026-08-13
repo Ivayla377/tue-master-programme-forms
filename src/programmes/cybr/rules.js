@@ -1,8 +1,8 @@
-// Builds IST-specific academic validation results from calculated programme data.
+// Builds CYBR-specific academic validation results from calculated programme data.
 import { formatCredits } from "../../shared/credit-utils.js";
-export { resolveIstRules } from "./form-config.js";
+export { resolveCybrRules } from "./form-config.js";
 
-export function buildIstValidations(values) {
+export function buildCybrValidations(values) {
   const validations = [
     {
       label: "Graduation course set",
@@ -16,15 +16,15 @@ export function buildIstValidations(values) {
           : "Select the graduation course set that applies to your project.",
     },
     {
-      label: "IST electives",
+      label: "CYBR electives",
       status:
-        values.flags.istElectiveMinimumMet
+        values.flags.cybrElectiveMinimumMet
           ? "success"
           : "error",
       detail:
-        `${values.istElectiveCount} selected `
-        + `(${formatCredits(values.istElectives)} / at least `
-        + `${formatCredits(values.rules.istElectiveMinimum)}).`,
+        `${values.cybrElectiveCount} selected `
+        + `(${formatCredits(values.cybrElectives)} / at least `
+        + `${formatCredits(values.rules.cybrElectiveMinimum)}).`,
     },
     {
       label: "M&CS electives",
@@ -76,14 +76,14 @@ export function buildIstValidations(values) {
     });
   }
 
-  if (values.invalidIstCourses.length > 0) {
+  if (values.invalidCybrCourses.length > 0) {
     validations.push({
-      label: "IST-elective eligibility",
+      label: "CYBR-elective eligibility",
       status: "error",
       detail:
-        `${values.invalidIstCourses
+        `${values.invalidCybrCourses
           .map((course) => course.displayCode)
-          .join(", ")} excluded because they are not current IST electives.`,
+          .join(", ")} excluded because they are not current CYBR electives.`,
     });
   }
 

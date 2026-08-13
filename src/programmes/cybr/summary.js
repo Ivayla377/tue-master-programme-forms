@@ -1,4 +1,4 @@
-// Renders IST credit panels and printable programme summaries.
+// Renders CYBR credit panels and printable programme summaries.
 import { formatCredits } from "../../shared/credit-utils.js";
 import {
   asArray,
@@ -23,7 +23,7 @@ import {
 
 const PANEL_SUBTOTAL_ROWS = [
   ["mandatory", "Mandatory components"],
-  ["istElectives", "IST electives"],
+  ["cybrElectives", "CYBR electives"],
   ["mcsElectives", "M&CS / internship"],
   ["homologation", "Homologation"],
   ["freeElectiveSpace", "Free-elective space"],
@@ -33,7 +33,7 @@ const PANEL_SUBTOTAL_ROWS = [
 const SUMMARY_SUBTOTAL_ROWS = [
   ["mandatoryFixed", "Fixed mandatory courses"],
   ["graduation", "Graduation courses"],
-  ["istElectives", "IST electives"],
+  ["cybrElectives", "CYBR electives"],
   ["mcsCourseElectives", "IAM/CSE courses"],
   ["manualMcsElectives", "Other M&CS courses"],
   ["internship", "Internship"],
@@ -43,7 +43,7 @@ const SUMMARY_SUBTOTAL_ROWS = [
 ];
 
 const SIDEBAR_ALWAYS_VISIBLE = new Set([
-  "IST electives",
+  "CYBR electives",
   "M&CS electives",
   "Free-elective space",
   "Total credits",
@@ -53,15 +53,15 @@ const SIDEBAR_EXCEPTION_LABELS = new Set([
   "Graduation course set",
   "Homologation credits",
   "Homologation courses",
-  "IST-elective eligibility",
+  "CYBR-elective eligibility",
   "M&CS-elective eligibility",
   "Other M&CS courses",
   "Manual course rows",
   "Double counting",
 ]);
 
-export function renderIstEctsPanel(report) {
-  const validations = selectIstSidebarValidations(report.validations);
+export function renderCybrEctsPanel(report) {
+  const validations = selectCybrSidebarValidations(report.validations);
   return renderSharedEctsPanel(
     {
       ...report,
@@ -74,7 +74,7 @@ export function renderIstEctsPanel(report) {
   );
 }
 
-export function selectIstSidebarValidations(validations) {
+export function selectCybrSidebarValidations(validations) {
   return asArray(validations).filter((validation) => {
     const label = String(asRecord(validation).label ?? "");
     if (SIDEBAR_ALWAYS_VISIBLE.has(label)) return true;
@@ -83,7 +83,7 @@ export function selectIstSidebarValidations(validations) {
   });
 }
 
-export function renderIstSummary(report, data, _choiceLookup, labels = {}) {
+export function renderCybrSummary(report, data, _choiceLookup, labels = {}) {
   const safeReport = normalizeReport(report);
   const safeData = asRecord(data);
   const selected = safeReport.selected;
@@ -95,9 +95,9 @@ export function renderIstSummary(report, data, _choiceLookup, labels = {}) {
   );
   const externalActive = booleanValue(safeData.external_courses) === true;
   const summaryEyebrow =
-    labels.summaryEyebrow ?? "IST Program of Examinations";
+    labels.summaryEyebrow ?? "CYBR Program of Examinations";
   const summaryTitle =
-    labels.summaryTitle ?? "Form 1: IST Program of Examinations";
+    labels.summaryTitle ?? "Form 1: CYBR Program of Examinations";
 
   const mandatoryCourses = [
     ...selected.mandatoryFixedCourses,
@@ -118,7 +118,7 @@ export function renderIstSummary(report, data, _choiceLookup, labels = {}) {
   ];
 
   return `
-    <article class="summary-report summary-report--ist">
+    <article class="summary-report summary-report--cybr">
       <header class="summary-header">
         <div>
           <p class="eyebrow">${escapeHtml(summaryEyebrow)}</p>
@@ -153,10 +153,10 @@ export function renderIstSummary(report, data, _choiceLookup, labels = {}) {
       </section>
 
       <section class="summary-section summary-section--allow-break">
-        <h3>IST electives</h3>
+        <h3>CYBR electives</h3>
         ${renderCourseTable(
-          selected.istElectiveCourses,
-          "No IST electives selected.",
+          selected.cybrElectiveCourses,
+          "No CYBR electives selected.",
         )}
       </section>
 
@@ -269,7 +269,7 @@ export function renderIstSummary(report, data, _choiceLookup, labels = {}) {
       <section class="summary-section summary-section--allow-break">
         <h3>Validation results</h3>
         ${renderValidationList(
-          compactIstSummaryValidations(safeReport.validations),
+          compactCybrSummaryValidations(safeReport.validations),
           "No validation results were reported.",
         )}
       </section>
@@ -288,11 +288,11 @@ export function renderIstSummary(report, data, _choiceLookup, labels = {}) {
   `;
 }
 
-export function compactIstSummaryValidations(validations) {
+export function compactCybrSummaryValidations(validations) {
   return asArray(validations).filter((validation) => {
     if (validationStatus(validation) !== "success") return true;
     return [
-      "IST electives",
+      "CYBR electives",
       "M&CS electives",
       "Free-elective space",
       "Total credits",
@@ -311,9 +311,9 @@ function normalizeReport(report) {
     rules: {
       programmeTarget: numericCredits(sourceRules.programmeTarget),
       mandatoryCredits: numericCredits(sourceRules.mandatoryCredits),
-      istElectiveMinimum: numericCredits(sourceRules.istElectiveMinimum),
-      istElectiveMinimumCount: numericCredits(
-        sourceRules.istElectiveMinimumCount,
+      cybrElectiveMinimum: numericCredits(sourceRules.cybrElectiveMinimum),
+      cybrElectiveMinimumCount: numericCredits(
+        sourceRules.cybrElectiveMinimumCount,
       ),
       mcsMinimum: numericCredits(sourceRules.mcsMinimum),
       freeElectiveSpaceMinimum: numericCredits(
@@ -332,8 +332,8 @@ function normalizeReport(report) {
     selected: {
       mandatoryFixedCourses: asArray(sourceSelected.mandatoryFixedCourses),
       graduation: asRecord(sourceSelected.graduation),
-      istElectiveCourses: asArray(sourceSelected.istElectiveCourses),
-      invalidIstCourses: asArray(sourceSelected.invalidIstCourses),
+      cybrElectiveCourses: asArray(sourceSelected.cybrElectiveCourses),
+      invalidCybrCourses: asArray(sourceSelected.invalidCybrCourses),
       mcsElectiveCourses: asArray(sourceSelected.mcsElectiveCourses),
       invalidMcsCourses: asArray(sourceSelected.invalidMcsCourses),
       mcsRows: asArray(sourceSelected.mcsRows),

@@ -1,6 +1,6 @@
 {
-  "title": "Form 1: IST Program of Examinations",
-  "description": "This form is used to create a report that shows your current study program. Its purpose is to be shared with the examination committee, so that they can check whether it satisfies the requirements of IST programs and approve it or inform you of how it does not satisfy the requirements. This form has built-in validation that should help you create a valid study program.",
+  "title": "Form 1: CYBR Program of Examinations",
+  "description": "This form is used to create a report that shows your current study program. Its purpose is to be shared with the examination committee, so that they can check whether it satisfies the requirements of the CYBR program and approve it or inform you of how it does not satisfy the requirements. This form has built-in validation that should help you create a valid study program.",
   "completedHtml": "",
   "showCompletePage": false,
   "clearInvisibleValues": "onHidden",
@@ -93,8 +93,8 @@
       ]
     },
     {
-      "name": "mandatory_and_ist",
-      "title": "Mandatory and IST courses",
+      "name": "mandatory_and_cybr",
+      "title": "Mandatory and CYBR courses",
       "elements": [
         {
           "type": "panel",
@@ -204,14 +204,14 @@
         },
         {
           "type": "panel",
-          "name": "ist_electives_panel",
-          "title": "IST electives",
+          "name": "cybr_electives_panel",
+          "title": "CYBR electives",
           "elements": [
             {
               "type": "tagbox",
-              "name": "ist_electives",
-              "title": "Select your IST electives",
-              "description": "Select at least three IST electives.",
+              "name": "cybr_electives",
+              "title": "Select your CYBR electives",
+              "description": "Select at least three CYBR electives.",
               "isRequired": true,
               "choices": [
                 {
@@ -796,7 +796,7 @@
               "title": "Programme name shown above the form",
               "visible": false,
               "readOnly": true,
-              "defaultValue": "TU/e MSc Computer Science and Engineering"
+              "defaultValue": "TU/e Master's track Cybersecurity"
             }
           ]
         }
@@ -830,12 +830,12 @@
       "includeIntoResult": true
     },
     {
-      "name": "rule_ist_elective_min_credits",
+      "name": "rule_cybr_elective_min_credits",
       "expression": "15",
       "includeIntoResult": true
     },
     {
-      "name": "rule_ist_elective_min_count",
+      "name": "rule_cybr_elective_min_count",
       "expression": "3",
       "includeIntoResult": true
     },
@@ -875,13 +875,13 @@
       "includeIntoResult": true
     },
     {
-      "name": "ist_elective_count",
-      "expression": "count({ist_electives})",
+      "name": "cybr_elective_count",
+      "expression": "count({cybr_electives})",
       "includeIntoResult": true
     },
     {
-      "name": "ist_elective_credits",
-      "expression": "{ist_elective_count} * {rule_standard_course_credits}",
+      "name": "cybr_elective_credits",
+      "expression": "{cybr_elective_count} * {rule_standard_course_credits}",
       "includeIntoResult": true
     },
     {
@@ -936,7 +936,7 @@
     },
     {
       "name": "total_programme_credits",
-      "expression": "{mandatory_credits} + {ist_elective_credits} + {free_elective_space_credits}",
+      "expression": "{mandatory_credits} + {cybr_elective_credits} + {free_elective_space_credits}",
       "includeIntoResult": true
     }
   ]

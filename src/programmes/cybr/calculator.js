@@ -1,4 +1,4 @@
-// Calculates normalized IST selections, credit totals, and validation inputs.
+// Calculates normalized CYBR selections, credit totals, and validation inputs.
 import {
   courseFromValue,
   normalizeCourseCode,
@@ -18,39 +18,39 @@ import { readNumericValue } from "../../shared/survey-rules.js";
 import { validationState } from "../../shared/validation-utils.js";
 import {
   GRADUATION_PATHS,
-  IST_COURSE_CATALOG,
-  IST_ELECTIVE_CODES,
-  IST_QUESTION_NAMES,
+  CYBR_COURSE_CATALOG,
+  CYBR_ELECTIVE_CODES,
+  CYBR_QUESTION_NAMES,
   MANDATORY_CODES,
   MCS_ELECTIVE_CODES,
-  createIstChoiceLookup,
-  resolveIstRules,
+  createCybrChoiceLookup,
+  resolveCybrRules,
 } from "./form-config.js";
-import { buildIstValidations } from "./rules.js";
+import { buildCybrValidations } from "./rules.js";
 
 export {
   GRADUATION_PATHS,
-  IST_COURSE_CATALOG,
-  IST_ELECTIVE_CODES,
+  CYBR_COURSE_CATALOG,
+  CYBR_ELECTIVE_CODES,
   MANDATORY_CODES,
   MCS_ELECTIVE_CODES,
-  createIstChoiceLookup,
+  createCybrChoiceLookup,
 };
 
-export const createChoiceLookup = createIstChoiceLookup;
-export const normalizeIstCode = normalizeCourseCode;
+export const createChoiceLookup = createCybrChoiceLookup;
+export const normalizeCybrCode = normalizeCourseCode;
 export const normalizeCode = normalizeCourseCode;
 
-export function calculateIst(data = {}, choiceLookup = createIstChoiceLookup()) {
-  const config = choiceLookup.istConfig;
-  const rules = resolveIstRules(data, config);
+export function calculateCybr(data = {}, choiceLookup = createCybrChoiceLookup()) {
+  const config = choiceLookup.cybrConfig;
+  const rules = resolveCybrRules(data, config);
   const duplicates = [];
   const claimed = new Map();
   const readCourse = (value, questionName) =>
     courseFromValue(value, choiceLookup, questionName);
 
   const mandatoryFixedCourses = config.mandatoryCodes.map((code) =>
-    readCourse(code, IST_QUESTION_NAMES.mandatory),
+    readCourse(code, CYBR_QUESTION_NAMES.mandatory),
   );
   for (const course of mandatoryFixedCourses) {
     course.counted = claimCourse(
@@ -68,11 +68,11 @@ export function calculateIst(data = {}, choiceLookup = createIstChoiceLookup()) 
     claimed,
     duplicates,
   );
-  const istSelection = claimListedCourses({
-    values: data.ist_electives,
-    allowedCodes: config.istElectiveCodes,
-    questionName: IST_QUESTION_NAMES.istElectives,
-    component: "IST elective",
+  const cybrSelection = claimListedCourses({
+    values: data.cybr_electives,
+    allowedCodes: config.cybrElectiveCodes,
+    questionName: CYBR_QUESTION_NAMES.cybrElectives,
+    component: "CYBR elective",
     choiceLookup,
     claimed,
     duplicates,
@@ -94,7 +94,7 @@ export function calculateIst(data = {}, choiceLookup = createIstChoiceLookup()) 
   const mcsSelection = claimListedCourses({
     values: data.mcs_course_electives,
     allowedCodes: config.mcsElectiveCodes,
-    questionName: IST_QUESTION_NAMES.mcsElectives,
+    questionName: CYBR_QUESTION_NAMES.mcsElectives,
     component: "IAM or CSE elective",
     choiceLookup,
     claimed,
@@ -130,7 +130,7 @@ export function calculateIst(data = {}, choiceLookup = createIstChoiceLookup()) 
 
   const useCalculatedValues =
     duplicates.length === 0
-    && istSelection.invalidCourses.length === 0
+    && cybrSelection.invalidCourses.length === 0
     && mcsSelection.invalidCourses.length === 0
     && (!data.graduation_course_set || graduation.valid);
   const subtotal = (name, fallback) =>
@@ -148,9 +148,9 @@ export function calculateIst(data = {}, choiceLookup = createIstChoiceLookup()) 
     "mandatory_credits",
     roundCredits(mandatoryFixed + graduationCredits),
   );
-  const istElectives = subtotal(
-    "ist_elective_credits",
-    sumCourses(istSelection.courses),
+  const cybrElectives = subtotal(
+    "cybr_elective_credits",
+    sumCourses(cybrSelection.courses),
   );
   const mcsCourseElectives = subtotal(
     "mcs_course_credits",
@@ -189,7 +189,7 @@ export function calculateIst(data = {}, choiceLookup = createIstChoiceLookup()) 
   );
   const total = subtotal(
     "total_programme_credits",
-    roundCredits(mandatory + istElectives + freeElectiveSpace),
+    roundCredits(mandatory + cybrElectives + freeElectiveSpace),
   );
 
   const invalidManualRows = [
@@ -197,13 +197,13 @@ export function calculateIst(data = {}, choiceLookup = createIstChoiceLookup()) 
     ...homologationRows,
     ...freeElectiveRows,
   ].filter((row) => !row.validCredits);
-  const istElectiveCount = istSelection.courses.length;
+  const cybrElectiveCount = cybrSelection.courses.length;
   const flags = {
     graduationCourseSetComplete:
       graduation.valid && mandatory >= rules.mandatoryCredits,
-    istElectiveMinimumMet:
-      istElectives >= rules.istElectiveMinimum
-      && istElectiveCount >= rules.istElectiveMinimumCount,
+    cybrElectiveMinimumMet:
+      cybrElectives >= rules.cybrElectiveMinimum
+      && cybrElectiveCount >= rules.cybrElectiveMinimumCount,
     mcsMinimumMet: mcsElectives >= rules.mcsMinimum,
     freeElectiveSpaceMinimumMet:
       freeElectiveSpace >= rules.freeElectiveSpaceMinimum,
@@ -214,19 +214,19 @@ export function calculateIst(data = {}, choiceLookup = createIstChoiceLookup()) 
     otherMcsCoursesSelectionComplete:
       !otherMcsCoursesActive || mcsRows.length > 0,
   };
-  const validations = buildIstValidations({
+  const validations = buildCybrValidations({
     flags,
     rules,
     graduation,
-    istElectives,
-    istElectiveCount,
+    cybrElectives,
+    cybrElectiveCount,
     mcsElectives,
     freeElectiveSpace,
     total,
     homologationCourses,
     homologation,
     invalidManualRows,
-    invalidIstCourses: istSelection.invalidCourses,
+    invalidCybrCourses: cybrSelection.invalidCourses,
     invalidMcsCourses: mcsSelection.invalidCourses,
     duplicates,
     internship,
@@ -238,7 +238,7 @@ export function calculateIst(data = {}, choiceLookup = createIstChoiceLookup()) 
       mandatoryFixed,
       graduation: graduationCredits,
       mandatory,
-      istElectives,
+      cybrElectives,
       mcsCourseElectives,
       manualMcsElectives,
       internship: internshipCredits,
@@ -253,8 +253,8 @@ export function calculateIst(data = {}, choiceLookup = createIstChoiceLookup()) 
     selected: {
       mandatoryFixedCourses,
       graduation,
-      istElectiveCourses: istSelection.courses,
-      invalidIstCourses: istSelection.invalidCourses,
+      cybrElectiveCourses: cybrSelection.courses,
+      invalidCybrCourses: cybrSelection.invalidCourses,
       mcsElectiveCourses: mcsSelection.courses,
       invalidMcsCourses: mcsSelection.invalidCourses,
       mcsRows,
@@ -269,7 +269,7 @@ export function calculateIst(data = {}, choiceLookup = createIstChoiceLookup()) 
   };
 }
 
-export const calculateEcts = calculateIst;
+export const calculateEcts = calculateCybr;
 
 function resolveGraduation(data, choiceLookup, config, claimed, duplicates) {
   const value = String(data.graduation_course_set ?? "").trim();
@@ -299,7 +299,7 @@ function resolveInternship(data, choiceLookup, config) {
   const selected = isTrue(data.internship);
   const code = config.internshipCodes[0] ?? "";
   const course = selected && code
-    ? courseFromValue(code, choiceLookup, IST_QUESTION_NAMES.internship)
+    ? courseFromValue(code, choiceLookup, CYBR_QUESTION_NAMES.internship)
     : null;
   return {
     selected,

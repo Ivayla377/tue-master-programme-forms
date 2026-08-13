@@ -20,9 +20,9 @@ export const programmes = {
     output: "dist/iam.html",
     emptyOutDir: false,
   },
-  ist: {
-    input: "ist.html",
-    output: "dist/ist.html",
+  cybr: {
+    input: "cybr.html",
+    output: "dist/cybr.html",
     emptyOutDir: false,
   },
 };
