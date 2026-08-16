@@ -83,12 +83,6 @@ const STREAM_LABELS = Object.fromEntries(
   DEFAULT_ES_CONFIG.streams.map(({ value, label }) => [value, label]),
 );
 
-const GRADUATION_CONTEXT_LABELS = Object.fromEntries(
-  DEFAULT_ES_CONFIG.graduationContexts.map(
-    ({ value, label }) => [value, label],
-  ),
-);
-
 const INTERNSHIP_TYPE_LABELS = Object.fromEntries(
   DEFAULT_ES_CONFIG.internshipTypeOptions.map(
     ({ value, label }) => [value, label],
@@ -168,19 +162,11 @@ export function renderEsSummary(report, data, choiceLookup, labels = {}) {
   const generatedOn = formatCurrentDate();
 
   const streamSelection = selected.stream ?? safeData.stream;
-  const graduationContext = selected.graduationContext ?? safeData.graduation_context;
   const streamLabel = choiceLabel(
     choiceLookup,
     "stream",
     streamSelection,
     STREAM_LABELS,
-    "Not selected",
-  );
-  const graduationContextLabel = choiceLabel(
-    choiceLookup,
-    "graduation_context",
-    graduationContext,
-    GRADUATION_CONTEXT_LABELS,
     "Not selected",
   );
   const streamElectiveRows = [
@@ -240,17 +226,14 @@ export function renderEsSummary(report, data, choiceLookup, labels = {}) {
 
   const preparationCourses = courseArray(selected.preparationProject);
   const graduationCourses = courseArray(selected.graduationProject);
-  const contextValue = choiceValue(graduationContext);
   if (preparationCourses.length === 0) {
     preparationCourses.push(...fallbackProjectCourses(
-      contextValue,
       "preparation",
       config,
     ));
   }
   if (graduationCourses.length === 0) {
     graduationCourses.push(...fallbackProjectCourses(
-      contextValue,
       "graduation",
       config,
     ));
@@ -295,7 +278,6 @@ export function renderEsSummary(report, data, choiceLookup, labels = {}) {
           ["Enrollment", personalInfo.enrollment],
           ...graduationClusterDetails(safeData, choiceLookup),
           ["Updates a previously approved programme", yesNo(safeData.previous)],
-          ["Graduation department", graduationContextLabel],
         ])}
       </section>
 
@@ -359,14 +341,13 @@ export function renderEsSummary(report, data, choiceLookup, labels = {}) {
 
       <section class="summary-section">
         <h3>Preparation and graduation projects</h3>
-        <p class="summary-inline-detail"><strong>Graduation department:</strong> ${formatText(graduationContextLabel)}</p>
         ${renderReportTable(
           ["Component", "Course code", "Course title", "Credits"],
           [
             ...preparationCourses.map((course) => ({ cells: ["Preparation graduation project", courseCode(course), courseTitle(course), courseCredits(course)] })),
             ...graduationCourses.map((course) => ({ cells: ["Graduation project", courseCode(course), courseTitle(course), courseCredits(course)] })),
           ],
-          "No valid graduation-department course alternatives were reported.",
+          "No valid fixed graduation courses were reported.",
           "summary-table--course-data summary-table--completion",
         )}
         ${renderInvalidGraduationSelections(selected.invalidGraduationSelections)}
@@ -407,7 +388,6 @@ export function renderEsSummary(report, data, choiceLookup, labels = {}) {
       <section class="summary-section summary-section--allow-break">
         <h3>Validation results</h3>
         ${renderValidationList(compactEsSummaryValidations(safeReport.validations, {
-          graduationDepartment: graduationContextLabel,
           hasHomologation: hasHomologationCourses,
           hasSelfChosenHomologation: hasSelfChosenHomologationCourses,
           hasExternalCourses: externalDetailsActive,
@@ -444,8 +424,6 @@ export function compactEsSummaryValidations(validations, options = {}) {
     } else if (label.startsWith("Homologation")) {
       homologation.push(validation);
     } else if ([
-      "Graduation department",
-      "Graduation context",
       "Preparation project",
       "Graduation project",
       "Graduation phase",
@@ -473,7 +451,6 @@ export function compactEsSummaryValidations(validations, options = {}) {
   if (graduation.length > 0) {
     const graduationValidation = compactGraduationValidation(
       graduation,
-      options.graduationDepartment,
       options.graduationCredits,
     );
     const totalIndex = ordinary.findIndex((validation) =>
@@ -503,20 +480,13 @@ export function compactEsSummaryValidations(validations, options = {}) {
 
 function compactGraduationValidation(
   validations,
-  department,
   graduationCredits = DEFAULT_ES_CONFIG.rules.graduationPhaseCredits,
 ) {
-  const compact = compactValidationGroup(
+  return compactValidationGroup(
     "Graduation phase",
     validations,
-    `${displayText(department || "Department not selected")} (${formatCredits(
-      graduationCredits,
-    )}).`,
+    `The two fixed graduation courses total ${formatCredits(graduationCredits)}.`,
   );
-  if (compact.status !== "success" && hasText(department)) {
-    compact.detail = `${displayText(department)}. ${compact.detail}`;
-  }
-  return compact;
 }
 
 function compactValidationGroup(label, validations, successDetail) {
@@ -579,7 +549,6 @@ function normalizeReport(report) {
       preparationProject: coalesce(sourceSelected.preparationProject, sourceSelected.preparationCourse),
       graduationProject: coalesce(sourceSelected.graduationProject, sourceSelected.masterProject),
       invalidGraduationSelections: arrayFromAliases(sourceSelected, ["invalidGraduationSelections"]),
-      graduationContext: coalesce(sourceSelected.graduationContext, sourceSelected.context),
     },
     validations,
     hasErrors,
@@ -704,10 +673,8 @@ function internshipCourseFromData(internship, data, config) {
   };
 }
 
-function fallbackProjectCourses(context, component, config) {
-  const definition = config.graduationContexts.find(
-    ({ value }) => value === normalizeChoiceValue(context),
-  );
+function fallbackProjectCourses(component, config) {
+  const definition = config.graduationCourses;
   const code = component === "preparation"
     ? definition?.preparationCode
     : definition?.graduationCode;

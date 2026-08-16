@@ -18,7 +18,7 @@ export const ES_SURVEY_SOURCE = surveySource;
 export const ES_QUESTION_NAMES = Object.freeze({
   commonMandatory: "common_mandatory_display",
   stream: "stream",
-  graduationContext: "graduation_context",
+  graduationCourses: "graduation_courses",
   internshipCode: "internship_code",
   internshipType: "internship_type",
   academicYear: "programme_academic_year",
@@ -71,21 +71,15 @@ export function buildEsFormConfig(surveyJson, lookup) {
         )),
       })),
   );
-  const graduationContexts = Object.freeze(
-    optionList(lookup, ES_QUESTION_NAMES.graduationContext).map(
-      ({ value, label }) => {
-        const questionName = `graduation_${value}_display`;
-        const codes = defaultCourseCodes(lookup, questionName);
-        return Object.freeze({
-          value,
-          label: label.replace(/\s*\([^)]*\)\s*$/, ""),
-          questionName,
-          preparationCode: codes[0] ?? "",
-          graduationCode: codes[1] ?? "",
-        });
-      },
-    ),
+  const graduationCodes = defaultCourseCodes(
+    lookup,
+    ES_QUESTION_NAMES.graduationCourses,
   );
+  const graduationCourses = Object.freeze({
+    questionName: ES_QUESTION_NAMES.graduationCourses,
+    preparationCode: graduationCodes[0] ?? "",
+    graduationCode: graduationCodes[1] ?? "",
+  });
   const externalCourseDisplayCodes = Object.freeze(lookup.getCodes(
     ES_QUESTION_NAMES.externalCourses,
   ));
@@ -101,7 +95,7 @@ export function buildEsFormConfig(surveyJson, lookup) {
       ES_QUESTION_NAMES.academicYear,
     )).trim(),
     streams,
-    graduationContexts,
+    graduationCourses,
     commonMandatoryCodes: Object.freeze(defaultCourseCodes(
       lookup,
       ES_QUESTION_NAMES.commonMandatory,
@@ -146,7 +140,7 @@ function buildCourseCatalog(lookup) {
   return Object.fromEntries(
     lookup.getCourses()
       .filter((course) =>
-        /^\d[A-Z0-9]+$/.test(course.displayCode)
+        /^\d[A-Z0-9]+(?:\/\d[A-Z0-9]+)?$/.test(course.displayCode)
         && Number.isFinite(course.credits))
       .map((course) => [
       course.code,
@@ -176,7 +170,6 @@ export const ES_COURSES = ES_COURSE_CATALOG;
 export const ES_ACADEMIC_YEAR = DEFAULT_ES_CONFIG.academicYear;
 export const COMMON_MANDATORY_CODES = DEFAULT_ES_CONFIG.commonMandatoryCodes;
 export const ES_STREAMS = DEFAULT_ES_CONFIG.streams;
-export const GRADUATION_CONTEXTS = DEFAULT_ES_CONFIG.graduationContexts;
 export const INTERNSHIP_CODES = DEFAULT_ES_CONFIG.internshipCodes;
 export const STALE_STREAM_ELECTIVE_CODES =
   DEFAULT_ES_CONFIG.staleStreamElectiveCodes;

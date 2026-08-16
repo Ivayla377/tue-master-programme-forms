@@ -18,7 +18,6 @@ import {
   ES_COURSE_CATALOG,
   ES_STREAMS,
   FREE_ELECTIVE_TARGET,
-  GRADUATION_CONTEXTS,
   HOMOLOGATION_MAX_CREDITS,
   INTERNSHIP_CODES,
   PROHIBITED_COMBINATIONS,
@@ -37,7 +36,6 @@ export {
   ES_COURSE_CATALOG,
   ES_STREAMS,
   FREE_ELECTIVE_TARGET,
-  GRADUATION_CONTEXTS,
   HOMOLOGATION_MAX_CREDITS,
   INTERNSHIP_CODES,
   PROHIBITED_COMBINATIONS,
@@ -93,7 +91,7 @@ export function calculateEs(data = {}, choiceLookup = createEsChoiceLookup()) {
       readCourse(streamDefinition.mandatoryQuestion),
     )
     : [];
-  const graduation = resolveGraduation(data, config, readCourse);
+  const graduation = resolveGraduation(config, readCourse);
   const internship = resolveInternship(data, config, readCourse);
 
   const activeElectiveValues = streamDefinition
@@ -282,9 +280,8 @@ export function calculateEs(data = {}, choiceLookup = createEsChoiceLookup()) {
     streamElectiveMinimumMet: streamElectivesSelected >= rules.streamElectiveTarget,
     freeElectiveSpaceMet: freeElectiveSpace >= rules.freeElectiveSpaceTarget,
     freeElectiveSpaceOver: freeElectiveSpace > rules.freeElectiveSpaceTarget,
-    graduationContextValid: graduation.contextValid,
-    preparationProjectValid: graduation.contextValid,
-    graduationProjectValid: graduation.contextValid,
+    preparationProjectValid: Boolean(graduation.preparationProject),
+    graduationProjectValid: Boolean(graduation.graduationProject),
     graduationPhaseComplete: graduationPhase === rules.graduationPhaseCredits,
     homologationWithinLimit: homologationCredits <= rules.homologationMaximum,
     selfChosenHomologationWithinLimit:
@@ -384,7 +381,6 @@ export function calculateEs(data = {}, choiceLookup = createEsChoiceLookup()) {
       preparationProject: graduation.preparationProject,
       graduationProject: graduation.graduationProject,
       incompatibleCombinations,
-      graduationContext: graduation.context,
     },
     flags,
     validations,
@@ -394,28 +390,21 @@ export function calculateEs(data = {}, choiceLookup = createEsChoiceLookup()) {
 
 export const calculateEcts = calculateEs;
 
-function resolveGraduation(data, config, readCourse) {
-  const values = selectedValues(data.graduation_context)
-    .map((value) => String(value).trim().toLowerCase())
-    .filter(Boolean);
-  const definition = values.length === 1
-    ? config.graduationContexts.find(({ value }) => value === values[0]) ?? null
+function resolveGraduation(config, readCourse) {
+  const definition = config.graduationCourses;
+  const preparationProject = definition.preparationCode
+    ? readCourse(definition.questionName)(definition.preparationCode)
+    : null;
+  const graduationProject = definition.graduationCode
+    ? readCourse(definition.questionName)(definition.graduationCode)
     : null;
   return {
-    context: definition
-      ? { value: definition.value, label: definition.label }
-      : null,
-    contextValid: Boolean(definition),
-    preparationProject: definition
-      ? readCourse(definition.questionName)(definition.preparationCode)
-      : null,
-    graduationProject: definition
-      ? readCourse(definition.questionName)(definition.graduationCode)
-      : null,
+    preparationProject,
+    graduationProject,
     preparationDetail:
-      "A preparation-project code can be derived only after one valid graduation department is selected.",
+      "The fixed preparation graduation project is missing from the ES form definition.",
     graduationDetail:
-      "A graduation-project code can be derived only after one valid graduation department is selected.",
+      "The fixed graduation project is missing from the ES form definition.",
   };
 }
 

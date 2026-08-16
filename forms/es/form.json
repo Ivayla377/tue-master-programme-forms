@@ -212,63 +212,30 @@
           "type": "panel",
           "name": "graduation_courses_panel",
           "title": "Graduation courses",
-          "description": "Choose the graduation department for the two fixed graduation courses · 40 ECTS",
+          "description": "These two fixed graduation courses total 40 ECTS. The applicable course code depends on whether the graduation project is carried out through M&CS or Electrical Engineering.",
           "elements": [
             {
-              "type": "radiogroup",
-              "name": "graduation_context",
-              "title": "Graduation department",
-              "isRequired": true,
-              "choices": [
-                {
-                  "value": "mcs",
-                  "text": "Mathematics & Computer Science (M&CS)"
-                },
-                {
-                  "value": "ee",
-                  "text": "Electrical Engineering (EE)"
-                }
-              ]
-            },
-            {
               "type": "checkbox",
-              "name": "graduation_mcs_display",
-              "visibleIf": "{graduation_context} = 'mcs'",
-              "title": "M&CS graduation courses",
-              "readOnly": true,
+              "name": "graduation_courses",
+              "title": "Graduation project",
+              "description": "These courses are fixed in the ES form.",
               "defaultValue": [
-                "2imc05",
-                "2imc00"
+                "2imc05 / 5t514",
+                "2imc00 / 5t746"
               ],
+              "correctAnswer": [
+                "2imc05 / 5t514",
+                "2imc00 / 5t746"
+              ],
+              "readOnly": true,
               "choices": [
                 {
-                  "value": "2imc05",
-                  "text": "2IMC05 Preparation Graduation Project (10 ECTS)"
+                  "value": "2imc05 / 5t514",
+                  "text": "2IMC05 / 5T514 - Preparation Graduation Project (10 ECTS)"
                 },
                 {
-                  "value": "2imc00",
-                  "text": "2IMC00 Master Project (30 ECTS)"
-                }
-              ]
-            },
-            {
-              "type": "checkbox",
-              "name": "graduation_ee_display",
-              "visibleIf": "{graduation_context} = 'ee'",
-              "title": "Electrical Engineering graduation courses",
-              "readOnly": true,
-              "defaultValue": [
-                "5t514",
-                "5t746"
-              ],
-              "choices": [
-                {
-                  "value": "5t514",
-                  "text": "5T514 Preparation Graduation Project ES 'Electrical Engineering' (10 ECTS)"
-                },
-                {
-                  "value": "5t746",
-                  "text": "5T746 Graduation Project ES 'Electrical Engineering' (30 ECTS)"
+                  "value": "2imc00 / 5t746",
+                  "text": "2IMC00 / 5T746 - Graduation Project (30 ECTS)"
                 }
               ]
             }
@@ -1147,12 +1114,12 @@
     },
     {
       "name": "credits_preparation_project",
-      "expression": "iif({graduation_context} notempty, {rule_preparation_project_credits}, 0)",
+      "expression": "{rule_preparation_project_credits}",
       "includeIntoResult": true
     },
     {
       "name": "credits_graduation_project",
-      "expression": "iif({graduation_context} notempty, {rule_graduation_project_credits}, 0)",
+      "expression": "{rule_graduation_project_credits}",
       "includeIntoResult": true
     },
     {

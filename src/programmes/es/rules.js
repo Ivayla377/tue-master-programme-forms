@@ -38,13 +38,6 @@ export function buildEsValidations(values) {
       `Additional stream electives, other free electives, homologation and internship together fill ${formatCredits(rules.freeElectiveSpaceTarget)}.`,
     ),
     {
-      label: "Graduation department",
-      status: values.flags.graduationContextValid ? "success" : "error",
-      detail: values.flags.graduationContextValid
-        ? `${values.graduation.context.label} course-code alternatives applied.`
-        : "Select exactly one graduation department: Mathematics & Computer Science or Electrical Engineering.",
-    },
-    {
       label: "Preparation project",
       status: values.flags.preparationProjectValid ? "success" : "error",
       detail: values.flags.preparationProjectValid

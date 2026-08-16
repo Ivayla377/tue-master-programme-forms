@@ -223,7 +223,10 @@ function stripCourseCodeAndCredits(label, displayCode) {
   if (!text) return "";
 
   if (displayCode) {
-    const escapedCode = displayCode.replace(/[.*+?^()|[\]\\]/g, "\\$&");
+    const escapedCode = displayCode
+      .split("/")
+      .map((part) => part.replace(/[.*+?^()|[\]\\]/g, "\\$&"))
+      .join("\\s*\\/\\s*");
     text = text.replace(new RegExp(`^${escapedCode}\\s*[-:]?\\s*`, "i"), "");
   }
 
