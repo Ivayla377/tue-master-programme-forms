@@ -12,6 +12,8 @@ No installation is needed to fill in a form. Download the programme form, then o
 - [Download the IAM form](https://github.com/Ivayla377/tue-master-programme-forms/releases/latest/download/iam.html)
 - [Download the CYBR form](https://github.com/Ivayla377/tue-master-programme-forms/releases/latest/download/cybr.html)
 
+*Latest release: 20 July 2026*
+
 The forms work offline after download.
 
 1. Complete the form section by section. The ECTS panel checks credits and programme requirements as you work.
