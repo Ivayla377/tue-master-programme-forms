@@ -10,6 +10,7 @@ import {
   escapeHtml,
   escapeRegExp,
   formatCurrentDate,
+  graduationClusterDetails,
   hasText,
   numericCredits,
   parseCreditValue,
@@ -83,7 +84,7 @@ export function selectCybrSidebarValidations(validations) {
   });
 }
 
-export function renderCybrSummary(report, data, _choiceLookup, labels = {}) {
+export function renderCybrSummary(report, data, choiceLookup, labels = {}) {
   const safeReport = normalizeReport(report);
   const safeData = asRecord(data);
   const selected = safeReport.selected;
@@ -136,7 +137,7 @@ export function renderCybrSummary(report, data, _choiceLookup, labels = {}) {
           ["Name", personalInfo.name],
           ["Student ID", personalInfo.id],
           ["Enrollment", personalInfo.enrollment],
-          ["Intended graduation cluster", safeData.graduation_cluster],
+          ...graduationClusterDetails(safeData, choiceLookup),
           ["Updates a previously approved program", yesNo(safeData.previous)],
         ])}
       </section>

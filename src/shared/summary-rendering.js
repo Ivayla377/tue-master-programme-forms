@@ -37,6 +37,47 @@ export function renderDetailsTable(rows) {
   `;
 }
 
+export function graduationClusterDetails(data, choiceLookup) {
+  const source = asRecord(data);
+  const clusterQuestionName = "intended_graduation_cluster";
+  const matchedQuestionName = "matched_to_graduation_cluster";
+  const matched = booleanValue(source[matchedQuestionName]);
+  const rows = [
+    [
+      questionTitle(choiceLookup, clusterQuestionName, "Intended graduation cluster"),
+      choiceLabel(choiceLookup, clusterQuestionName, source[clusterQuestionName]),
+    ],
+    [
+      questionTitle(
+        choiceLookup,
+        matchedQuestionName,
+        "Have you already been matched to your intended graduation cluster?",
+      ),
+      matched === true ? "Yes" : matched === false ? "No" : "",
+    ],
+  ];
+
+  const advisorNameQuestion = matched === false
+    ? "mentor_name"
+    : matched === true
+      ? "graduation_cluster_representative_name"
+      : "";
+  if (advisorNameQuestion) {
+    rows.push([
+      questionTitle(
+        choiceLookup,
+        advisorNameQuestion,
+        advisorNameQuestion === "mentor_name"
+          ? "Who is your mentor?"
+          : "Who is the representative of your intended graduation cluster?",
+      ),
+      source[advisorNameQuestion],
+    ]);
+  }
+
+  return rows;
+}
+
 export function renderReportTable(
   headers,
   rows,
@@ -210,6 +251,17 @@ export function escapeHtml(value) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
+}
+
+function choiceLabel(choiceLookup, questionName, value) {
+  return choiceLookup?.getLabel?.(questionName, value) ?? displayText(value);
+}
+
+function questionTitle(choiceLookup, questionName, fallback) {
+  return coalesceNonBlank(
+    choiceLookup?.getQuestion?.(questionName)?.title,
+    fallback,
+  );
 }
 
 function renderSidebarSubtotal(label, value) {

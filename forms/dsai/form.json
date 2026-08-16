@@ -51,80 +51,83 @@
                                        },
                                        {
                                            "type":  "panel",
-                                           "name":  "graduation_group_panel",
-                                           "title":  "Graduation group",
+                                           "name":  "graduation_cluster_panel",
+                                           "title":  "Graduation cluster",
                                            "elements":  [
                                                             {
+                                                                "type":  "dropdown",
+                                                                "name":  "intended_graduation_cluster",
+                                                                "title":  "Intended graduation cluster",
+                                                                "isRequired":  true,
+                                                                "choices":  [
+                                                                                {
+                                                                                    "value":  "algorithms",
+                                                                                    "text":  "Algorithms (ALGO)"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "formal_systems_analysis",
+                                                                                    "text":  "Formal Systems Analysis (FSA)"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "security",
+                                                                                    "text":  "Security (SEC)"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "software_engineering_technology",
+                                                                                    "text":  "Software Engineering and Technology (SET)"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "iris",
+                                                                                    "text":  "Interconnected Resource-aware Intelligent Systems (IRIS)"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "dai_databases",
+                                                                                    "text":  "Data and Artificial Intelligence (DAI) - Databases"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "dai_other",
+                                                                                    "text":  "Data and Artificial Intelligence (DAI) - Other groups"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "process_analytics",
+                                                                                    "text":  "Process Analytics (PA)"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "visualization",
+                                                                                    "text":  "Visualization (VIS)"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "stochastic_probability_operations_research",
+                                                                                    "text":  "Stochastic Probability and Operations Research (SPOR)"
+                                                                                }
+                                                                            ],
+                                                                "showOtherItem":  true,
+                                                                "otherText":  "Other / not listed",
+                                                                "storeOthersAsComment":  false
+                                                            },
+                                                            {
                                                                 "type":  "boolean",
-                                                                "name":  "matched",
-                                                                "title":  "Have you already been matched to a graduation group?",
+                                                                "name":  "matched_to_graduation_cluster",
+                                                                "title":  "Have you already been matched to your intended graduation cluster?",
                                                                 "isRequired":  true
                                                             },
                                                             {
                                                                 "type":  "text",
-                                                                "name":  "mentor",
-                                                                "visibleIf":  "{matched} = false",
+                                                                "name":  "mentor_name",
+                                                                "visibleIf":  "{matched_to_graduation_cluster} = false",
                                                                 "title":  "Who is your mentor?",
                                                                 "description":  "The name of the person who advised you in the composition of your study program",
-                                                                "isRequired":  true,
-                                                                "requiredIf":  "{matched} = false",
-                                                                "placeholder":  "Surname, Given name"
+                                                                "requiredIf":  "{matched_to_graduation_cluster} = false",
+                                                                "clearIfInvisible":  "onHidden"
                                                             },
                                                             {
-                                                                "type":  "dropdown",
-                                                                "name":  "grad_group",
-                                                                "visibleIf":  "{matched} = true",
-                                                                "title":  "What graduation group have you been matched with?",
-                                                                "description":  "The graduation group you have been matched with",
-                                                                "isRequired":  true,
-                                                                "requiredIf":  "{matched} = true",
-                                                                "choices":  [
-                                                                                {
-                                                                                    "value":  "algo",
-                                                                                    "text":  "ALGO"
-                                                                                },
-                                                                                {
-                                                                                    "value":  "db",
-                                                                                    "text":  "DAI-DB"
-                                                                                },
-                                                                                {
-                                                                                    "value":  "dm",
-                                                                                    "text":  "DAI-DM"
-                                                                                },
-                                                                                {
-                                                                                    "value":  "uai",
-                                                                                    "text":  "DAI-UAI"
-                                                                                },
-                                                                                {
-                                                                                    "value":  "fsa",
-                                                                                    "text":  "FSA"
-                                                                                },
-                                                                                {
-                                                                                    "value":  "iris",
-                                                                                    "text":  "IRIS"
-                                                                                },
-                                                                                {
-                                                                                    "value":  "pa",
-                                                                                    "text":  "PA"
-                                                                                },
-                                                                                {
-                                                                                    "value":  "sec",
-                                                                                    "text":  "SEC"
-                                                                                },
-                                                                                {
-                                                                                    "value":  "set",
-                                                                                    "text":  "SET"
-                                                                                },
-                                                                                {
-                                                                                    "value":  "spor",
-                                                                                    "text":  "SPOR"
-                                                                                },
-                                                                                {
-                                                                                    "value":  "vis",
-                                                                                    "text":  "VIS"
-                                                                                }
-                                                                            ],
-                                                                "showOtherItem":  true
+                                                                "type":  "text",
+                                                                "name":  "graduation_cluster_representative_name",
+                                                                "visibleIf":  "{matched_to_graduation_cluster} = true",
+                                                                "title":  "Who is the representative of your intended graduation cluster?",
+                                                                "description":  "The name of the graduation cluster representative who advised you in the composition of your study program",
+                                                                "requiredIf":  "{matched_to_graduation_cluster} = true",
+                                                                "clearIfInvisible":  "onHidden"
                                                             }
                                                         ]
                                        },
@@ -611,9 +614,8 @@
                                                                 "type":  "radiogroup",
                                                                 "name":  "seminar",
                                                                 "title":  "What seminar is included in your study program?",
-                                                                "description":  "If you have already been matched to a graduation group, you should normally here choose the corresponding seminar. Seminars are 5 EC courses.",
+                                                                "description":  "Choose the seminar that corresponds to your intended graduation cluster. Seminars are 5 ECTS courses.",
                                                                 "isRequired":  true,
-                                                                "requiredIf":  "{matched} = true",
                                                                 "choices":  [
                                                                                 {
                                                                                     "value":  "2ima00",
@@ -664,8 +666,8 @@
                                                             {
                                                                 "type":  "comment",
                                                                 "name":  "mismatch",
-                                                                "visibleIf":  "{seminar} notempty and {matched} = true and {grad_group} \u003c\u003e {seminar_group}",
-                                                                "title":  "Your seminar does not correspond to the graduation group to which you are matched!",
+                                                                "visibleIf":  "{seminar} notempty and {intended_graduation_cluster} \u003c\u003e {seminar_group}",
+                                                                "title":  "Your seminar does not correspond to your intended graduation cluster!",
                                                                 "description":  "Please explain why this is the case",
                                                                 "isRequired":  true
                                                             }
@@ -771,7 +773,7 @@
                              },
                              {
                                  "name":  "seminar_group",
-                                 "expression":  "iif({seminar} = '2ima00', 'algo', iif({seminar} = '2imd00', 'db', iif({seminar} = '2imi00', 'pa', iif({seminar} = '2imm00', 'dm', iif({seminar} = '2ims00', 'sec', iif({seminar} = '2amu00', 'uai', iif({seminar} = '2imv00', 'vis', iif({seminar} = '2ams00', 'spor', iif({seminar} = '2imn00', 'iris', iif({seminar} = '2imp00', 'set', iif({seminar} = '2imf00', 'fsa', '')))))))))))",
+                                 "expression":  "iif({seminar} = '2ima00', 'algorithms', iif({seminar} = '2imd00', 'dai_databases', iif({seminar} = '2imi00', 'process_analytics', iif({seminar} = '2imm00', 'dai_other', iif({seminar} = '2ims00', 'security', iif({seminar} = '2amu00', 'dai_other', iif({seminar} = '2imv00', 'visualization', iif({seminar} = '2ams00', 'stochastic_probability_operations_research', iif({seminar} = '2imn00', 'iris', iif({seminar} = '2imp00', 'software_engineering_technology', iif({seminar} = '2imf00', 'formal_systems_analysis', '')))))))))))",
                                  "includeIntoResult":  true
                              },
                              {

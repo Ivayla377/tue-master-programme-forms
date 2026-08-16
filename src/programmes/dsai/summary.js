@@ -4,6 +4,7 @@ import {
   escapeHtml,
   formatCurrentDate,
   formatText,
+  graduationClusterDetails,
   renderDetailsTable,
   renderEctsPanel as renderSharedEctsPanel,
   renderReportTable,
@@ -28,13 +29,9 @@ export function renderEctsPanel(report) {
 }
 export function renderSummary(report, data, choiceLookup, labels = {}) {
   const personalInfo = data.personal_info ?? {};
-  const matched = isTrue(data.matched);
   const hasFreeElectives = report.selected.freeRows.length > 0;
   const hasHomologationCourses = report.selected.homologationCourses.length > 0;
   const hasFreeSpaceCourses = hasFreeElectives || hasHomologationCourses;
-  const graduationGroup = matched
-    ? choiceLookup.getLabel("grad_group", data.grad_group)
-    : data.mentor;
 
   const summaryEyebrow = labels.summaryEyebrow ?? "Program of Examinations";
 
@@ -60,8 +57,7 @@ export function renderSummary(report, data, choiceLookup, labels = {}) {
           ["Name", personalInfo.name],
           ["Student ID", personalInfo.id],
           ["Enrollment date", personalInfo.enrollment],
-          ["Matched to graduation group", yesNo(data.matched)],
-          [matched ? "Graduation group" : "Mentor", graduationGroup],
+          ...graduationClusterDetails(data, choiceLookup),
           ["Change of approved program", yesNo(data.previous)],
         ])}
       </section>

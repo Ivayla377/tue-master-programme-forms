@@ -15,7 +15,7 @@ export const CSE_SURVEY_SOURCE = surveySource;
 
 export const CSE_QUESTION_NAMES = Object.freeze({
   focusArea: "extra_focus_area",
-  graduationGroup: "graduation_group",
+  graduationGroup: "intended_graduation_cluster",
   graduationCourses: "graduation_courses",
   internshipCourse: "internship_course_display",
   specializationAdditional: "specialization_additional",

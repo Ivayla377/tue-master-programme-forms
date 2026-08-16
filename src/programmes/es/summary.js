@@ -12,6 +12,7 @@ import {
   formatCurrentDate,
   formatReportCell,
   formatText,
+  graduationClusterDetails,
   hasText,
   numericCredits,
   parseCreditValue,
@@ -182,14 +183,6 @@ export function renderEsSummary(report, data, choiceLookup, labels = {}) {
     GRADUATION_CONTEXT_LABELS,
     "Not selected",
   );
-  const intendedGraduationClusterLabel = choiceLabel(
-    choiceLookup,
-    "intended_graduation_cluster",
-    safeData.intended_graduation_cluster,
-    {},
-    "Not selected",
-  );
-
   const streamElectiveRows = [
     ...selected.requiredStreamElectiveCourses.map((course) => ({
       cells: [courseCode(course), courseTitle(course), courseCredits(course)],
@@ -300,8 +293,7 @@ export function renderEsSummary(report, data, choiceLookup, labels = {}) {
           ["Name", personalInfo.name],
           ["Student ID", personalInfo.id],
           ["Enrollment", personalInfo.enrollment],
-          ["Intended graduation cluster", intendedGraduationClusterLabel],
-          ["Representative graduation cluster", safeData.representative_graduation_cluster],
+          ...graduationClusterDetails(safeData, choiceLookup),
           ["Updates a previously approved programme", yesNo(safeData.previous)],
           ["Graduation department", graduationContextLabel],
         ])}

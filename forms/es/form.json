@@ -69,53 +69,72 @@
               "choices": [
                 {
                   "value": "algorithms",
-                  "text": "Algorithms"
+                  "text": "Algorithms (ALGO)"
                 },
                 {
                   "value": "formal_systems_analysis",
-                  "text": "Formal Systems Analysis"
+                  "text": "Formal Systems Analysis (FSA)"
                 },
                 {
                   "value": "security",
-                  "text": "Security"
+                  "text": "Security (SEC)"
                 },
                 {
                   "value": "software_engineering_technology",
-                  "text": "Software Engineering and Technology"
+                  "text": "Software Engineering and Technology (SET)"
                 },
                 {
                   "value": "iris",
-                  "text": "Interconnected Resource-aware Intelligent Systems"
+                  "text": "Interconnected Resource-aware Intelligent Systems (IRIS)"
                 },
                 {
                   "value": "dai_databases",
-                  "text": "Data and Artificial Intelligence - Databases"
+                  "text": "Data and Artificial Intelligence (DAI) - Databases"
                 },
                 {
                   "value": "dai_other",
-                  "text": "Data and Artificial Intelligence - Other groups"
+                  "text": "Data and Artificial Intelligence (DAI) - Other groups"
                 },
                 {
                   "value": "process_analytics",
-                  "text": "Process Analytics"
+                  "text": "Process Analytics (PA)"
                 },
                 {
                   "value": "visualization",
-                  "text": "Visualization"
+                  "text": "Visualization (VIS)"
                 },
                 {
-                  "value": "discrete_mathematics",
-                  "text": "Discrete Mathematics"
+                  "value": "electronic_systems",
+                  "text": "Cluster Electronic Systems (ES)"
                 }
               ],
-              "showOtherItem": true
+              "showOtherItem": true,
+              "otherText": "Other / not listed",
+              "storeOthersAsComment": false
+            },
+            {
+              "type": "boolean",
+              "name": "matched_to_graduation_cluster",
+              "title": "Have you already been matched to your intended graduation cluster?",
+              "isRequired": true
             },
             {
               "type": "text",
-              "name": "representative_graduation_cluster",
-              "title": "Name of representative graduation cluster",
-              "description": "Enter the representative's name if it is already known.",
-              "placeholder": "Representative name"
+              "name": "mentor_name",
+              "visibleIf": "{matched_to_graduation_cluster} = false",
+              "title": "Who is your mentor?",
+              "description": "The name of the person who advised you in the composition of your study program",
+              "requiredIf": "{matched_to_graduation_cluster} = false",
+              "clearIfInvisible": "onHidden"
+            },
+            {
+              "type": "text",
+              "name": "graduation_cluster_representative_name",
+              "visibleIf": "{matched_to_graduation_cluster} = true",
+              "title": "Who is the representative of your intended graduation cluster?",
+              "description": "The name of the graduation cluster representative who advised you in the composition of your study program",
+              "requiredIf": "{matched_to_graduation_cluster} = true",
+              "clearIfInvisible": "onHidden"
             }
           ]
         },

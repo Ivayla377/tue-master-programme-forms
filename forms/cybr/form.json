@@ -62,11 +62,79 @@
           "title": "Graduation cluster",
           "elements": [
             {
-              "type": "text",
-              "name": "graduation_cluster",
+              "type": "dropdown",
+              "name": "intended_graduation_cluster",
               "title": "Intended graduation cluster",
               "isRequired": true,
-              "placeholder": "Graduation cluster"
+              "choices": [
+                {
+                  "value": "algorithms",
+                  "text": "Algorithms (ALGO)"
+                },
+                {
+                  "value": "formal_systems_analysis",
+                  "text": "Formal Systems Analysis (FSA)"
+                },
+                {
+                  "value": "security",
+                  "text": "Security (SEC)"
+                },
+                {
+                  "value": "software_engineering_technology",
+                  "text": "Software Engineering and Technology (SET)"
+                },
+                {
+                  "value": "iris",
+                  "text": "Interconnected Resource-aware Intelligent Systems (IRIS)"
+                },
+                {
+                  "value": "dai_databases",
+                  "text": "Data and Artificial Intelligence (DAI) - Databases"
+                },
+                {
+                  "value": "dai_other",
+                  "text": "Data and Artificial Intelligence (DAI) - Other groups"
+                },
+                {
+                  "value": "process_analytics",
+                  "text": "Process Analytics (PA)"
+                },
+                {
+                  "value": "visualization",
+                  "text": "Visualization (VIS)"
+                },
+                {
+                  "value": "discrete_mathematics",
+                  "text": "Discrete Mathematics (DM)"
+                }
+              ],
+              "showOtherItem": true,
+              "otherText": "Other / not listed",
+              "storeOthersAsComment": false
+            },
+            {
+              "type": "boolean",
+              "name": "matched_to_graduation_cluster",
+              "title": "Have you already been matched to your intended graduation cluster?",
+              "isRequired": true
+            },
+            {
+              "type": "text",
+              "name": "mentor_name",
+              "visibleIf": "{matched_to_graduation_cluster} = false",
+              "title": "Who is your mentor?",
+              "description": "The name of the person who advised you in the composition of your study program",
+              "requiredIf": "{matched_to_graduation_cluster} = false",
+              "clearIfInvisible": "onHidden"
+            },
+            {
+              "type": "text",
+              "name": "graduation_cluster_representative_name",
+              "visibleIf": "{matched_to_graduation_cluster} = true",
+              "title": "Who is the representative of your intended graduation cluster?",
+              "description": "The name of the graduation cluster representative who advised you in the composition of your study program",
+              "requiredIf": "{matched_to_graduation_cluster} = true",
+              "clearIfInvisible": "onHidden"
             }
           ]
         },

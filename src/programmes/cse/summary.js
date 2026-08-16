@@ -1,11 +1,12 @@
 // Renders CSE credit panels and printable programme summaries.
-import { CSE_FOCUS_AREAS, CSE_GRADUATION_GROUPS } from "./calculator.js";
+import { CSE_FOCUS_AREAS } from "./calculator.js";
 import { formatCredits, isTrue } from "../../shared/credit-utils.js";
 import {
   escapeHtml,
   escapeRegExp,
   formatCurrentDate,
   formatText,
+  graduationClusterDetails,
   renderDetailsTable,
   renderEctsPanel as renderSharedEctsPanel,
   renderReportTable as renderSharedReportTable,
@@ -69,11 +70,7 @@ export function renderCseSummary(report, data, choiceLookup, labels = {}) {
           ["Name", personalInfo.name],
           ["Student ID", personalInfo.id],
           ["Month and year of enrollment", personalInfo.enrollment],
-          ["Intended graduation group", graduationGroupLabel(
-            data.graduation_group,
-            choiceLookup,
-          )],
-          ["Representative research cluster", data.research_cluster],
+          ...graduationClusterDetails(data, choiceLookup),
           ["Change to previous program", yesNo(data.previous)],
         ])}
       </section>
@@ -290,12 +287,6 @@ function courseTitle(course) {
     : label;
 
   return title || "Course title not available";
-}
-
-function graduationGroupLabel(value, choiceLookup) {
-  const configured = choiceLookup?.getLabel?.("graduation_group", value);
-  if (configured && configured !== value) return configured;
-  return CSE_GRADUATION_GROUPS.find((group) => group.value === value)?.label ?? value ?? "";
 }
 
 function focusLabel(value, choiceLookup) {
