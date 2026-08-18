@@ -42,7 +42,7 @@ export function mountProgramForm(config) {
   survey.showQuestionNumbers = "off";
   survey.showCompleteButton = false;
   survey.showCompletePage = false;
-  survey.checkErrorsMode = "onValueChanged";
+  survey.checkErrorsMode = surveyJson.checkErrorsMode ?? "onValueChanged";
   survey.focusFirstQuestionAutomatic = false;
   survey.widthMode = "responsive";
 
@@ -56,6 +56,15 @@ export function mountProgramForm(config) {
       config.beforeCalculate?.(survey);
       const report = config.calculateReport(survey.data, choiceLookup);
       const summaryHtml = config.renderSummary(report, survey.data, choiceLookup, labels);
+
+      for (const [questionName, renderHtml] of Object.entries(
+        config.htmlQuestionRenderers ?? {},
+      )) {
+        const question = survey.getQuestionByName(questionName);
+        if (question) {
+          question.html = renderHtml(report, survey.data, choiceLookup, labels);
+        }
+      }
 
       const ectsPanel = document.getElementById("ectsPanel");
       if (ectsPanel) {

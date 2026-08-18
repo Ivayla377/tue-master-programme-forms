@@ -10,7 +10,11 @@ import {
   DSAI_SURVEY_SOURCE,
   createChoiceLookup,
 } from "./form-config.js";
-import { renderEctsPanel, renderSummary } from "./summary.js";
+import {
+  renderEctsPanel,
+  renderSummary,
+  renderTrajectoryClassification,
+} from "./summary.js";
 
 export const dsaiFormConfig = {
   surveySource: DSAI_SURVEY_SOURCE,
@@ -20,6 +24,9 @@ export const dsaiFormConfig = {
   createChoiceLookup,
   calculateReport: calculateEcts,
   beforeCalculate: removeBlockedSpecializationSelections,
+  htmlQuestionRenderers: {
+    trajectory_classification_html: renderTrajectoryClassification,
+  },
   renderEctsPanel,
   renderSummary,
 };

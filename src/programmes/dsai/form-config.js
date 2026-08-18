@@ -33,6 +33,7 @@ export const RULE_FIELD_NAMES = Object.freeze({
 export const QUESTION_NAMES = Object.freeze({
   core: "core",
   coreElective: "core_elective",
+  majorTrajectories: "selected_major_trajectories",
   seminar: "seminar",
   homologation: "homologation_courses",
   internshipMetadata: "internship_course_display",

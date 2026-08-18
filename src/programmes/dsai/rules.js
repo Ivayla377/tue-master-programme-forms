@@ -1,41 +1,83 @@
 // Builds DS&AI-specific trajectory and academic validation results.
 import { normalizeCourseCode } from "../../shared/course-catalog.js";
-import { sumCourses } from "../../shared/course-selection.js";
 import { formatCredits } from "../../shared/credit-utils.js";
 import {
   minimumCreditValidation,
   targetCreditValidation,
 } from "../../shared/validation-utils.js";
 
-export function chooseMajorTrajectories(
+export function classifyTrajectories(
   trajectories,
-  specializationTotal,
+  selectedMajorNames,
   rules,
 ) {
-  const candidates = trajectories.filter(
+  const selected = trajectories.filter(
+    (trajectory) => trajectory.courses.length > 0,
+  );
+  const majorCandidates = selected.filter(
     (trajectory) =>
       trajectory.credits >= rules.majorMinimumCredits,
   );
-  if (candidates.length < rules.majorMinimumCount) return candidates;
+  const requiredCount = rules.majorMinimumCount;
+  const candidateNames = new Set(
+    majorCandidates.map((trajectory) => trajectory.name),
+  );
+  const requestedNames = [...new Set(
+    selectedMajorNames.map((name) => String(name).trim().toLowerCase()),
+  )].filter(Boolean);
+  const validRequestedNames = requestedNames.filter(
+    (name) => candidateNames.has(name),
+  );
+  const choiceRequired = majorCandidates.length > requiredCount;
+  const choiceValid = choiceRequired
+    && requestedNames.length === requiredCount
+    && validRequestedNames.length === requiredCount;
 
-  let best = null;
-  for (
-    const group of combinations(candidates, rules.majorMinimumCount)
-  ) {
-    const majorCredits = sumCourses(group);
-    const minorCredits = specializationTotal - majorCredits;
-    const score = [
-      minorCredits >= rules.minorMinimumCredits ? 1 : 0,
-      minorCredits,
-      -majorCredits,
-    ];
-
-    if (!best || compareScores(score, best.score) > 0) {
-      best = { group, score };
-    }
+  let state;
+  let majorTrajectories;
+  if (majorCandidates.length < requiredCount) {
+    state = "incomplete";
+    majorTrajectories = majorCandidates;
+  } else if (!choiceRequired) {
+    state = "automatic";
+    majorTrajectories = majorCandidates;
+  } else if (choiceValid) {
+    state = "selected";
+    const chosenNames = new Set(validRequestedNames);
+    majorTrajectories = majorCandidates.filter(
+      (trajectory) => chosenNames.has(trajectory.name),
+    );
+  } else {
+    state = "choice_required";
+    majorTrajectories = [];
   }
 
-  return best?.group ?? candidates.slice(0, rules.majorMinimumCount);
+  const majorNames = new Set(
+    majorTrajectories.map((trajectory) => trajectory.name),
+  );
+  const classificationResolved = state === "automatic" || state === "selected";
+  const minorTrajectories = selected.filter((trajectory) => {
+    if (majorNames.has(trajectory.name)) return false;
+    return classificationResolved || !candidateNames.has(trajectory.name);
+  });
+  const trajectoryClassifications = selected.map((trajectory) => ({
+    ...trajectory,
+    role: majorNames.has(trajectory.name)
+      ? state === "incomplete" ? "major_candidate" : "major"
+      : candidateNames.has(trajectory.name) && !classificationResolved
+        ? "major_candidate"
+        : "minor",
+  }));
+
+  return {
+    state,
+    choiceRequired,
+    choiceValid,
+    majorCandidates,
+    majorTrajectories,
+    minorTrajectories,
+    trajectoryClassifications,
+  };
 }
 
 export function getBlockedSpecializationCodes(
@@ -92,35 +134,6 @@ function choiceIsBlockedByCore(choice, coreElectiveCode) {
   });
 }
 
-function combinations(items, size, start = 0, prefix = []) {
-  if (prefix.length === size) return [prefix];
-
-  const groups = [];
-  for (
-    let index = start;
-    index <= items.length - (size - prefix.length);
-    index += 1
-  ) {
-    groups.push(
-      ...combinations(
-        items,
-        size,
-        index + 1,
-        [...prefix, items[index]],
-      ),
-    );
-  }
-  return groups;
-}
-
-function compareScores(left, right) {
-  for (let index = 0; index < left.length; index += 1) {
-    if (left[index] > right[index]) return 1;
-    if (left[index] < right[index]) return -1;
-  }
-  return 0;
-}
-
 export function buildDsaiValidations(values) {
   const { rules } = values;
   const validations = [
@@ -139,22 +152,22 @@ export function buildDsaiValidations(values) {
     ),
     {
       label: "Major trajectories",
-      status:
-        values.majorTrajectories.length >= rules.majorMinimumCount
-          ? "success"
-          : "error",
-      detail:
-        `${values.majorTrajectories.length}/${rules.majorMinimumCount} `
-        + `trajectories have at least ${formatCredits(rules.majorMinimumCredits)}.`,
+      status: ["automatic", "selected"].includes(values.majorClassificationState)
+        ? "success"
+        : "error",
+      detail: majorTrajectoryValidationDetail(values),
     },
     {
       label: "Minor trajectory courses",
       status:
-        values.specializationMinor >= rules.minorMinimumCredits
+        values.majorClassificationState !== "choice_required"
+        && values.specializationMinor >= rules.minorMinimumCredits
           ? "success"
           : "error",
       detail:
-        `${formatCredits(values.specializationMinor)} selected outside the inferred majors.`,
+        values.majorClassificationState === "choice_required"
+          ? "Choose the two major trajectories before the minor courses can be classified."
+          : `${formatCredits(values.specializationMinor)} classified toward the minor requirement.`,
     },
     {
       label: "Project course",
@@ -223,4 +236,25 @@ export function buildDsaiValidations(values) {
   }
 
   return validations;
+}
+
+function majorTrajectoryValidationDetail(values) {
+  const { rules } = values;
+  const candidateCount = values.majorCandidates.length;
+  if (values.majorClassificationState === "automatic") {
+    return "Automatically classified as majors: "
+      + values.majorTrajectories.map((trajectory) => trajectory.label).join(", ")
+      + ".";
+  }
+  if (values.majorClassificationState === "selected") {
+    return "Selected majors: "
+      + values.majorTrajectories.map((trajectory) => trajectory.label).join(", ")
+      + ".";
+  }
+  if (values.majorClassificationState === "choice_required") {
+    return `${candidateCount} trajectories qualify. Select exactly `
+      + `${rules.majorMinimumCount} as majors.`;
+  }
+  return `${candidateCount}/${rules.majorMinimumCount} trajectories currently `
+    + `have at least ${formatCredits(rules.majorMinimumCredits)}.`;
 }

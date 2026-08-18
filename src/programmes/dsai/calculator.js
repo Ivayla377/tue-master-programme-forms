@@ -23,7 +23,7 @@ import {
 } from "./form-config.js";
 import {
   buildDsaiValidations,
-  chooseMajorTrajectories,
+  classifyTrajectories,
   getBlockedSpecializationByField,
 } from "./rules.js";
 
@@ -97,8 +97,10 @@ export function calculateEcts(
     specializationTotal: specialization.credits,
     specializationMajor: specialization.majorCredits,
     specializationMinor: specialization.minorCredits,
+    majorCandidates: specialization.majorCandidates,
     majorTrajectories: specialization.majorTrajectories,
     minorTrajectories: specialization.minorTrajectories,
+    majorClassificationState: specialization.majorClassificationState,
     seminarCredits: seminar.credits,
     freeRowsCredits: freeElectives.credits,
     freeSpaceTotal,
@@ -129,8 +131,11 @@ export function calculateEcts(
       coreCourses: core.courses,
       coreElectiveCourse: core.elective,
       trajectories: specialization.trajectories,
+      majorCandidates: specialization.majorCandidates,
       majorTrajectories: specialization.majorTrajectories,
       minorTrajectories: specialization.minorTrajectories,
+      trajectoryClassifications: specialization.trajectoryClassifications,
+      majorClassificationState: specialization.majorClassificationState,
       seminar: seminar.course,
       freeRows: freeElectives.rows,
       homologationCourses: homologation.courses,
@@ -197,28 +202,23 @@ function buildSpecialization({ data, rules, readCourse }) {
     "credits_specialization",
     sumCourses(courses),
   );
-  const majorTrajectories = chooseMajorTrajectories(
+  const classification = classifyTrajectories(
     trajectories,
-    credits,
+    selectedValues(data[QUESTION_NAMES.majorTrajectories]),
     rules,
-  );
-  const majorNames = new Set(
-    majorTrajectories.map((trajectory) => trajectory.name),
-  );
-  const minorTrajectories = trajectories.filter(
-    (trajectory) =>
-      !majorNames.has(trajectory.name)
-      && trajectory.courses.length > 0,
   );
 
   return {
     courses,
     trajectories,
-    majorTrajectories,
-    minorTrajectories,
+    majorCandidates: classification.majorCandidates,
+    majorTrajectories: classification.majorTrajectories,
+    minorTrajectories: classification.minorTrajectories,
+    trajectoryClassifications: classification.trajectoryClassifications,
+    majorClassificationState: classification.state,
     credits,
-    majorCredits: sumCourses(majorTrajectories),
-    minorCredits: sumCourses(minorTrajectories),
+    majorCredits: sumCourses(classification.majorTrajectories),
+    minorCredits: sumCourses(classification.minorTrajectories),
   };
 }
 

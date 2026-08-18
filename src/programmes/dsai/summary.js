@@ -27,6 +27,25 @@ const SUBTOTAL_ROWS = [
 export function renderEctsPanel(report) {
   return renderSharedEctsPanel(report, SUBTOTAL_ROWS);
 }
+
+export function renderTrajectoryClassification(report) {
+  const classifications = report.selected.trajectoryClassifications ?? [];
+
+  return `
+    <section class="trajectory-classification" aria-live="polite">
+      <h4>Selection overview</h4>
+      <p>Review how your selected trajectories are classified below.</p>
+      ${classifications.length > 0
+        ? `<div class="trajectory-classification__table">
+            <ul aria-label="Current trajectory status">
+              ${classifications.map(renderTrajectoryClassificationItem).join("")}
+            </ul>
+          </div>`
+        : '<p class="trajectory-classification__empty">Select specialization electives to see the overview.</p>'}
+    </section>
+  `;
+}
+
 export function renderSummary(report, data, choiceLookup, labels = {}) {
   const personalInfo = data.personal_info ?? {};
   const hasFreeElectives = report.selected.freeRows.length > 0;
@@ -72,9 +91,11 @@ export function renderSummary(report, data, choiceLookup, labels = {}) {
 
       <section class="summary-section">
         <h3>Specialization Electives</h3>
+        <p class="summary-inline-detail"><strong>Trajectory classification:</strong> ${escapeHtml(
+          printableClassificationMessage(report.selected.majorClassificationState),
+        )}</p>
         ${renderReportTable(["Type", "Trajectory / course", "Credits"], [
-          ...renderTrajectoryRows("Major", report.selected.majorTrajectories),
-          ...renderTrajectoryRows("Minor", report.selected.minorTrajectories),
+          ...renderClassifiedTrajectoryRows(report.selected),
         ])}
       </section>
 
@@ -215,6 +236,46 @@ function renderValidationItem(validation) {
 
 function formatCourseCredits(course) {
   return formatCredits(course?.credits ?? 0);
+}
+
+function renderClassifiedTrajectoryRows(selected) {
+  const classifications = selected.trajectoryClassifications;
+  if (!Array.isArray(classifications)) {
+    return [
+      ...renderTrajectoryRows("Major", selected.majorTrajectories),
+      ...renderTrajectoryRows("Minor", selected.minorTrajectories),
+    ];
+  }
+  const labels = {
+    major: "Major",
+    minor: "Minor",
+    major_candidate: "Major candidate",
+  };
+  return classifications.flatMap((trajectory) =>
+    renderTrajectoryRows(labels[trajectory.role] ?? "Unclassified", [trajectory]));
+}
+
+function printableClassificationMessage(state) {
+  if (state === "automatic") return "Majors detected automatically.";
+  if (state === "selected") return "Majors selected by the student.";
+  if (state === "choice_required") return "Major selection required.";
+  return "Major requirements incomplete.";
+}
+
+function renderTrajectoryClassificationItem(trajectory) {
+  const labels = {
+    major: "Major",
+    minor: "Minor",
+    major_candidate: "Eligible for major",
+  };
+  const role = labels[trajectory.role] ?? "Unclassified";
+  return `
+    <li>
+      <strong>${escapeHtml(trajectory.label)}</strong>
+      <span class="trajectory-classification__credits">${escapeHtml(formatCredits(trajectory.credits))}</span>
+      <span class="trajectory-classification__status">${escapeHtml(role)}</span>
+    </li>
+  `;
 }
 
 function displayCourseLabel(course) {

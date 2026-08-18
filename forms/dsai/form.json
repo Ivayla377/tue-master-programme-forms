@@ -6,6 +6,7 @@
     "loadingHtml":  "Loading form...",
     "showProgressBar":  "top",
     "progressBarType":  "pages",
+    "checkErrorsMode":  "onNextPage",
     "pages":  [
                   {
                       "name":  "frontmatter",
@@ -452,6 +453,67 @@
                                                                             ]
                                                             },
                                                             {
+                                                                "type":  "html",
+                                                                "name":  "trajectory_classification_html",
+                                                                "html":  "\u003csection class=\"trajectory-classification\" aria-live=\"polite\"\u003e\u003ch4\u003eSelection overview\u003c/h4\u003e\u003cp\u003eReview how your selected trajectories are classified below.\u003c/p\u003e\u003cp class=\"trajectory-classification__empty\"\u003eSelect specialization electives to see the overview.\u003c/p\u003e\u003c/section\u003e"
+                                                            },
+                                                            {
+                                                                "type":  "checkbox",
+                                                                "name":  "selected_major_trajectories",
+                                                                "visibleIf":  "{number_of_major_candidates} \u003e {rule_major_min_count}",
+                                                                "title":  "Which two qualifying trajectories do you want to use as your majors?",
+                                                                "description":  "More than two trajectories meet the {rule_major_min_credits} ECTS threshold. Select two as majors; the others count toward the minor.",
+                                                                "isRequired":  true,
+                                                                "requiredErrorText":  "Select exactly two major trajectories.",
+                                                                "clearIfInvisible":  "onHidden",
+                                                                "maxSelectedChoices":  2,
+                                                                "validators":  [
+                                                                                   {
+                                                                                       "type":  "answercount",
+                                                                                       "text":  "Select exactly two major trajectories.",
+                                                                                       "minCount":  2,
+                                                                                       "maxCount":  2
+                                                                                   }
+                                                                               ],
+                                                                "choices":  [
+                                                                                {
+                                                                                    "value":  "context",
+                                                                                    "text":  "DS\u0026AI in Context",
+                                                                                    "visibleIf":  "{credits_context_electives} \u003e= {rule_major_min_credits}"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "stat",
+                                                                                    "text":  "Statistics",
+                                                                                    "visibleIf":  "{credits_stat_electives} \u003e= {rule_major_min_credits}"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "db",
+                                                                                    "text":  "Data Engineering \u0026 Management",
+                                                                                    "visibleIf":  "{credits_db_electives} \u003e= {rule_major_min_credits}"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "aiml",
+                                                                                    "text":  "Artificial Intelligence \u0026 Machine Learning",
+                                                                                    "visibleIf":  "{credits_aiml_electives} \u003e= {rule_major_min_credits}"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "dmml",
+                                                                                    "text":  "Data Mining \u0026 Machine Learning",
+                                                                                    "visibleIf":  "{credits_dmml_electives} \u003e= {rule_major_min_credits}"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "pmva",
+                                                                                    "text":  "Process Mining \u0026 Visual Analytics",
+                                                                                    "visibleIf":  "{credits_pmva_electives} \u003e= {rule_major_min_credits}"
+                                                                                },
+                                                                                {
+                                                                                    "value":  "ada",
+                                                                                    "text":  "Algorithmic Data Analysis",
+                                                                                    "visibleIf":  "{credits_ada_electives} \u003e= {rule_major_min_credits}"
+                                                                                }
+                                                                            ]
+                                                            },
+                                                            {
                                                                 "type":  "checkbox",
                                                                 "name":  "project_course_metadata",
                                                                 "visible":  false,
@@ -854,6 +916,11 @@
                              {
                                  "name":  "credits_ada_electives",
                                  "expression":  "{number_of_ada_electives} * {rule_standard_course_credits}",
+                                 "includeIntoResult":  true
+                             },
+                             {
+                                 "name":  "number_of_major_candidates",
+                                 "expression":  "iif({credits_context_electives} \u003e= {rule_major_min_credits}, 1, 0) + iif({credits_stat_electives} \u003e= {rule_major_min_credits}, 1, 0) + iif({credits_db_electives} \u003e= {rule_major_min_credits}, 1, 0) + iif({credits_aiml_electives} \u003e= {rule_major_min_credits}, 1, 0) + iif({credits_dmml_electives} \u003e= {rule_major_min_credits}, 1, 0) + iif({credits_pmva_electives} \u003e= {rule_major_min_credits}, 1, 0) + iif({credits_ada_electives} \u003e= {rule_major_min_credits}, 1, 0)",
                                  "includeIntoResult":  true
                              },
                              {
