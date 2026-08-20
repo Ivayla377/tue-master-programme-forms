@@ -60,7 +60,7 @@ export function buildEsValidations(values) {
       "Total credits",
       values.total,
       rules.programmeTarget,
-      `The programme totals exactly ${formatCredits(rules.programmeTarget)}.`,
+      `The program totals exactly ${formatCredits(rules.programmeTarget)}.`,
     ),
     {
       label: "Course incompatibilities",
@@ -207,7 +207,7 @@ export function buildEsValidations(values) {
     validations.push({
       label: "Seminar scheduling",
       status: "warning",
-      detail: `${seminars.map((item) => item.displayCode).join(", ")} may not be taken earlier than quarter 4 of the programme.`,
+      detail: `${seminars.map((item) => item.displayCode).join(", ")} may not be taken earlier than quarter 4 of the program.`,
     });
   }
 
@@ -220,9 +220,9 @@ export function buildEsValidations(values) {
   }
 
   validations.push({
-    label: "Programme coherence review",
+    label: "Program coherence review",
     status: "warning",
-    detail: "Substantive course overlap, academic level and overall programme coherence require Examination Committee review and were not verified automatically.",
+    detail: "Substantive course overlap, academic level and overall program coherence require Examination Committee review and were not verified automatically.",
   });
 
   return validations;

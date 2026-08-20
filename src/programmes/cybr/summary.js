@@ -10,6 +10,7 @@ import {
   escapeHtml,
   escapeRegExp,
   formatCurrentDate,
+  formatMonthYear,
   graduationClusterDetails,
   hasText,
   numericCredits,
@@ -24,7 +25,7 @@ import {
 
 const PANEL_SUBTOTAL_ROWS = [
   ["mandatory", "Mandatory components"],
-  ["cybrElectives", "CYBR electives"],
+  ["cybrElectives", "Cybersecurity electives"],
   ["mcsElectives", "M&CS / internship"],
   ["homologation", "Homologation"],
   ["freeElectiveSpace", "Free-elective space"],
@@ -34,7 +35,7 @@ const PANEL_SUBTOTAL_ROWS = [
 const SUMMARY_SUBTOTAL_ROWS = [
   ["mandatoryFixed", "Fixed mandatory courses"],
   ["graduation", "Graduation courses"],
-  ["cybrElectives", "CYBR electives"],
+  ["cybrElectives", "Cybersecurity electives"],
   ["mcsCourseElectives", "IAM/CSE courses"],
   ["manualMcsElectives", "Other M&CS courses"],
   ["internship", "Internship"],
@@ -44,17 +45,17 @@ const SUMMARY_SUBTOTAL_ROWS = [
 ];
 
 const SIDEBAR_ALWAYS_VISIBLE = new Set([
-  "CYBR electives",
+  "Cybersecurity electives",
   "M&CS electives",
   "Free-elective space",
   "Total credits",
 ]);
 
 const SIDEBAR_EXCEPTION_LABELS = new Set([
-  "Graduation course set",
+  "Mandatory components",
   "Homologation credits",
   "Homologation courses",
-  "CYBR-elective eligibility",
+  "Cybersecurity elective eligibility",
   "M&CS-elective eligibility",
   "Other M&CS courses",
   "Manual course rows",
@@ -100,10 +101,6 @@ export function renderCybrSummary(report, data, choiceLookup, labels = {}) {
   const summaryTitle =
     labels.summaryTitle ?? "Form 1: CYBR Program of Examinations";
 
-  const mandatoryCourses = [
-    ...selected.mandatoryFixedCourses,
-    ...asArray(graduation.courses),
-  ];
   const mcsRows = [
     ...selected.mcsElectiveCourses.map((course) =>
       typedCourseRow("IAM/CSE course", course),
@@ -136,7 +133,7 @@ export function renderCybrSummary(report, data, choiceLookup, labels = {}) {
         ${renderDetailsTable([
           ["Name", personalInfo.name],
           ["Student ID", personalInfo.id],
-          ["Enrollment", personalInfo.enrollment],
+          ["Month and year of enrollment", formatMonthYear(personalInfo.enrollment)],
           ...graduationClusterDetails(safeData, choiceLookup),
           ["Updates a previously approved program", yesNo(safeData.previous)],
         ])}
@@ -144,20 +141,26 @@ export function renderCybrSummary(report, data, choiceLookup, labels = {}) {
 
       <section class="summary-section summary-section--allow-break">
         <h3>Mandatory components</h3>
-        ${renderDetailsTable([
-          ["Graduation course set", graduation.label],
-        ])}
         ${renderCourseTable(
-          mandatoryCourses,
+          selected.mandatoryFixedCourses,
           "No mandatory components were reported.",
         )}
       </section>
 
       <section class="summary-section summary-section--allow-break">
-        <h3>CYBR electives</h3>
+        <h3>Graduation courses</h3>
+        <p class="summary-footnote">The applicable course code depends on whether the graduation project is carried out through M&amp;CS or Electrical Engineering.</p>
+        ${renderCourseTable(
+          graduation.courses,
+          "No fixed graduation courses were reported.",
+        )}
+      </section>
+
+      <section class="summary-section summary-section--allow-break">
+        <h3>Cybersecurity electives</h3>
         ${renderCourseTable(
           selected.cybrElectiveCourses,
-          "No CYBR electives selected.",
+          "No Cybersecurity electives selected.",
         )}
       </section>
 
@@ -293,7 +296,7 @@ export function compactCybrSummaryValidations(validations) {
   return asArray(validations).filter((validation) => {
     if (validationStatus(validation) !== "success") return true;
     return [
-      "CYBR electives",
+      "Cybersecurity electives",
       "M&CS electives",
       "Free-elective space",
       "Total credits",

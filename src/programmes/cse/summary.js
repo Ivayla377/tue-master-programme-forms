@@ -5,6 +5,7 @@ import {
   escapeHtml,
   escapeRegExp,
   formatCurrentDate,
+  formatMonthYear,
   formatText,
   graduationClusterDetails,
   renderDetailsTable,
@@ -69,7 +70,7 @@ export function renderCseSummary(report, data, choiceLookup, labels = {}) {
         ${renderDetailsTable([
           ["Name", personalInfo.name],
           ["Student ID", personalInfo.id],
-          ["Month and year of enrollment", personalInfo.enrollment],
+          ["Month and year of enrollment", formatMonthYear(personalInfo.enrollment)],
           ...graduationClusterDetails(data, choiceLookup),
           ["Change to previous program", yesNo(data.previous)],
         ])}

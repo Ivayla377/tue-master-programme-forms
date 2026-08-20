@@ -141,11 +141,12 @@
         {
           "type": "panel",
           "name": "previous_panel",
+          "title": "Previous approval",
           "elements": [
             {
               "type": "boolean",
               "name": "previous",
-              "title": "Is this a change to a previously approved program?",
+              "title": "Is this a change of a previously approved study program?",
               "isRequired": true
             },
             {
@@ -954,7 +955,7 @@
             {
               "type": "text",
               "name": "programme_header_kicker",
-              "title": "Programme name shown above the form",
+              "title": "Program name shown above the form",
               "visible": false,
               "readOnly": true,
               "defaultValue": "TU/e MSc Computer Science and Engineering"

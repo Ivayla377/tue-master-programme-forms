@@ -21,7 +21,7 @@
               "name": "name",
               "title": "Name",
               "isRequired": true,
-              "placeholder": "Surname, given name(s)"
+              "placeholder": "Surname, Given name(s)"
             },
             {
               "name": "id",
@@ -141,11 +141,12 @@
         {
           "type": "panel",
           "name": "previous_panel",
+          "title": "Previous approval",
           "elements": [
             {
               "type": "boolean",
               "name": "previous",
-              "title": "Is this a change to a previously approved program?",
+              "title": "Is this a change of a previously approved study program?",
               "isRequired": true
             },
             {
@@ -208,78 +209,51 @@
                   "text": "2IMS00 Seminar Information Security Technology (5 ECTS)"
                 }
               ]
-            },
+            }
+          ]
+        },
+        {
+          "type": "panel",
+          "name": "graduation_courses_panel",
+          "title": "Graduation courses",
+          "description": "The applicable course code depends on whether the graduation project is carried out through M&CS or Electrical Engineering.",
+          "elements": [
             {
-              "type": "radiogroup",
-              "name": "graduation_course_set",
-              "title": "Graduation course set",
-              "description": "Choose the graduation department. The matching fixed graduation courses are shown below.",
-              "isRequired": true,
+              "type": "checkbox",
+              "name": "graduation_courses",
+              "title": "Graduation project",
+              "defaultValue": [
+                "2imc05 / 5t514",
+                "2imc00 / 5t746"
+              ],
+              "correctAnswer": [
+                "2imc05 / 5t514",
+                "2imc00 / 5t746"
+              ],
+              "readOnly": true,
               "choices": [
                 {
-                  "value": "graduation_computer_science_courses",
-                  "text": "Computer Science"
+                  "value": "2imc05 / 5t514",
+                  "text": "2IMC05 / 5T514 - Preparation Graduation Project (10 ECTS)"
                 },
                 {
-                  "value": "graduation_mathematics_courses",
-                  "text": "Mathematics"
+                  "value": "2imc00 / 5t746",
+                  "text": "2IMC00 / 5T746 - Graduation Project (30 ECTS)"
                 }
               ]
-            },
-            {
-              "type": "checkbox",
-              "name": "graduation_computer_science_courses",
-              "title": "Computer Science graduation courses",
-              "readOnly": true,
-              "defaultValue": [
-                "2imc05",
-                "2imc00"
-              ],
-              "choices": [
-                {
-                  "value": "2imc05",
-                  "text": "2IMC05 Preparation Graduation Project (10 ECTS)"
-                },
-                {
-                  "value": "2imc00",
-                  "text": "2IMC00 Master Project (30 ECTS)"
-                }
-              ],
-              "visibleIf": "{graduation_course_set} = 'graduation_computer_science_courses'"
-            },
-            {
-              "type": "checkbox",
-              "name": "graduation_mathematics_courses",
-              "title": "Mathematics graduation courses",
-              "readOnly": true,
-              "defaultValue": [
-                "2mmr05",
-                "2mmr30"
-              ],
-              "choices": [
-                {
-                  "value": "2mmr05",
-                  "text": "2MMR05 Preparation Graduation Project (10 ECTS)"
-                },
-                {
-                  "value": "2mmr30",
-                  "text": "2MMR30 Final Project (30 ECTS)"
-                }
-              ],
-              "visibleIf": "{graduation_course_set} = 'graduation_mathematics_courses'"
             }
           ]
         },
         {
           "type": "panel",
           "name": "cybr_electives_panel",
-          "title": "CYBR electives",
+          "title": "Cybersecurity electives",
           "elements": [
             {
               "type": "tagbox",
               "name": "cybr_electives",
-              "title": "Select your CYBR electives",
-              "description": "Select at least three CYBR electives.",
+              "title": "Select your Cybersecurity electives",
+              "description": "Select at least three Cybersecurity electives.",
               "isRequired": true,
               "choices": [
                 {
@@ -877,7 +851,7 @@
             {
               "type": "text",
               "name": "programme_header_kicker",
-              "title": "Programme name shown above the form",
+              "title": "Program name shown above the form",
               "visible": false,
               "readOnly": true,
               "defaultValue": "TU/e Master's track Cybersecurity"
@@ -950,7 +924,7 @@
     },
     {
       "name": "graduation_credits",
-      "expression": "iif({graduation_course_set} notempty, {rule_graduation_credits}, 0)",
+      "expression": "{rule_graduation_credits}",
       "includeIntoResult": true
     },
     {

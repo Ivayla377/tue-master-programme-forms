@@ -240,6 +240,19 @@ export function formatCurrentDate() {
   }).format(new Date());
 }
 
+export function formatMonthYear(value) {
+  const normalized = String(value ?? "").trim();
+  const match = normalized.match(/^(\d{4})-(0[1-9]|1[0-2])(?:-\d{2})?$/);
+  if (!match) return normalized;
+
+  const [, year, month] = match;
+  return new Intl.DateTimeFormat("en-GB", {
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(Date.UTC(Number(year), Number(month) - 1, 1)));
+}
+
 export function escapeRegExp(value) {
   return String(value).replace(/[.*+?^\${}()|[\]\\]/g, "\\$&");
 }

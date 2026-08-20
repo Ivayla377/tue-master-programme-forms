@@ -17,7 +17,7 @@ import {
 import { readNumericValue } from "../../shared/survey-rules.js";
 import { validationState } from "../../shared/validation-utils.js";
 import {
-  GRADUATION_PATHS,
+  GRADUATION_CODES,
   CYBR_COURSE_CATALOG,
   CYBR_ELECTIVE_CODES,
   CYBR_QUESTION_NAMES,
@@ -29,7 +29,7 @@ import {
 import { buildCybrValidations } from "./rules.js";
 
 export {
-  GRADUATION_PATHS,
+  GRADUATION_CODES,
   CYBR_COURSE_CATALOG,
   CYBR_ELECTIVE_CODES,
   MANDATORY_CODES,
@@ -62,7 +62,6 @@ export function calculateCybr(data = {}, choiceLookup = createCybrChoiceLookup()
   }
 
   const graduation = resolveGraduation(
-    data,
     choiceLookup,
     config,
     claimed,
@@ -72,7 +71,7 @@ export function calculateCybr(data = {}, choiceLookup = createCybrChoiceLookup()
     values: data.cybr_electives,
     allowedCodes: config.cybrElectiveCodes,
     questionName: CYBR_QUESTION_NAMES.cybrElectives,
-    component: "CYBR elective",
+    component: "Cybersecurity elective",
     choiceLookup,
     claimed,
     duplicates,
@@ -132,7 +131,7 @@ export function calculateCybr(data = {}, choiceLookup = createCybrChoiceLookup()
     duplicates.length === 0
     && cybrSelection.invalidCourses.length === 0
     && mcsSelection.invalidCourses.length === 0
-    && (!data.graduation_course_set || graduation.valid);
+    && graduation.valid;
   const subtotal = (name, fallback) =>
     useCalculatedValues ? readNumericValue(data, name, fallback) : fallback;
 
@@ -199,7 +198,7 @@ export function calculateCybr(data = {}, choiceLookup = createCybrChoiceLookup()
   ].filter((row) => !row.validCredits);
   const cybrElectiveCount = cybrSelection.courses.length;
   const flags = {
-    graduationCourseSetComplete:
+    mandatoryComponentsComplete:
       graduation.valid && mandatory >= rules.mandatoryCredits,
     cybrElectiveMinimumMet:
       cybrElectives >= rules.cybrElectiveMinimum
@@ -271,14 +270,10 @@ export function calculateCybr(data = {}, choiceLookup = createCybrChoiceLookup()
 
 export const calculateEcts = calculateCybr;
 
-function resolveGraduation(data, choiceLookup, config, claimed, duplicates) {
-  const value = String(data.graduation_course_set ?? "").trim();
-  const path = config.graduationPaths.find((item) => item.value === value);
-  const courses = path
-    ? path.codes.map((code) =>
-        courseFromValue(code, choiceLookup, path.questionName),
-      )
-    : [];
+function resolveGraduation(choiceLookup, config, claimed, duplicates) {
+  const courses = config.graduationCodes.map((code) =>
+    courseFromValue(code, choiceLookup, CYBR_QUESTION_NAMES.graduation)
+  );
   for (const course of courses) {
     course.counted = claimCourse(
       course,
@@ -288,9 +283,8 @@ function resolveGraduation(data, choiceLookup, config, claimed, duplicates) {
     );
   }
   return {
-    value,
-    label: path?.label ?? "",
-    valid: Boolean(path && courses.length > 0),
+    valid: courses.length > 0
+      && courses.length === config.graduationCodes.length,
     courses,
   };
 }

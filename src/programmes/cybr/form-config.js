@@ -14,7 +14,7 @@ export const CYBR_SURVEY_SOURCE = surveySource;
 
 export const CYBR_QUESTION_NAMES = Object.freeze({
   mandatory: "mandatory_components_display",
-  graduationPath: "graduation_course_set",
+  graduation: "graduation_courses",
   cybrElectives: "cybr_electives",
   mcsElectives: "mcs_course_electives",
   internship: "internship_course_display",
@@ -37,20 +37,9 @@ export function createCybrChoiceLookup(surveyJson = surveySource) {
 }
 
 export function buildCybrFormConfig(surveyJson, lookup) {
-  const graduationPaths = Object.freeze(
-    lookup.getChoices(CYBR_QUESTION_NAMES.graduationPath).map((choice) => {
-      const value = String(choice.value);
-      return Object.freeze({
-        value,
-        label: choice.text,
-        questionName: value,
-        codes: Object.freeze(defaultCourseCodes(lookup, value)),
-      });
-    }),
-  );
   const courseQuestionNames = [
     CYBR_QUESTION_NAMES.mandatory,
-    ...graduationPaths.map(({ questionName }) => questionName),
+    CYBR_QUESTION_NAMES.graduation,
     CYBR_QUESTION_NAMES.cybrElectives,
     CYBR_QUESTION_NAMES.mcsElectives,
     CYBR_QUESTION_NAMES.internship,
@@ -70,10 +59,10 @@ export function buildCybrFormConfig(surveyJson, lookup) {
       lookup,
       CYBR_QUESTION_NAMES.mandatory,
     )),
-    graduationPaths,
-    graduationPathValues: Object.freeze(
-      graduationPaths.map(({ value }) => value),
-    ),
+    graduationCodes: Object.freeze(defaultCourseCodes(
+      lookup,
+      CYBR_QUESTION_NAMES.graduation,
+    )),
     cybrElectiveCodes: Object.freeze(
       lookup.getCodes(CYBR_QUESTION_NAMES.cybrElectives),
     ),
@@ -116,6 +105,6 @@ const DEFAULT_CYBR_LOOKUP = createCybrChoiceLookup(surveySource);
 export const DEFAULT_CYBR_CONFIG = DEFAULT_CYBR_LOOKUP.cybrConfig;
 export const CYBR_COURSE_CATALOG = DEFAULT_CYBR_CONFIG.courseCatalog;
 export const MANDATORY_CODES = DEFAULT_CYBR_CONFIG.mandatoryCodes;
-export const GRADUATION_PATHS = DEFAULT_CYBR_CONFIG.graduationPathValues;
+export const GRADUATION_CODES = DEFAULT_CYBR_CONFIG.graduationCodes;
 export const CYBR_ELECTIVE_CODES = DEFAULT_CYBR_CONFIG.cybrElectiveCodes;
 export const MCS_ELECTIVE_CODES = DEFAULT_CYBR_CONFIG.mcsElectiveCodes;

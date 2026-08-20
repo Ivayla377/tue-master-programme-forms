@@ -10,6 +10,7 @@ import {
   escapeHtml,
   escapeRegExp,
   formatCurrentDate,
+  formatMonthYear,
   formatReportCell,
   formatText,
   graduationClusterDetails,
@@ -47,7 +48,7 @@ const SUMMARY_SUBTOTAL_ROWS = [
   ["internship", "Internship"],
   ["preparationProject", "Preparation graduation project"],
   ["graduationProject", "Graduation project"],
-  ["total", "Overall programme total"],
+  ["total", "Overall program total"],
 ];
 
 const SUBTOTAL_ALIASES = {
@@ -275,9 +276,9 @@ export function renderEsSummary(report, data, choiceLookup, labels = {}) {
         ${renderDetailsTable([
           ["Name", personalInfo.name],
           ["Student ID", personalInfo.id],
-          ["Enrollment", personalInfo.enrollment],
+          ["Month and year of enrollment", formatMonthYear(personalInfo.enrollment)],
           ...graduationClusterDetails(safeData, choiceLookup),
-          ["Updates a previously approved programme", yesNo(safeData.previous)],
+          ["Updates a previously approved program", yesNo(safeData.previous)],
         ])}
       </section>
 
@@ -374,7 +375,7 @@ export function renderEsSummary(report, data, choiceLookup, labels = {}) {
       <section class="summary-section">
         <h3>Changes, motivations and notes</h3>
         ${renderNotes([
-          ...(updateDetailsActive ? [["Changes to the previously approved programme", safeData.changes]] : []),
+          ...(updateDetailsActive ? [["Changes to the previously approved program", safeData.changes]] : []),
           ...(selfChosenDetailsActive ? [["Motivation for self-chosen homologation courses", safeData.homologation_motivation]] : []),
           ["Additional notes for the Examination Committee", safeData.committee_notes],
         ])}
@@ -433,7 +434,7 @@ export function compactEsSummaryValidations(validations, options = {}) {
       "Stream mandatory courses",
       "Manual elective rows",
       "Internship selection",
-      "Programme coherence review",
+      "Program coherence review",
     ].includes(label)) {
       continue;
     } else if (label === "Course incompatibilities"

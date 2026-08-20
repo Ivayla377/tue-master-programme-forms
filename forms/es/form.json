@@ -21,7 +21,7 @@
               "name": "name",
               "title": "Name",
               "isRequired": true,
-              "placeholder": "Surname, given name(s)"
+              "placeholder": "Surname, Given name(s)"
             },
             {
               "name": "id",
@@ -141,11 +141,12 @@
         {
           "type": "panel",
           "name": "previous_panel",
+          "title": "Previous approval",
           "elements": [
             {
               "type": "boolean",
               "name": "previous",
-              "title": "Is this a change to a previously approved program?",
+              "title": "Is this a change of a previously approved study program?",
               "isRequired": true
             },
             {
@@ -212,13 +213,12 @@
           "type": "panel",
           "name": "graduation_courses_panel",
           "title": "Graduation courses",
-          "description": "These two fixed graduation courses total 40 ECTS. The applicable course code depends on whether the graduation project is carried out through M&CS or Electrical Engineering.",
+          "description": "The applicable course code depends on whether the graduation project is carried out through M&CS or Electrical Engineering.",
           "elements": [
             {
               "type": "checkbox",
               "name": "graduation_courses",
               "title": "Graduation project",
-              "description": "These courses are fixed in the ES form.",
               "defaultValue": [
                 "2imc05 / 5t514",
                 "2imc00 / 5t746"
@@ -849,7 +849,7 @@
               "name": "internship_code",
               "visibleIf": "{internship} = true",
               "title": "Internship course code",
-              "description": "Use the registration code confirmed by your supervisor or programme.",
+              "description": "Use the registration code confirmed by your supervisor or program.",
               "isRequired": true,
               "requiredIf": "{internship} = true",
               "choices": [
@@ -912,7 +912,7 @@
             {
               "type": "text",
               "name": "programme_header_kicker",
-              "title": "Programme name shown above the form",
+              "title": "Program name shown above the form",
               "visible": false,
               "readOnly": true,
               "defaultValue": "TU/e MSc Embedded Systems"

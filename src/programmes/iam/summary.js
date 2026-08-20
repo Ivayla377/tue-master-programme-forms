@@ -10,6 +10,7 @@ import {
   escapeHtml,
   escapeRegExp,
   formatCurrentDate,
+  formatMonthYear,
   hasText,
   numericCredits,
   parseCreditValue,
@@ -42,7 +43,7 @@ const SUMMARY_SUBTOTAL_ROWS = [
   ["internship", "Internship"],
   ["homologation", "Homologation"],
   ["freeElectiveRows", "Other free electives"],
-  ["total", "Overall programme total"],
+  ["total", "Overall program total"],
 ];
 
 const SIDEBAR_ALWAYS_VISIBLE = new Set([
@@ -130,9 +131,9 @@ export function renderIamSummary(report, data, choiceLookup, labels = {}) {
         ${renderDetailsTable([
           ["Name", personalInfo.name],
           ["Student ID", personalInfo.id],
-          ["Enrollment", personalInfo.enrollment],
+          ["Month and year of enrollment", formatMonthYear(personalInfo.enrollment)],
           ["Mentor", safeData.mentor],
-          ["Updates a previously approved programme", yesNo(safeData.previous)],
+          ["Updates a previously approved program", yesNo(safeData.previous)],
         ])}
       </section>
 
@@ -219,7 +220,7 @@ export function renderIamSummary(report, data, choiceLookup, labels = {}) {
       <section class="summary-section">
         <h3>Changes, motivations and notes</h3>
         ${renderNotes([
-          ["Changes to the previously approved programme", booleanValue(safeData.previous) === true ? safeData.changes : undefined],
+          ["Changes to the previously approved program", booleanValue(safeData.previous) === true ? safeData.changes : undefined],
           [
             "Motivation for self-chosen homologation courses",
             booleanValue(safeData.self_chosen_homologation) === true

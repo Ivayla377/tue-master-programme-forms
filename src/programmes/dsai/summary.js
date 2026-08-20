@@ -3,6 +3,7 @@ import { formatCredits, isTrue } from "../../shared/credit-utils.js";
 import {
   escapeHtml,
   formatCurrentDate,
+  formatMonthYear,
   formatText,
   graduationClusterDetails,
   renderDetailsTable,
@@ -75,7 +76,7 @@ export function renderSummary(report, data, choiceLookup, labels = {}) {
         ${renderDetailsTable([
           ["Name", personalInfo.name],
           ["Student ID", personalInfo.id],
-          ["Enrollment date", personalInfo.enrollment],
+          ["Month and year of enrollment", formatMonthYear(personalInfo.enrollment)],
           ...graduationClusterDetails(data, choiceLookup),
           ["Change of approved program", yesNo(data.previous)],
         ])}

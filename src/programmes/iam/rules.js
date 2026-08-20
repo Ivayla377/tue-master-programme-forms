@@ -148,7 +148,7 @@ function totalValidation(total, programmeTarget) {
       label: "Total credits",
       status: "warning",
       detail:
-        `${formatCredits(total)} selected; ${formatCredits(programmeTarget)} is the normal programme size.`,
+        `${formatCredits(total)} selected; ${formatCredits(programmeTarget)} is the normal program size.`,
     };
   }
   return {

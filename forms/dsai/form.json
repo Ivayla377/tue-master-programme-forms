@@ -44,9 +44,16 @@
                                                          },
                                                          {
                                                              "name":  "enrollment",
+                                                             "title":  "Month and year of enrollment",
                                                              "isRequired":  true,
-                                                             "inputType":  "date",
-                                                             "title":  "Enrollment date"
+                                                             "inputType":  "month",
+                                                             "validators":  [
+                                                                                {
+                                                                                    "type":  "regex",
+                                                                                    "text":  "Enter a valid enrollment month from 2010 to 2035.",
+                                                                                    "regex":  "^(?:201[0-9]|202[0-9]|203[0-5])-(?:0[1-9]|1[0-2])$"
+                                                                                }
+                                                                            ]
                                                          }
                                                      ]
                                        },
@@ -135,6 +142,7 @@
                                        {
                                            "type":  "panel",
                                            "name":  "previous_panel",
+                                           "title":  "Previous approval",
                                            "elements":  [
                                                             {
                                                                 "type":  "boolean",
@@ -165,7 +173,7 @@
                                                                                  {
                                                                                      "type":  "text",
                                                                                      "name":  "programme_header_kicker",
-                                                                                     "title":  "Programme name shown above the form",
+                                                                                     "title":  "Program name shown above the form",
                                                                                      "visible":  false,
                                                                                      "readOnly":  true,
                                                                                      "defaultValue":  "TU/e MSc Data Science & Artificial Intelligence"
@@ -214,7 +222,6 @@
                                                                 "name":  "unassigned_homologation",
                                                                 "visibleIf":  "{homologation} = true",
                                                                 "title":  "Did you include unassigned homologation courses?",
-                                                                "defaultValue":  "false",
                                                                 "isRequired":  true
                                                             },
                                                             {
@@ -566,7 +573,6 @@
                                                                 "name":  "internship",
                                                                 "title":  "Do you do an internship as part of your study program?",
                                                                 "description":  "An internship is optional (course code 2IMC10, counts for 15 EC). Keep in mind, when you do an external internship (e.g. at a company), your graduation project needs to be executed internally (within TU/e), when you do an internal internship you cannot graduate with the same supervisor.",
-                                                                "defaultValue":  "false",
                                                                 "isRequired":  true
                                                             },
                                                             {

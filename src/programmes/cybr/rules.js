@@ -5,18 +5,18 @@ export { resolveCybrRules } from "./form-config.js";
 export function buildCybrValidations(values) {
   const validations = [
     {
-      label: "Graduation course set",
+      label: "Mandatory components",
       status:
-        values.flags.graduationCourseSetComplete
+        values.flags.mandatoryComponentsComplete
           ? "success"
           : "error",
       detail:
-        values.flags.graduationCourseSetComplete
-          ? `${values.graduation.label} selected.`
-          : "Select the graduation course set that applies to your project.",
+        values.flags.mandatoryComponentsComplete
+          ? `Fixed mandatory and graduation courses total ${formatCredits(values.rules.mandatoryCredits)}.`
+          : `Fixed mandatory and graduation courses must total ${formatCredits(values.rules.mandatoryCredits)}.`,
     },
     {
-      label: "CYBR electives",
+      label: "Cybersecurity electives",
       status:
         values.flags.cybrElectiveMinimumMet
           ? "success"
@@ -78,12 +78,12 @@ export function buildCybrValidations(values) {
 
   if (values.invalidCybrCourses.length > 0) {
     validations.push({
-      label: "CYBR-elective eligibility",
+      label: "Cybersecurity elective eligibility",
       status: "error",
       detail:
         `${values.invalidCybrCourses
           .map((course) => course.displayCode)
-          .join(", ")} excluded because they are not current CYBR electives.`,
+          .join(", ")} excluded because they are not current Cybersecurity electives.`,
     });
   }
 
