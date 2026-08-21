@@ -84,12 +84,6 @@ const STREAM_LABELS = Object.fromEntries(
   DEFAULT_ES_CONFIG.streams.map(({ value, label }) => [value, label]),
 );
 
-const INTERNSHIP_TYPE_LABELS = Object.fromEntries(
-  DEFAULT_ES_CONFIG.internshipTypeOptions.map(
-    ({ value, label }) => [value, label],
-  ),
-);
-
 export function renderEsEctsPanel(report) {
   const safeReport = normalizeReport(report);
   const validations = selectEsSidebarValidations(safeReport.validations);
@@ -214,15 +208,6 @@ export function renderEsSummary(report, data, choiceLookup, labels = {}) {
 
   const internship = asRecord(selected.internship);
   const internshipSelected = booleanValue(coalesce(internship.selected, safeData.internship));
-  const internshipCourse = internshipSelected === false
-    ? null
-    : internship.course ?? internshipCourseFromData(internship, safeData, config);
-  const internshipType = choiceLabel(
-    choiceLookup,
-    "internship_type",
-    coalesce(internship.type, safeData.internship_type),
-    INTERNSHIP_TYPE_LABELS,
-  );
   const internshipSupervisor = coalesce(internship.supervisor, safeData.internship_supervisor);
 
   const preparationCourses = courseArray(selected.preparationProject);
@@ -247,7 +232,7 @@ export function renderEsSummary(report, data, choiceLookup, labels = {}) {
   const externalCourseDisplayCodes =
     config.externalCourseDisplayCodes.join(", ");
   const externalDetailsEntered = hasAnyText([
-    safeData.external_course_university,
+    safeData.external_course_institutions,
     safeData.external_course_links,
     safeData.external_course_motivation,
     safeData.external_course_overlap,
@@ -328,16 +313,10 @@ export function renderEsSummary(report, data, choiceLookup, labels = {}) {
           ["Included", yesNo(coalesce(internship.selected, safeData.internship))],
           ...(internshipSelected === true
             ? [
-                ["Internship type", internshipType],
                 ["Supervisor (if known)", internshipSupervisor],
               ]
             : []),
         ])}
-        ${internshipCourse
-          ? renderCourseTable([internshipCourse], "", "summary-table--three-course")
-          : internshipSelected === true
-            ? '<p class="summary-footnote">No valid internship course code was reported.</p>'
-            : ""}
       </section>
 
       <section class="summary-section">
@@ -363,7 +342,7 @@ export function renderEsSummary(report, data, choiceLookup, labels = {}) {
             : []),
           ...(externalDetailsActive
             ? [
-                ["University / institution", safeData.external_course_university],
+                ["University / institution", safeData.external_course_institutions],
                 ["Course-description links", safeData.external_course_links],
                 ["Motivation for selection", safeData.external_course_motivation],
                 ["Explanation of non-overlap", safeData.external_course_overlap],
@@ -607,7 +586,7 @@ function reportRowsOrEnteredRows(reportRows, enteredRows) {
 
 function hasEnteredManualRow(row) {
   const item = asRecord(row);
-  return hasAnyText([item.code, item.title, item.name, item.credits]);
+  return hasAnyText([item.code, item.title, item.credits]);
 }
 
 function manualRowIsValid(row) {
@@ -638,7 +617,7 @@ function courseCode(course) {
 
 function courseTitle(course, fallback = "Course title not available") {
   const item = asRecord(course);
-  const directTitle = coalesceNonBlank(item.title, item.name);
+  const directTitle = coalesceNonBlank(item.title);
   if (directTitle !== undefined) return displayText(directTitle);
 
   const label = String(coalesce(item.label, ""))
@@ -657,21 +636,6 @@ function courseCredits(course) {
   if (value === undefined) return "Not reported";
   const parsed = parseCreditValue(value);
   return parsed === null ? displayText(value) : formatCredits(parsed);
-}
-
-function internshipCourseFromData(internship, data, config) {
-  const code = coalesceNonBlank(internship.code, data.internship_code);
-  if (code === undefined) return null;
-  const metadata = config.courseCatalog[normalizeChoiceValue(code)];
-  return {
-    code: metadata?.code ?? code,
-    title: metadata?.title ?? "Internship",
-    credits: coalesceNonBlank(
-      internship.credits,
-      metadata?.credits,
-      config.rules.internshipCredits,
-    ),
-  };
 }
 
 function fallbackProjectCourses(component, config) {

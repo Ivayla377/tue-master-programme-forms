@@ -122,12 +122,23 @@ export function renderSummary(report, data, choiceLookup, labels = {}) {
             ? renderCourseRows("Homologation course", report.selected.homologationCourses)
             : []),
         ], "None selected")}
-        ${hasFreeElectives
-          ? `<p class="summary-footnote">External free electives: ${yesNo(data.external_courses)}</p>`
-          : ""}
         ${hasFreeSpaceCourses && !hasHomologationCourses
           ? '<p class="summary-footnote">Homologation: None selected</p>'
           : ""}
+      </section>
+      <section class="summary-section">
+        <h3>External university courses</h3>
+        ${renderDetailsTable([
+          ["External university courses declared", yesNo(data.external_courses)],
+          ...(isTrue(data.external_courses)
+            ? [
+                ["External institution(s)", data.external_course_institutions],
+                ["Course-description links", data.external_course_links],
+                ["Motivation for selection", data.external_course_motivation],
+                ["Explanation of non-overlap", data.external_course_overlap],
+              ]
+            : []),
+        ])}
       </section>
       <section class="summary-section">
         <h3>Motivations and Notes</h3>
@@ -135,8 +146,8 @@ export function renderSummary(report, data, choiceLookup, labels = {}) {
           ["Changes to previous program", data.changes],
           ["Core course explanation", data.core_deselected],
           ["Unassigned homologation motivation", data.unassigned_motivation],
-          ["External free elective justification", data.external_justification],
           ["Seminar mismatch explanation", data.mismatch],
+          ["Additional notes for the examination committee", data.committee_notes],
         ])}
       </section>
 
@@ -204,7 +215,7 @@ function renderFreeRows(rows) {
   return rows.map((row) => ({
     cells: [
       "Free elective",
-      [row.code, row.name].filter(Boolean).join(" "),
+      [row.code, row.title].filter(Boolean).join(" "),
       row.validCredits ? formatCredits(row.credits) : "Not counted",
     ],
   }));

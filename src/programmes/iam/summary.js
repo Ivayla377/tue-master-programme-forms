@@ -39,7 +39,7 @@ const SUMMARY_SUBTOTAL_ROWS = [
   ["listedSpecialization", "Listed specialization electives"],
   ["mastermathSpecialization", "Mastermath / approved specialization"],
   ["coreAndSpecialization", "Core and specialization subtotal"],
-  ["officialFreeElectives", "Listed free electives"],
+  ["listedFreeElectives", "Listed free electives"],
   ["internship", "Internship"],
   ["homologation", "Homologation"],
   ["freeElectiveRows", "Other free electives"],
@@ -55,7 +55,7 @@ const SIDEBAR_ALWAYS_VISIBLE = new Set([
 const SIDEBAR_EXCEPTION_LABELS = new Set([
   "Core-elective eligibility",
   "Specialization-elective eligibility",
-  "Official free-elective eligibility",
+  "Listed free-elective eligibility",
   "Manual course rows",
   "Double counting",
   "Homologation credits",
@@ -98,7 +98,7 @@ export function renderIamSummary(report, data, choiceLookup, labels = {}) {
   ];
 
   const freeRows = [
-    ...selected.officialFreeElectiveCourses.map((course) => ({
+    ...selected.listedFreeElectiveCourses.map((course) => ({
       cells: ["Listed free elective", courseCode(course), courseTitle(course), courseCredits(course)],
     })),
     ...manualRows("Homologation", [
@@ -194,9 +194,10 @@ export function renderIamSummary(report, data, choiceLookup, labels = {}) {
           ["External university courses declared", yesNo(safeData.external_courses)],
           ...(externalActive
             ? [
-                ["University / institution", safeData.external_course_university],
+                ["External institution(s)", safeData.external_course_institutions],
                 ["Course-description links", safeData.external_course_links],
-                ["Motivation and non-overlap", safeData.external_course_motivation],
+                ["Motivation for selection", safeData.external_course_motivation],
+                ["Explanation of non-overlap", safeData.external_course_overlap],
               ]
             : []),
         ])}
@@ -290,7 +291,7 @@ function normalizeReport(report) {
       mastermathSpecialization: numericCredits(sourceSubtotals.mastermathSpecialization),
       specializationElectives: numericCredits(sourceSubtotals.specializationElectives),
       coreAndSpecialization: numericCredits(sourceSubtotals.coreAndSpecialization),
-      officialFreeElectives: numericCredits(sourceSubtotals.officialFreeElectives),
+      listedFreeElectives: numericCredits(sourceSubtotals.listedFreeElectives),
       internship: numericCredits(sourceSubtotals.internship),
       assignedHomologation: numericCredits(sourceSubtotals.assignedHomologation),
       selfChosenHomologation: numericCredits(sourceSubtotals.selfChosenHomologation),
@@ -305,7 +306,7 @@ function normalizeReport(report) {
       specializationElectiveCourses: asArray(sourceSelected.specializationElectiveCourses),
       invalidSpecializationCourses: asArray(sourceSelected.invalidSpecializationCourses),
       mastermathSpecializationRows: asArray(sourceSelected.mastermathSpecializationRows),
-      officialFreeElectiveCourses: asArray(sourceSelected.officialFreeElectiveCourses),
+      listedFreeElectiveCourses: asArray(sourceSelected.listedFreeElectiveCourses),
       internship: asRecord(sourceSelected.internship),
       homologationRows: asArray(sourceSelected.homologationRows),
       selfChosenHomologationRows: asArray(sourceSelected.selfChosenHomologationRows),
@@ -392,7 +393,7 @@ function courseCode(course) {
 
 function courseTitle(course, fallback = "Course title not available") {
   const item = asRecord(course);
-  const directTitle = coalesceNonBlank(item.title, item.name);
+  const directTitle = coalesceNonBlank(item.title);
   if (directTitle !== undefined) return displayText(directTitle);
 
   const label = String(coalesce(item.label, ""))

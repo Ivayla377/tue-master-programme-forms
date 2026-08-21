@@ -124,7 +124,7 @@
                                                                 "name":  "mentor_name",
                                                                 "visibleIf":  "{matched_to_graduation_cluster} = false",
                                                                 "title":  "Who is your mentor?",
-                                                                "description":  "The name of the person who advised you in the composition of your study program",
+                                                                "description":  "The name of the person who advised you in the composition of your study program.",
                                                                 "requiredIf":  "{matched_to_graduation_cluster} = false",
                                                                 "clearIfInvisible":  "onHidden"
                                                             },
@@ -133,7 +133,7 @@
                                                                 "name":  "graduation_cluster_representative_name",
                                                                 "visibleIf":  "{matched_to_graduation_cluster} = true",
                                                                 "title":  "Who is the representative of your intended graduation cluster?",
-                                                                "description":  "The name of the graduation cluster representative who advised you in the composition of your study program",
+                                                                "description":  "The name of the graduation cluster representative who advised you in the composition of your study program.",
                                                                 "requiredIf":  "{matched_to_graduation_cluster} = true",
                                                                 "clearIfInvisible":  "onHidden"
                                                             }
@@ -188,52 +188,6 @@
                       "name":  "program",
                       "title":  "Program courses",
                       "elements":  [
-                                       {
-                                           "type":  "panel",
-                                           "name":  "homologation_panel",
-                                           "title":  "Homologation courses",
-                                           "description":  "Homologation courses are bachelor courses assigned during the admission process to make up deficiencies in previous knowledge. Please check your admission letter to see if you have homologation courses. It is also possible to pick a maximum of three bachelor courses yourself to compensate deficiencies, if you think it is necessary. If you do that, a motivation for including the self-chosen homologation courses must be attached to this form.",
-                                           "elements":  [
-                                                            {
-                                                                "type":  "boolean",
-                                                                "name":  "homologation",
-                                                                "title":  "Were you assigned or did you otherwise include one or more homologation courses? ",
-                                                                "isRequired":  true
-                                                            },
-                                                            {
-                                                                "type":  "tagbox",
-                                                                "name":  "homologation_courses",
-                                                                "visibleIf":  "{homologation} = true",
-                                                                "title":  "Select all the homologation courses included in your program",
-                                                                "isRequired":  true,
-                                                                "requiredIf":  "{homologation} = true",
-                                                                "choices":  [
-                                                                                "Item 1",
-                                                                                "Item 2",
-                                                                                {
-                                                                                    "value":  "Item 3",
-                                                                                    "text":  "Visualization"
-                                                                                }
-                                                                            ],
-                                                                "maxSelectedChoices":  3
-                                                            },
-                                                            {
-                                                                "type":  "boolean",
-                                                                "name":  "unassigned_homologation",
-                                                                "visibleIf":  "{homologation} = true",
-                                                                "title":  "Did you include unassigned homologation courses?",
-                                                                "isRequired":  true
-                                                            },
-                                                            {
-                                                                "type":  "comment",
-                                                                "name":  "unassigned_motivation",
-                                                                "visibleIf":  "{homologation} = true and {unassigned_homologation} = true",
-                                                                "title":  "Motivation for including your unassigned homologation courses",
-                                                                "isRequired":  true,
-                                                                "requiredIf":  "{homologation} = true and {unassigned_homologation} = true"
-                                                            }
-                                                        ]
-                                       },
                                        {
                                            "type":  "panel",
                                            "name":  "core_panel",
@@ -562,17 +516,120 @@
                   },
                   {
                       "name":  "free_elective_space",
-                      "title":  "Free elective space",
+                        "title":  "Free-elective space",
+                        "description":  "The free-elective space is 15 ECTS. It can be filled with free electives, homologation courses or an internship.",
                       "elements":  [
                                        {
                                            "type":  "panel",
+                                           "name":  "free_electives_panel",
+                                           "title":  "Free elective courses",
+                                           "description":  "Add master-level courses that are not already counted elsewhere in your study program. These may be offered by your own program, another TU/e department or another university. Courses must not substantially overlap with each other or with other courses in your program.",
+                                           "elements":  [
+                                                            {
+                                                                "type":  "matrixdynamic",
+                                                                "name":  "free_electives",
+                                                                "title":  "Free elective courses",
+                                                                "titleLocation":  "hidden",
+                                                                "columns":  [
+                                                                                {
+                                                                                    "name":  "code",
+                                                                                    "title":  "Course code",
+                                                                                    "isRequired":  true,
+                                                                                    "isUnique":  true,
+                                                                                    "width":  "6em"
+                                                                                },
+                                                                                {
+                                                                                    "name":  "title",
+                                                                                    "title":  "Course title",
+                                                                                    "isRequired":  true
+                                                                                },
+                                                                                {
+                                                                                    "name":  "credits",
+                                                                                    "title":  "ECTS",
+                                                                                    "cellType":  "text",
+                                                                                    "isRequired":  true,
+                                                                                    "width":  "3em",
+                                                                                    "totalType":  "sum",
+                                                                                    "totalDisplayStyle":  "decimal",
+                                                                                    "inputType":  "number",
+                                                                                    "min":  0.1,
+                                                                                    "step":  0.1,
+                                                                                    "validators":  [
+                                                                                                       {
+                                                                                                           "type":  "numeric",
+                                                                                                           "text":  "Enter a positive ECTS value.",
+                                                                                                           "minValue":  0.1
+                                                                                                       }
+                                                                                                   ]
+                                                                                }
+                                                                            ],
+                                                                "cellType":  "text",
+                                                                "rowCount":  0,
+                                                                "confirmDelete":  true,
+                                                                "confirmDeleteText":  "Are you sure you want to delete this free elective?",
+                                                                "addRowText":  "Add free elective",
+                                                                "allowRowReorder":  true
+                                                            }
+                                                        ]
+                                       },
+                                       {
+                                           "type":  "panel",
+                                           "name":  "homologation_panel",
+                                           "title":  "Homologation courses",
+                                           "description":  "Homologation courses are bachelor courses used to make up deficiencies in previous knowledge. Please check your admission letter to see assigned homologation courses. It is also possible to pick a maximum of three bachelor courses yourself to compensate deficiencies, if you think it is necessary.",
+                                           "elements":  [
+                                                            {
+                                                                "type":  "boolean",
+                                                                "name":  "homologation",
+                                                                "title":  "Do you include homologation courses?",
+                                                                "isRequired":  true
+                                                            },
+                                                            {
+                                                                "type":  "tagbox",
+                                                                "name":  "homologation_courses",
+                                                                "visibleIf":  "{homologation} = true",
+                                                                "title":  "Included homologation courses",
+                                                                "description":  "Add up to three courses.",
+                                                                "isRequired":  true,
+                                                                "requiredIf":  "{homologation} = true",
+                                                                "choices":  [
+                                                                                "Item 1",
+                                                                                "Item 2",
+                                                                                {
+                                                                                    "value":  "Item 3",
+                                                                                    "text":  "Visualization"
+                                                                                }
+                                                                            ],
+                                                                "maxSelectedChoices":  3
+                                                            },
+                                                            {
+                                                                "type":  "boolean",
+                                                                "name":  "unassigned_homologation",
+                                                                "visibleIf":  "{homologation} = true",
+                                                                "title":  "Are any homologation courses self-chosen rather than assigned in the admission letter?",
+                                                                "isRequired":  true
+                                                            },
+                                                            {
+                                                                "type":  "comment",
+                                                                "name":  "unassigned_motivation",
+                                                                "visibleIf":  "{homologation} = true and {unassigned_homologation} = true",
+                                                                "title":  "Motivation self-chosen homologation courses",
+                                                                "description":  "Explain the deficiency addressed by each self-chosen bachelor course and for which master-level courses they are required.",
+                                                                "isRequired":  true,
+                                                                "requiredIf":  "{homologation} = true and {unassigned_homologation} = true"
+                                                            }
+                                                        ]
+                                       },
+                                       {
+                                           "type":  "panel",
                                            "name":  "internship_panel",
+                                           "title":  "Internship",
+                                           "description":  "An internship is optional and contributes 15 ECTS to the free-elective total. For an external internship, the graduation project must be executed internally. For an internal internship, you cannot graduate with the same supervisor.",
                                            "elements":  [
                                                             {
                                                                 "type":  "boolean",
                                                                 "name":  "internship",
-                                                                "title":  "Do you do an internship as part of your study program?",
-                                                                "description":  "An internship is optional (course code 2IMC10, counts for 15 EC). Keep in mind, when you do an external internship (e.g. at a company), your graduation project needs to be executed internally (within TU/e), when you do an internal internship you cannot graduate with the same supervisor.",
+                                                                "title":  "Do you include an internship (2IMC10)?",
                                                                 "isRequired":  true
                                                             },
                                                             {
@@ -594,77 +651,10 @@
                                                                 "type":  "text",
                                                                 "name":  "internship_supervisor",
                                                                 "visibleIf":  "{internship} = true",
-                                                                "title":  "Internship supervisor",
-                                                                "description":  "If known, please fill in the name of your TU/e internship supervisor",
-                                                                "placeholder":  "Surname, Given name"
-                                                            }
-                                                        ]
-                                       },
-                                       {
-                                           "type":  "panel",
-                                           "name":  "panel1",
-                                           "elements":  [
-                                                            {
-                                                                "type":  "matrixdynamic",
-                                                                "name":  "free",
-                                                                "title":  "Which free elective courses did you include?",
-                                                                "description":  "Free elective courses can be any master-level courses from the TU/e or another university. You can have up to three free elective courses in your study program. In case a free elective was followed at another university, please add its name between parentheses to the course name.\n\nNotes: Homologation courses are considered to fill up a free elective slot, so you need to subtract the number of  homologation courses from the number of courses you need to fill in here. Furthermore, if you do an internship as part of your study program, that completely fills up your free elective space and then you should not fill in anything here.",
-                                                                "columns":  [
-                                                                                {
-                                                                                    "name":  "code",
-                                                                                    "title":  "Course code",
-                                                                                    "isRequired":  true,
-                                                                                    "isUnique":  true,
-                                                                                    "width":  "6em"
-                                                                                },
-                                                                                {
-                                                                                    "name":  "name",
-                                                                                    "title":  "Course name",
-                                                                                    "isRequired":  true,
-                                                                                    "isUnique":  true
-                                                                                },
-                                                                                {
-                                                                                    "name":  "credits",
-                                                                                    "title":  "Credits",
-                                                                                    "cellType":  "text",
-                                                                                    "isRequired":  true,
-                                                                                    "width":  "3em",
-                                                                                    "totalType":  "sum",
-                                                                                    "totalDisplayStyle":  "decimal",
-                                                                                    "totalCurrency":  "EUR",
-                                                                                    "inputType":  "number",
-                                                                                    "min":  0
-                                                                                }
-                                                                            ],
-                                                                "choices":  [
-                                                                                1,
-                                                                                2,
-                                                                                3,
-                                                                                4,
-                                                                                5
-                                                                            ],
-                                                                "cellType":  "text",
-                                                                "rowCount":  0,
-                                                                "maxRowCount":  3,
-                                                                "confirmDelete":  true,
-                                                                "confirmDeleteText":  "Are you sure you want to delete this free elective?",
-                                                                "addRowText":  "Add free elective",
-                                                                "allowRowReorder":  true
-                                                            },
-                                                            {
-                                                                "type":  "boolean",
-                                                                "name":  "external_courses",
-                                                                "visibleIf":  "{free[0].name} notempty",
-                                                                "title":  "Are any of your free electives from another university?",
-                                                                "isRequired":  true
-                                                            },
-                                                            {
-                                                                "type":  "comment",
-                                                                "name":  "external_justification",
-                                                                "visibleIf":  "{external_courses} = true",
-                                                                "title":  "Justification of free electives from another university",
-                                                                "description":  "For every free elective that is from another university, please give links to course descriptions. Also including a motivation for your selection and an explanation of why these courses do not overlap with each other or with other courses in your study program",
-                                                                "isRequired":  true
+                                                                "title":  "Internship supervisor (if known)",
+                                                                "isRequired":  true,
+                                                                "requiredIf":  "{internship} = true",
+                                                                "placeholder":  "Supervisor name"
                                                             }
                                                         ]
                                        }
@@ -765,6 +755,73 @@
                                                                "text":  "2AMC00 Master Project (30 ECTS)"
                                                            }
                                                        ]
+                                       }
+                                   ]
+                  },
+                  {
+                      "name":  "additional_information",
+                      "title":  "Additional information",
+                      "elements":  [
+                                       {
+                                           "type":  "panel",
+                                           "name":  "external_courses_panel",
+                                           "title":  "External university courses",
+                                           "elements":  [
+                                                            {
+                                                                "type":  "boolean",
+                                                                "name":  "external_courses",
+                                                                "title":  "Does your proposed study program include any course offered by another university?",
+                                                                "isRequired":  true
+                                                            },
+                                                            {
+                                                                "type":  "text",
+                                                                "name":  "external_course_institutions",
+                                                                "visibleIf":  "{external_courses} = true",
+                                                                "title":  "External institution(s)",
+                                                                "isRequired":  true,
+                                                                "requiredIf":  "{external_courses} = true",
+                                                                "placeholder":  "Institution name(s)"
+                                                            },
+                                                            {
+                                                                "type":  "comment",
+                                                                "name":  "external_course_links",
+                                                                "visibleIf":  "{external_courses} = true",
+                                                                "title":  "Course-description link(s)",
+                                                                "description":  "Provide a course-catalogue or official description link for every external course.",
+                                                                "isRequired":  true,
+                                                                "requiredIf":  "{external_courses} = true",
+                                                                "validators":  [
+                                                                                   {
+                                                                                       "type":  "regex",
+                                                                                       "text":  "Provide at least one http(s) course-description link.",
+                                                                                       "regex":  "[\\s\\S]*https?:\\/\\/\\S+[\\s\\S]*"
+                                                                                   }
+                                                                               ]
+                                                            },
+                                                            {
+                                                                "type":  "comment",
+                                                                "name":  "external_course_motivation",
+                                                                "visibleIf":  "{external_courses} = true",
+                                                                "title":  "Motivation for selecting the external course(s)",
+                                                                "isRequired":  true,
+                                                                "requiredIf":  "{external_courses} = true"
+                                                            },
+                                                            {
+                                                                "type":  "comment",
+                                                                "name":  "external_course_overlap",
+                                                                "visibleIf":  "{external_courses} = true",
+                                                                "title":  "Explanation of non-overlap",
+                                                                "description":  "Explain why the external courses do not overlap with each other or with another course in the proposed program.",
+                                                                "isRequired":  true,
+                                                                "requiredIf":  "{external_courses} = true"
+                                                            }
+                                                        ]
+                                       },
+                                       {
+                                           "type":  "comment",
+                                           "name":  "committee_notes",
+                                           "title":  "Additional notes for the Examination Committee",
+                                           "description":  "Include any other information that should appear in the final report."
                                        }
                                    ]
                   },
@@ -946,7 +1003,7 @@
                              },
                              {
                                  "name":  "credits_free_rows",
-                                 "expression":  "sumInArray({free}, 'credits')",
+                                 "expression":  "sumInArray({free_electives}, 'credits', {code} notempty and {title} notempty and {credits} > 0)",
                                  "includeIntoResult":  true
                              },
                              {

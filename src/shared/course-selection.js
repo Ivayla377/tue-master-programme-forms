@@ -54,7 +54,7 @@ export function normalizeManualCourseRows(rows, options = {}) {
 
   const settings = {
     codeField: "code",
-    titleFields: ["title", "name"],
+    titleFields: ["title"],
     creditsField: "credits",
     linkedCourseFields: ["linkedCourse", "linked_course", "master_course"],
     requireCode: true,
@@ -209,7 +209,6 @@ function normalizeManualRow(sourceRow, index, settings) {
     displayCode: code || normalizedCode.toUpperCase(),
     normalizedCode,
     title,
-    name: title,
     credits: validCredits ? parsedCredits.value : 0,
     rawCredits,
     linkedCourse,

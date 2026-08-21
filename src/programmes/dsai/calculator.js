@@ -292,11 +292,7 @@ function buildGraduation({ data, choiceLookup, readCourse }) {
 }
 
 function buildFreeElectives({ data }) {
-  const rows = normalizeManualCourseRows(data.free, {
-    titleFields: ["name", "title"],
-    requireCode: false,
-    requireTitle: false,
-    allowZeroCredits: true,
+  const rows = normalizeManualCourseRows(data.free_electives, {
     invalidReason: "Incomplete row or invalid credit value.",
   });
   return {

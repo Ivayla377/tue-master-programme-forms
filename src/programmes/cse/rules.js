@@ -118,13 +118,18 @@ export function buildCseValidations(values) {
 
   if (
     isTrue(values.data.external_courses)
-    && !hasText(values.data.external_justification)
+    && ![
+      values.data.external_course_institutions,
+      values.data.external_course_links,
+      values.data.external_course_motivation,
+      values.data.external_course_overlap,
+    ].every(hasText)
   ) {
     validations.push({
-      label: "External-course links",
+      label: "External-course information",
       status: "error",
       detail:
-        "Add course-description links and the required motivation for external free electives.",
+        "Add the institution, course-description links, motivation and non-overlap explanation for external courses.",
     });
   }
 

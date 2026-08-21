@@ -9,11 +9,13 @@ import {
   claimListedCourses,
   claimManualCourseRows,
   normalizeManualCourseRows,
+  renameCourseClaim,
   roundCredits,
   sumCountedCourses,
   sumCountedRows,
   sumCourses,
 } from "../../shared/course-selection.js";
+import { allocateCoursesToTarget } from "../../shared/elective-allocation.js";
 import { readNumericValue } from "../../shared/survey-rules.js";
 import { validationState } from "../../shared/validation-utils.js";
 import {
@@ -76,6 +78,19 @@ export function calculateCybr(data = {}, choiceLookup = createCybrChoiceLookup()
     claimed,
     duplicates,
   });
+  const cybrElectiveAllocation = allocateCoursesToTarget(
+    cybrSelection.courses,
+    rules.cybrElectiveMinimum,
+  );
+  const requiredCybrElectiveCourses = cybrElectiveAllocation.required;
+  const excessCybrElectiveCourses = cybrElectiveAllocation.excess;
+  for (const course of excessCybrElectiveCourses) {
+    renameCourseClaim(
+      course,
+      "additional Cybersecurity elective in free-elective space",
+      claimed,
+    );
+  }
 
   const internship = resolveInternship(data, choiceLookup, config);
   if (internship.course) {
@@ -147,9 +162,17 @@ export function calculateCybr(data = {}, choiceLookup = createCybrChoiceLookup()
     "mandatory_credits",
     roundCredits(mandatoryFixed + graduationCredits),
   );
-  const cybrElectives = subtotal(
-    "cybr_elective_credits",
+  const cybrElectivesSelected = subtotal(
+    "cybr_elective_credits_selected",
     sumCourses(cybrSelection.courses),
+  );
+  const cybrElectivesRequired = subtotal(
+    "cybr_elective_credits_required",
+    cybrElectiveAllocation.requiredCredits,
+  );
+  const cybrElectivesExcess = subtotal(
+    "cybr_elective_credits_excess",
+    cybrElectiveAllocation.excessCredits,
   );
   const mcsCourseElectives = subtotal(
     "mcs_course_credits",
@@ -184,11 +207,15 @@ export function calculateCybr(data = {}, choiceLookup = createCybrChoiceLookup()
   );
   const freeElectiveSpace = subtotal(
     "free_elective_space_credits",
-    roundCredits(mcsElectives + otherFreeElectives),
+    roundCredits(
+      cybrElectivesExcess + mcsElectives + otherFreeElectives,
+    ),
   );
   const total = subtotal(
     "total_programme_credits",
-    roundCredits(mandatory + cybrElectives + freeElectiveSpace),
+    roundCredits(
+      mandatory + cybrElectivesRequired + freeElectiveSpace,
+    ),
   );
 
   const invalidManualRows = [
@@ -201,8 +228,7 @@ export function calculateCybr(data = {}, choiceLookup = createCybrChoiceLookup()
     mandatoryComponentsComplete:
       graduation.valid && mandatory >= rules.mandatoryCredits,
     cybrElectiveMinimumMet:
-      cybrElectives >= rules.cybrElectiveMinimum
-      && cybrElectiveCount >= rules.cybrElectiveMinimumCount,
+      cybrElectivesSelected >= rules.cybrElectiveMinimum,
     mcsMinimumMet: mcsElectives >= rules.mcsMinimum,
     freeElectiveSpaceMinimumMet:
       freeElectiveSpace >= rules.freeElectiveSpaceMinimum,
@@ -217,7 +243,7 @@ export function calculateCybr(data = {}, choiceLookup = createCybrChoiceLookup()
     flags,
     rules,
     graduation,
-    cybrElectives,
+    cybrElectives: cybrElectivesSelected,
     cybrElectiveCount,
     mcsElectives,
     freeElectiveSpace,
@@ -237,7 +263,10 @@ export function calculateCybr(data = {}, choiceLookup = createCybrChoiceLookup()
       mandatoryFixed,
       graduation: graduationCredits,
       mandatory,
-      cybrElectives,
+      cybrElectives: cybrElectivesRequired,
+      cybrElectivesSelected,
+      cybrElectivesRequired,
+      cybrElectivesExcess,
       mcsCourseElectives,
       manualMcsElectives,
       internship: internshipCredits,
@@ -253,6 +282,8 @@ export function calculateCybr(data = {}, choiceLookup = createCybrChoiceLookup()
       mandatoryFixedCourses,
       graduation,
       cybrElectiveCourses: cybrSelection.courses,
+      requiredCybrElectiveCourses,
+      excessCybrElectiveCourses,
       invalidCybrCourses: cybrSelection.invalidCourses,
       mcsElectiveCourses: mcsSelection.courses,
       invalidMcsCourses: mcsSelection.invalidCourses,

@@ -127,16 +127,11 @@ export function buildEsValidations(values) {
     },
     {
       label: "Internship selection",
-      status: values.internshipAnswered
-        && (!values.internship.selected || values.internship.valid)
-        ? "success"
-        : "error",
+      status: values.internshipAnswered ? "success" : "error",
       detail: !values.internshipAnswered
         ? "Indicate whether an internship is included."
         : values.internship.selected
-        ? values.internship.valid
-          ? `${values.internship.course.displayCode} contributes ${formatCredits(values.internship.course.credits)} inside free-elective space.`
-          : `Select exactly one current internship code (${values.internshipCodes.join(" or ")}) and an internal/external internship type.`
+        ? `The internship contributes ${formatCredits(values.internship.credits)} inside free-elective space.`
         : "No internship selected.",
     },
     {
@@ -211,7 +206,7 @@ export function buildEsValidations(values) {
     });
   }
 
-  if (values.internship.selected && values.internship.valid) {
+  if (values.internship.selected) {
     validations.push({
       label: "Internship supervision constraint",
       status: "warning",

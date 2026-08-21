@@ -24,7 +24,6 @@ export const CYBR_RULE_FIELD_NAMES = Object.freeze({
   programmeTarget: "rule_programme_target",
   mandatoryCredits: "rule_mandatory_credits",
   cybrElectiveMinimum: "rule_cybr_elective_min_credits",
-  cybrElectiveMinimumCount: "rule_cybr_elective_min_count",
   mcsMinimum: "rule_mcs_min_credits",
   freeElectiveSpaceMinimum: "rule_free_elective_space_min_credits",
   homologationMaximum: "rule_homologation_max_credits",

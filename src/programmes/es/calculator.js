@@ -92,7 +92,7 @@ export function calculateEs(data = {}, choiceLookup = createEsChoiceLookup()) {
     )
     : [];
   const graduation = resolveGraduation(config, readCourse);
-  const internship = resolveInternship(data, config, readCourse);
+  const internship = resolveInternship(data, rules);
 
   const activeElectiveValues = streamDefinition
     ? selectedValues(data[streamDefinition.electiveQuestion])
@@ -182,7 +182,7 @@ export function calculateEs(data = {}, choiceLookup = createEsChoiceLookup()) {
   const internshipCredits = readNumericValue(
     data,
     "credits_internship",
-    internship.selected && internship.valid ? internship.course.credits : 0,
+    internship.selected && internship.valid ? internship.credits : 0,
   );
   const freeElectiveSpace = readNumericValue(
     data,
@@ -238,7 +238,6 @@ export function calculateEs(data = {}, choiceLookup = createEsChoiceLookup()) {
     ...streamElectiveCourses,
     ...freeElectiveRows.filter(({ validCredits }) => validCredits),
     ...homologationRows.filter(({ validCredits }) => validCredits),
-    internship.valid ? internship.course : null,
     graduation.preparationProject,
     graduation.graduationProject,
   ].map((item) => normalizeEsCode(item?.normalizedCode ?? item?.code)).filter(Boolean));
@@ -265,7 +264,7 @@ export function calculateEs(data = {}, choiceLookup = createEsChoiceLookup()) {
   const externalEvidenceRequired = externalSelected || externalCoursePresent;
   const externalDeclarationConsistent = !externalCoursePresent || externalSelected;
   const externalInformationComplete = !externalEvidenceRequired || (
-    hasText(data.external_course_university)
+    hasText(data.external_course_institutions)
     && containsHttpUrl(data.external_course_links)
     && hasText(data.external_course_motivation)
     && hasText(data.external_course_overlap)
@@ -340,7 +339,6 @@ export function calculateEs(data = {}, choiceLookup = createEsChoiceLookup()) {
     streamCount: config.streams.length,
     commonMandatoryCount: config.commonMandatoryCodes.length,
     seminarCodes: config.seminarCodes,
-    internshipCodes: config.internshipCodes,
     externalCourseCodes: config.externalCourseCodes,
     externalCourseDisplayCodes: config.externalCourseDisplayCodes,
   });
@@ -408,27 +406,16 @@ function resolveGraduation(config, readCourse) {
   };
 }
 
-function resolveInternship(data, config, readCourse) {
+function resolveInternship(data, rules) {
   const selected = booleanValue(data.internship) === true;
-  const values = selected ? selectedValues(data.internship_code) : [];
-  const type = String(data.internship_type ?? "").trim().toLowerCase();
-  const valid = !selected || (
-    values.length === 1
-    && config.internshipCodes.map(normalizeEsCode).includes(normalizeEsCode(values[0]))
-    && config.internshipTypes.has(type)
-  );
-  const course = selected && valid
-    ? readCourse("internship_code")(values[0])
-    : null;
   return {
     selected,
-    valid,
-    code: course?.code ?? "",
-    course,
-    credits: course?.credits ?? 0,
-    type,
+    valid: true,
+    code: "",
+    course: null,
+    credits: selected ? rules.internshipCredits : 0,
     supervisor: data.internship_supervisor ?? "",
-    invalidValues: valid ? [] : values,
+    invalidValues: [],
   };
 }
 

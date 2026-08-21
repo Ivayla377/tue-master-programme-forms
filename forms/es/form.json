@@ -123,7 +123,7 @@
               "name": "mentor_name",
               "visibleIf": "{matched_to_graduation_cluster} = false",
               "title": "Who is your mentor?",
-              "description": "The name of the person who advised you in the composition of your study program",
+              "description": "The name of the person who advised you in the composition of your study program.",
               "requiredIf": "{matched_to_graduation_cluster} = false",
               "clearIfInvisible": "onHidden"
             },
@@ -132,7 +132,7 @@
               "name": "graduation_cluster_representative_name",
               "visibleIf": "{matched_to_graduation_cluster} = true",
               "title": "Who is the representative of your intended graduation cluster?",
-              "description": "The name of the graduation cluster representative who advised you in the composition of your study program",
+              "description": "The name of the graduation cluster representative who advised you in the composition of your study program.",
               "requiredIf": "{matched_to_graduation_cluster} = true",
               "clearIfInvisible": "onHidden"
             }
@@ -673,7 +673,7 @@
           "type": "panel",
           "name": "free_electives_panel",
           "title": "Free elective courses",
-          "description": "In case a free elective was followed at another university, please add its name between parentheses to the course name.",
+          "description": "Add master-level courses that are not already counted elsewhere in your study program. These may be offered by your own program, another TU/e department or another university. Courses must not substantially overlap with each other or with other courses in your program.",
           "elements": [
             {
               "type": "html",
@@ -709,57 +709,24 @@
                   "isRequired": true,
                   "width": "6em",
                   "cellType": "text",
-                  "inputType": "text",
+                  "inputType": "number",
+                  "min": 0.1,
+                  "step": 0.1,
                   "totalType": "sum",
-                  "totalDisplayStyle": "decimal"
+                  "totalDisplayStyle": "decimal",
+                  "validators": [
+                    {
+                      "type": "numeric",
+                      "text": "Enter a positive ECTS value.",
+                      "minValue": 0.1
+                    }
+                  ]
                 }
               ],
               "rowCount": 0,
               "confirmDelete": true,
               "addRowText": "Add free elective",
               "confirmDeleteText": "Remove this free elective?"
-            },
-            {
-              "type": "boolean",
-              "name": "external_courses",
-              "title": "Does the proposed program include a course from another university?",
-              "description": "Answer Yes for every external-university course. Selecting 2IMNT1 requires a Yes answer and the supporting information below because it is offered by the University of Twente.",
-              "isRequired": true
-            },
-            {
-              "type": "text",
-              "name": "external_course_university",
-              "visibleIf": "{external_courses} = true or {stream_electives_systems_on_chip} contains '2imnt1'",
-              "title": "External university or universities",
-              "isRequired": true,
-              "requiredIf": "{external_courses} = true or {stream_electives_systems_on_chip} contains '2imnt1'",
-              "placeholder": "University name(s)"
-            },
-            {
-              "type": "comment",
-              "name": "external_course_links",
-              "visibleIf": "{external_courses} = true or {stream_electives_systems_on_chip} contains '2imnt1'",
-              "title": "Course-description link(s)",
-              "description": "Provide a course-catalogue or official description link for every external course.",
-              "isRequired": true,
-              "requiredIf": "{external_courses} = true or {stream_electives_systems_on_chip} contains '2imnt1'"
-            },
-            {
-              "type": "comment",
-              "name": "external_course_motivation",
-              "visibleIf": "{external_courses} = true or {stream_electives_systems_on_chip} contains '2imnt1'",
-              "title": "Motivation for selecting the external course(s)",
-              "isRequired": true,
-              "requiredIf": "{external_courses} = true or {stream_electives_systems_on_chip} contains '2imnt1'"
-            },
-            {
-              "type": "comment",
-              "name": "external_course_overlap",
-              "visibleIf": "{external_courses} = true or {stream_electives_systems_on_chip} contains '2imnt1'",
-              "title": "Explanation of non-overlap",
-              "description": "Explain why the external courses do not overlap with each other or with another course in the proposed program.",
-              "isRequired": true,
-              "requiredIf": "{external_courses} = true or {stream_electives_systems_on_chip} contains '2imnt1'"
             }
           ]
         },
@@ -767,13 +734,12 @@
           "type": "panel",
           "name": "homologation_panel",
           "title": "Homologation courses",
-          "description": "Homologation courses are bachelor courses assigned during the admission process to make up deficiencies in previous knowledge. They may be at most 15 ECTS in total.",
+          "description": "Homologation courses are bachelor courses used to make up deficiencies in previous knowledge. Please check your admission letter to see assigned homologation courses. It is also possible to pick a maximum of three bachelor courses yourself to compensate deficiencies, if you think it is necessary.",
           "elements": [
             {
               "type": "boolean",
               "name": "homologation",
               "title": "Do you include homologation courses?",
-              "description": "Please check your admission letter to see whether homologation courses are included.",
               "isRequired": true
             },
             {
@@ -781,7 +747,7 @@
               "name": "homologation_courses",
               "visibleIf": "{homologation} = true",
               "title": "Included homologation courses",
-              "description": "Add all homologation courses here, whether assigned in your admission letter or chosen by you.",
+              "description": "Add up to three courses.",
               "isRequired": true,
               "requiredIf": "{homologation} = true",
               "columns": [
@@ -825,8 +791,8 @@
               "type": "comment",
               "name": "homologation_motivation",
               "visibleIf": "{homologation} = true and {self_chosen_homologation} = true",
-              "title": "Motivation for self-chosen homologation courses",
-              "description": "Explain the deficiency addressed by each self-chosen bachelor course.",
+              "title": "Motivation self-chosen homologation courses",
+              "description": "Explain the deficiency addressed by each self-chosen bachelor course and for which master-level courses they are required.",
               "isRequired": true,
               "requiredIf": "{homologation} = true and {self_chosen_homologation} = true"
             }
@@ -836,22 +802,20 @@
           "type": "panel",
           "name": "internship_panel",
           "title": "Internship",
-          "description": "An internship is optional and contributes 15 ECTS inside the free-elective space.",
+          "description": "An internship is optional and contributes 15 ECTS to the free-elective total. For an external internship, the graduation project must be executed internally. For an internal internship, you cannot graduate with the same supervisor.",
           "elements": [
             {
               "type": "boolean",
               "name": "internship",
-              "title": "Do you include an internship?",
+              "title": "Do you include an internship (2IMC10 / 5L990)?",
               "isRequired": true
             },
             {
-              "type": "radiogroup",
-              "name": "internship_code",
-              "visibleIf": "{internship} = true",
-              "title": "Internship course code",
-              "description": "Use the registration code confirmed by your supervisor or program.",
-              "isRequired": true,
-              "requiredIf": "{internship} = true",
+              "type": "checkbox",
+              "name": "internship_course_display",
+              "title": "Internship course metadata",
+              "visible": false,
+              "readOnly": true,
               "choices": [
                 {
                   "value": "2imc10",
@@ -864,28 +828,12 @@
               ]
             },
             {
-              "type": "radiogroup",
-              "name": "internship_type",
-              "visibleIf": "{internship} = true",
-              "title": "Internship type",
-              "isRequired": true,
-              "requiredIf": "{internship} = true",
-              "choices": [
-                {
-                  "value": "internal",
-                  "text": "Internal internship (within TU/e)"
-                },
-                {
-                  "value": "external",
-                  "text": "External internship (for example, at a company)"
-                }
-              ]
-            },
-            {
               "type": "text",
               "name": "internship_supervisor",
               "visibleIf": "{internship} = true",
               "title": "Internship supervisor (if known)",
+              "isRequired": true,
+              "requiredIf": "{internship} = true",
               "placeholder": "Supervisor name"
             }
           ]
@@ -896,6 +844,61 @@
       "name": "additional_information",
       "title": "Additional information",
       "elements": [
+        {
+          "type": "panel",
+          "name": "external_courses_panel",
+          "title": "External university courses",
+          "elements": [
+            {
+              "type": "boolean",
+              "name": "external_courses",
+              "title": "Does your proposed study program include any course offered by another university?",
+              "isRequired": true
+            },
+            {
+              "type": "text",
+              "name": "external_course_institutions",
+              "visibleIf": "{external_courses} = true or {stream_electives_systems_on_chip} contains '2imnt1'",
+              "title": "External institution(s)",
+              "isRequired": true,
+              "requiredIf": "{external_courses} = true or {stream_electives_systems_on_chip} contains '2imnt1'",
+              "placeholder": "Institution name(s)"
+            },
+            {
+              "type": "comment",
+              "name": "external_course_links",
+              "visibleIf": "{external_courses} = true or {stream_electives_systems_on_chip} contains '2imnt1'",
+              "title": "Course-description link(s)",
+              "description": "Provide a course-catalogue or official description link for every external course.",
+              "isRequired": true,
+              "requiredIf": "{external_courses} = true or {stream_electives_systems_on_chip} contains '2imnt1'",
+              "validators": [
+                {
+                  "type": "regex",
+                  "text": "Provide at least one http(s) course-description link.",
+                  "regex": "[\\s\\S]*https?:\\/\\/\\S+[\\s\\S]*"
+                }
+              ]
+            },
+            {
+              "type": "comment",
+              "name": "external_course_motivation",
+              "visibleIf": "{external_courses} = true or {stream_electives_systems_on_chip} contains '2imnt1'",
+              "title": "Motivation for selecting the external course(s)",
+              "isRequired": true,
+              "requiredIf": "{external_courses} = true or {stream_electives_systems_on_chip} contains '2imnt1'"
+            },
+            {
+              "type": "comment",
+              "name": "external_course_overlap",
+              "visibleIf": "{external_courses} = true or {stream_electives_systems_on_chip} contains '2imnt1'",
+              "title": "Explanation of non-overlap",
+              "description": "Explain why the external courses do not overlap with each other or with another course in the proposed program.",
+              "isRequired": true,
+              "requiredIf": "{external_courses} = true or {stream_electives_systems_on_chip} contains '2imnt1'"
+            }
+          ]
+        },
         {
           "type": "panel",
           "name": "programme_metadata",
@@ -995,8 +998,8 @@
         {
           "type": "comment",
           "name": "committee_notes",
-          "title": "Additional notes for the examination committee",
-          "description": "Include any other information that should appear in the printable review."
+          "title": "Additional notes for the Examination Committee",
+          "description": "Include any other information that should appear in the final report."
         }
       ]
     },
@@ -1104,7 +1107,7 @@
     },
     {
       "name": "credits_internship",
-      "expression": "iif({internship} = true and {internship_code} notempty and {internship_type} notempty, {rule_internship_credits}, 0)",
+      "expression": "iif({internship} = true, {rule_internship_credits}, 0)",
       "includeIntoResult": true
     },
     {

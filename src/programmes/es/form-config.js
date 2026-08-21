@@ -19,8 +19,7 @@ export const ES_QUESTION_NAMES = Object.freeze({
   commonMandatory: "common_mandatory_display",
   stream: "stream",
   graduationCourses: "graduation_courses",
-  internshipCode: "internship_code",
-  internshipType: "internship_type",
+  internshipCourse: "internship_course_display",
   academicYear: "programme_academic_year",
   legacyStreamElectives: "legacy_stream_elective_metadata",
   seminarCourses: "seminar_course_metadata",
@@ -83,11 +82,6 @@ export function buildEsFormConfig(surveyJson, lookup) {
   const externalCourseDisplayCodes = Object.freeze(lookup.getCodes(
     ES_QUESTION_NAMES.externalCourses,
   ));
-  const internshipTypeOptions = Object.freeze(optionList(
-    lookup,
-    ES_QUESTION_NAMES.internshipType,
-  ));
-
   return Object.freeze({
     rules,
     academicYear: String(defaultQuestionValue(
@@ -101,11 +95,7 @@ export function buildEsFormConfig(surveyJson, lookup) {
       ES_QUESTION_NAMES.commonMandatory,
     )),
     internshipCodes: Object.freeze(lookup.getCodes(
-      ES_QUESTION_NAMES.internshipCode,
-    )),
-    internshipTypeOptions,
-    internshipTypes: new Set(internshipTypeOptions.map(
-      ({ value }) => value.trim().toLowerCase(),
+      ES_QUESTION_NAMES.internshipCourse,
     )),
     staleStreamElectiveCodes: Object.freeze(lookup.getCodes(
       ES_QUESTION_NAMES.legacyStreamElectives,

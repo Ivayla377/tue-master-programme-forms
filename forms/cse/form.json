@@ -123,7 +123,7 @@
               "name": "mentor_name",
               "visibleIf": "{matched_to_graduation_cluster} = false",
               "title": "Who is your mentor?",
-              "description": "The name of the person who advised you in the composition of your study program",
+              "description": "The name of the person who advised you in the composition of your study program.",
               "requiredIf": "{matched_to_graduation_cluster} = false",
               "clearIfInvisible": "onHidden"
             },
@@ -132,7 +132,7 @@
               "name": "graduation_cluster_representative_name",
               "visibleIf": "{matched_to_graduation_cluster} = true",
               "title": "Who is the representative of your intended graduation cluster?",
-              "description": "The name of the graduation cluster representative who advised you in the composition of your study program",
+              "description": "The name of the graduation cluster representative who advised you in the composition of your study program.",
               "requiredIf": "{matched_to_graduation_cluster} = true",
               "clearIfInvisible": "onHidden"
             }
@@ -667,7 +667,7 @@
             {
               "type": "boolean",
               "name": "internship",
-              "title": "Do you include 2IMC10 Internship in your program?",
+              "title": "Do you include an internship (2IMC10)?",
               "isRequired": true
             },
             {
@@ -691,6 +691,8 @@
               "name": "internship_supervisor",
               "visibleIf": "{internship} = true",
               "title": "Internship supervisor (if known)",
+              "isRequired": true,
+              "requiredIf": "{internship} = true",
               "placeholder": "Supervisor name"
             }
           ]
@@ -699,14 +701,14 @@
     },
     {
       "name": "free_space",
-      "title": "Free electives and homologation",
-      "description": "Free electives and homologation courses together must fill exactly 15 ECTS.",
+      "title": "Free-elective space",
+      "description": "The free-elective space is 15 ECTS. It can be filled with additional specialization electives, other free electives or homologation courses.",
       "elements": [
         {
           "type": "panel",
           "name": "free_electives_panel",
           "title": "Free elective courses",
-          "description": "In case a free elective was followed at another university, please add its name between parentheses to the course name.",
+          "description": "Add master-level courses that are not already counted elsewhere in your study program. These may be offered by your own program, another TU/e department or another university. Courses must not substantially overlap with each other or with other courses in your program.",
           "elements": [
         {
           "type": "html",
@@ -730,7 +732,7 @@
               "inputType": "text"
             },
             {
-              "name": "name",
+              "name": "title",
               "title": "Course title",
               "isRequired": true,
               "cellType": "text",
@@ -738,39 +740,29 @@
             },
             {
               "name": "credits",
-              "title": "Credits",
+              "title": "ECTS",
               "cellType": "text",
               "inputType": "number",
-              "min": 0,
+              "min": 0.1,
+              "step": 0.1,
               "totalType": "sum",
               "totalDisplayStyle": "decimal",
               "isRequired": true,
-              "width": "5em"
+              "width": "5em",
+              "validators": [
+                {
+                  "type": "numeric",
+                  "text": "Enter a positive ECTS value.",
+                  "minValue": 0.1
+                }
+              ]
             }
           ],
           "rowCount": 0,
-          "maxRowCount": 3,
           "confirmDelete": true,
           "addRowText": "Add free elective",
           "confirmDeleteText": "Remove this free elective?",
           "cellType": "text"
-        },
-        {
-          "type": "boolean",
-          "name": "external_courses",
-          "visibleIf": "{free_electives.length} > 0",
-          "title": "Are any free electives from another university?",
-          "isRequired": true,
-          "requiredIf": "{free_electives.length} > 0"
-        },
-        {
-          "type": "comment",
-          "name": "external_justification",
-          "visibleIf": "{external_courses} = true",
-          "title": "Links and justification for external free electives",
-          "description": "Provide links to course descriptions, your motivation, and an explanation of why the courses do not overlap with another course in this program.",
-          "isRequired": true,
-          "requiredIf": "{external_courses} = true"
         }
           ]
         },
@@ -778,7 +770,7 @@
           "type": "panel",
           "name": "homologation_panel",
           "title": "Homologation courses",
-          "description": "Homologation courses are bachelor courses used to make up deficiencies in previous knowledge. Check your admission letter to see assigned homologation courses. You may also include a maximum of three self-chosen homologation courses.",
+          "description": "Homologation courses are bachelor courses used to make up deficiencies in previous knowledge. Please check your admission letter to see assigned homologation courses. It is also possible to pick a maximum of three bachelor courses yourself to compensate deficiencies, if you think it is necessary.",
           "elements": [
             {
               "type": "boolean",
@@ -840,7 +832,8 @@
               "type": "comment",
               "name": "homologation_motivation",
               "visibleIf": "{homologation} = true and {self_chosen_homologation} = true",
-              "title": "Motivation for self-chosen homologation courses",
+              "title": "Motivation self-chosen homologation courses",
+              "description": "Explain the deficiency addressed by each self-chosen bachelor course and for which master-level courses they are required.",
               "isRequired": true,
               "requiredIf": "{homologation} = true and {self_chosen_homologation} = true"
             }
@@ -929,15 +922,70 @@
       ]
     },
     {
-      "name": "agreement",
-      "title": "Additional notes",
+      "name": "additional_information",
+      "title": "Additional information",
       "description": "Add information that should be visible to the examination committee on the review report.",
       "elements": [
         {
+          "type": "panel",
+          "name": "external_courses_panel",
+          "title": "External university courses",
+          "elements": [
+            {
+              "type": "boolean",
+              "name": "external_courses",
+              "title": "Does your proposed study program include any course offered by another university?",
+              "isRequired": true
+            },
+            {
+              "type": "text",
+              "name": "external_course_institutions",
+              "visibleIf": "{external_courses} = true",
+              "title": "External institution(s)",
+              "isRequired": true,
+              "requiredIf": "{external_courses} = true",
+              "placeholder": "Institution name(s)"
+            },
+            {
+              "type": "comment",
+              "name": "external_course_links",
+              "visibleIf": "{external_courses} = true",
+              "title": "Course-description link(s)",
+              "description": "Provide a course-catalogue or official description link for every external course.",
+              "isRequired": true,
+              "requiredIf": "{external_courses} = true",
+              "validators": [
+                {
+                  "type": "regex",
+                  "text": "Provide at least one http(s) course-description link.",
+                  "regex": "[\\s\\S]*https?:\\/\\/\\S+[\\s\\S]*"
+                }
+              ]
+            },
+            {
+              "type": "comment",
+              "name": "external_course_motivation",
+              "visibleIf": "{external_courses} = true",
+              "title": "Motivation for selecting the external course(s)",
+              "isRequired": true,
+              "requiredIf": "{external_courses} = true"
+            },
+            {
+              "type": "comment",
+              "name": "external_course_overlap",
+              "visibleIf": "{external_courses} = true",
+              "title": "Explanation of non-overlap",
+              "description": "Explain why the external courses do not overlap with each other or with another course in the proposed program.",
+              "isRequired": true,
+              "requiredIf": "{external_courses} = true"
+            }
+          ]
+        },
+        {
           "type": "comment",
           "name": "committee_notes",
-          "title": "Changes, course-description links, or additional motivation",
-          "description": "Use this field for changes to a previously approved program, links to courses at another university, or motivation that should be visible to the examination committee."
+          "title": "Additional notes for the Examination Committee",
+          "description": "Include any other information that should appear in the final report."
         },
         {
           "type": "panel",

@@ -25,7 +25,7 @@ import {
 
 const PANEL_SUBTOTAL_ROWS = [
   ["mandatory", "Mandatory components"],
-  ["cybrElectives", "Cybersecurity electives"],
+  ["cybrElectives", "Cybersecurity electives (required)"],
   ["mcsElectives", "M&CS / internship"],
   ["homologation", "Homologation"],
   ["freeElectiveSpace", "Free-elective space"],
@@ -35,7 +35,8 @@ const PANEL_SUBTOTAL_ROWS = [
 const SUMMARY_SUBTOTAL_ROWS = [
   ["mandatoryFixed", "Fixed mandatory courses"],
   ["graduation", "Graduation courses"],
-  ["cybrElectives", "Cybersecurity electives"],
+  ["cybrElectives", "Cybersecurity electives (required)"],
+  ["cybrElectivesExcess", "Additional Cybersecurity electives in free space"],
   ["mcsCourseElectives", "IAM/CSE courses"],
   ["manualMcsElectives", "Other M&CS courses"],
   ["internship", "Internship"],
@@ -159,8 +160,16 @@ export function renderCybrSummary(report, data, choiceLookup, labels = {}) {
       <section class="summary-section summary-section--allow-break">
         <h3>Cybersecurity electives</h3>
         ${renderCourseTable(
-          selected.cybrElectiveCourses,
+          selected.requiredCybrElectiveCourses,
           "No Cybersecurity electives selected.",
+        )}
+      </section>
+
+      <section class="summary-section summary-section--allow-break">
+        <h3>Additional Cybersecurity electives in free-elective space</h3>
+        ${renderCourseTable(
+          selected.excessCybrElectiveCourses,
+          "No additional Cybersecurity electives selected.",
         )}
       </section>
 
@@ -217,12 +226,10 @@ export function renderCybrSummary(report, data, choiceLookup, labels = {}) {
           ["External university courses declared", yesNo(safeData.external_courses)],
           ...(externalActive
             ? [
-                ["University / institution", safeData.external_course_university],
+                ["University / institution", safeData.external_course_institutions],
                 ["Course-description links", safeData.external_course_links],
-                [
-                  "Motivation and non-overlap",
-                  safeData.external_course_motivation,
-                ],
+                ["Motivation for selection", safeData.external_course_motivation],
+                ["Explanation of non-overlap", safeData.external_course_overlap],
               ]
             : []),
         ])}
@@ -316,9 +323,6 @@ function normalizeReport(report) {
       programmeTarget: numericCredits(sourceRules.programmeTarget),
       mandatoryCredits: numericCredits(sourceRules.mandatoryCredits),
       cybrElectiveMinimum: numericCredits(sourceRules.cybrElectiveMinimum),
-      cybrElectiveMinimumCount: numericCredits(
-        sourceRules.cybrElectiveMinimumCount,
-      ),
       mcsMinimum: numericCredits(sourceRules.mcsMinimum),
       freeElectiveSpaceMinimum: numericCredits(
         sourceRules.freeElectiveSpaceMinimum,
@@ -337,6 +341,12 @@ function normalizeReport(report) {
       mandatoryFixedCourses: asArray(sourceSelected.mandatoryFixedCourses),
       graduation: asRecord(sourceSelected.graduation),
       cybrElectiveCourses: asArray(sourceSelected.cybrElectiveCourses),
+      requiredCybrElectiveCourses: asArray(
+        sourceSelected.requiredCybrElectiveCourses,
+      ),
+      excessCybrElectiveCourses: asArray(
+        sourceSelected.excessCybrElectiveCourses,
+      ),
       invalidCybrCourses: asArray(sourceSelected.invalidCybrCourses),
       mcsElectiveCourses: asArray(sourceSelected.mcsElectiveCourses),
       invalidMcsCourses: asArray(sourceSelected.invalidMcsCourses),
@@ -451,7 +461,7 @@ function courseCode(course) {
 
 function courseTitle(course, fallback = "Course title not available") {
   const item = asRecord(course);
-  const directTitle = coalesceNonBlank(item.title, item.name);
+  const directTitle = coalesceNonBlank(item.title);
   if (directTitle !== undefined) return displayText(directTitle);
 
   const label = String(coalesce(item.label, ""))

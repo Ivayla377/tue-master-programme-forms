@@ -56,12 +56,12 @@ export function buildIamValidations(values) {
     });
   }
 
-  if (values.invalidOfficialFreeCourses.length > 0) {
+  if (values.invalidListedFreeCourses.length > 0) {
     validations.push({
-      label: "Official free-elective eligibility",
+      label: "Listed free-elective eligibility",
       status: "error",
       detail:
-        `${values.invalidOfficialFreeCourses.map((course) => course.displayCode).join(", ")} excluded because they are not current listed IAM free electives.`,
+        `${values.invalidListedFreeCourses.map((course) => course.displayCode).join(", ")} excluded because they are not current listed IAM free electives.`,
     });
   }
 

@@ -20,7 +20,7 @@ import {
   IAM_COURSE_CATALOG,
   IAM_QUESTION_NAMES,
   MANDATORY_CODES,
-  OFFICIAL_FREE_ELECTIVE_CODES,
+  LISTED_FREE_ELECTIVE_CODES,
   SPECIALIZATION_ELECTIVE_CODES,
   createIamChoiceLookup,
   resolveIamRules,
@@ -31,7 +31,7 @@ export {
   CORE_ELECTIVE_CODES,
   IAM_COURSE_CATALOG,
   MANDATORY_CODES,
-  OFFICIAL_FREE_ELECTIVE_CODES,
+  LISTED_FREE_ELECTIVE_CODES,
   SPECIALIZATION_ELECTIVE_CODES,
   createIamChoiceLookup,
 };
@@ -81,10 +81,10 @@ export function calculateIam(data = {}, choiceLookup = createIamChoiceLookup()) 
     claimed,
     duplicates,
   );
-  const officialFreeSelection = claimListedCourses({
-    values: data.official_free_electives,
-    allowedCodes: config.officialFreeElectiveCodes,
-    questionName: IAM_QUESTION_NAMES.officialFree,
+  const listedFreeSelection = claimListedCourses({
+    values: data.listed_free_electives,
+    allowedCodes: config.listedFreeElectiveCodes,
+    questionName: IAM_QUESTION_NAMES.listedFree,
     component: "free elective",
     choiceLookup,
     claimed,
@@ -137,7 +137,7 @@ export function calculateIam(data = {}, choiceLookup = createIamChoiceLookup()) 
     duplicates.length === 0
     && coreSelection.invalidCourses.length === 0
     && specializationSelection.invalidCourses.length === 0
-    && officialFreeSelection.invalidCourses.length === 0
+    && listedFreeSelection.invalidCourses.length === 0
     && selfChosenHomologationRows.length === 0;
   const subtotal = (name, fallback) =>
     useCalculatedValues ? readNumericValue(data, name, fallback) : fallback;
@@ -174,9 +174,9 @@ export function calculateIam(data = {}, choiceLookup = createIamChoiceLookup()) 
     "core_and_specialization_credits",
     roundCredits(coreElectives + specializationElectives),
   );
-  const officialFreeElectives = subtotal(
-    "official_free_elective_credits",
-    sumCourses(officialFreeSelection.courses),
+  const listedFreeElectives = subtotal(
+    "listed_free_elective_credits",
+    sumCourses(listedFreeSelection.courses),
   );
   const internshipCredits = subtotal(
     "internship_credits",
@@ -201,7 +201,7 @@ export function calculateIam(data = {}, choiceLookup = createIamChoiceLookup()) 
   const freeElectiveSpace = subtotal(
     "free_elective_space_credits",
     roundCredits(
-      officialFreeElectives
+      listedFreeElectives
       + internshipCredits
       + homologation
       + freeElectiveRowsCredits,
@@ -235,8 +235,8 @@ export function calculateIam(data = {}, choiceLookup = createIamChoiceLookup()) 
     hasInvalidCoreSelections: coreSelection.invalidCourses.length > 0,
     hasInvalidSpecializationSelections:
       specializationSelection.invalidCourses.length > 0,
-    hasInvalidOfficialFreeSelections:
-      officialFreeSelection.invalidCourses.length > 0,
+    hasInvalidListedFreeSelections:
+      listedFreeSelection.invalidCourses.length > 0,
     hasInvalidManualRows: invalidManualRows.length > 0,
     hasDuplicates: duplicates.length > 0,
     hasAssignedHomologation: homologationRowsPresent,
@@ -260,7 +260,7 @@ export function calculateIam(data = {}, choiceLookup = createIamChoiceLookup()) 
     invalidManualRows,
     invalidCoreCourses: coreSelection.invalidCourses,
     invalidSpecializationCourses: specializationSelection.invalidCourses,
-    invalidOfficialFreeCourses: officialFreeSelection.invalidCourses,
+    invalidListedFreeCourses: listedFreeSelection.invalidCourses,
     duplicates,
     internship,
     selfChosenHomologationActive,
@@ -278,7 +278,7 @@ export function calculateIam(data = {}, choiceLookup = createIamChoiceLookup()) 
       mastermathSpecialization,
       specializationElectives,
       coreAndSpecialization,
-      officialFreeElectives,
+      listedFreeElectives,
       internship: internshipCredits,
       assignedHomologation,
       selfChosenHomologation,
@@ -294,8 +294,8 @@ export function calculateIam(data = {}, choiceLookup = createIamChoiceLookup()) 
       specializationElectiveCourses: specializationSelection.courses,
       invalidSpecializationCourses: specializationSelection.invalidCourses,
       mastermathSpecializationRows: mastermathRows,
-      officialFreeElectiveCourses: officialFreeSelection.courses,
-      invalidOfficialFreeCourses: officialFreeSelection.invalidCourses,
+      listedFreeElectiveCourses: listedFreeSelection.courses,
+      invalidListedFreeCourses: listedFreeSelection.invalidCourses,
       internship,
       homologationRows,
       selfChosenHomologationRows,

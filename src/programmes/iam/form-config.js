@@ -16,7 +16,7 @@ export const IAM_QUESTION_NAMES = Object.freeze({
   mandatory: "mandatory_components_display",
   core: "core_electives",
   specialization: "specialization_electives",
-  officialFree: "official_free_electives",
+  listedFree: "listed_free_electives",
   internship: "internship_course_display",
 });
 
@@ -56,8 +56,8 @@ export function buildIamFormConfig(surveyJson, lookup) {
     specializationElectiveCodes: Object.freeze(
       lookup.getCodes(IAM_QUESTION_NAMES.specialization),
     ),
-    officialFreeElectiveCodes: Object.freeze(
-      lookup.getCodes(IAM_QUESTION_NAMES.officialFree),
+    listedFreeElectiveCodes: Object.freeze(
+      lookup.getCodes(IAM_QUESTION_NAMES.listedFree),
     ),
     internshipCodes: Object.freeze(defaultCourseCodes(
       lookup,
@@ -98,5 +98,5 @@ export const MANDATORY_CODES = DEFAULT_IAM_CONFIG.mandatoryCodes;
 export const CORE_ELECTIVE_CODES = DEFAULT_IAM_CONFIG.coreElectiveCodes;
 export const SPECIALIZATION_ELECTIVE_CODES =
   DEFAULT_IAM_CONFIG.specializationElectiveCodes;
-export const OFFICIAL_FREE_ELECTIVE_CODES =
-  DEFAULT_IAM_CONFIG.officialFreeElectiveCodes;
+export const LISTED_FREE_ELECTIVE_CODES =
+  DEFAULT_IAM_CONFIG.listedFreeElectiveCodes;

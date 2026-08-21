@@ -151,7 +151,7 @@ export function renderCseSummary(report, data, choiceLookup, labels = {}) {
             cells: [
               "Free elective",
               row.code,
-              row.name,
+              row.title,
               row.validCredits && row.counted !== false ? formatCredits(row.credits) : "Not counted",
             ],
           })),
@@ -159,18 +159,31 @@ export function renderCseSummary(report, data, choiceLookup, labels = {}) {
             cells: [
               "Homologation",
               row.code,
-              row.name,
+              row.title,
               row.validCredits && row.counted !== false ? formatCredits(row.credits) : "Not counted",
             ],
           })),
         ], "None selected")}
-        ${hasFreeElectives
-          ? `<p class="summary-footnote">External free electives: ${yesNo(data.external_courses)}</p>`
-          : ""}
         ${hasFreeSpaceCourses && !hasHomologationCourses
           ? '<p class="summary-footnote">Homologation: None selected</p>'
           : ""}
       </section>
+
+      <section class="summary-section">
+        <h3>External university courses</h3>
+        ${renderDetailsTable([
+          ["External university courses declared", yesNo(data.external_courses)],
+          ...(isTrue(data.external_courses)
+            ? [
+                ["External institution(s)", data.external_course_institutions],
+                ["Course-description links", data.external_course_links],
+                ["Motivation for selection", data.external_course_motivation],
+                ["Explanation of non-overlap", data.external_course_overlap],
+              ]
+            : []),
+        ])}
+      </section>
+
       <section class="summary-section">
         <h3>Seminar and graduation project</h3>
         ${renderReportTable(["Component", "Course code", "Course title", "Credits"], [
@@ -199,9 +212,8 @@ export function renderCseSummary(report, data, choiceLookup, labels = {}) {
         <h3>Notes for the examination committee</h3>
         ${renderNotes([
           ["Changes to previous program", data.changes],
-          ["External free-elective links and justification", data.external_justification],
           ["Self-chosen homologation motivation", data.homologation_motivation],
-          ["Additional committee notes", data.committee_notes],
+          ["Additional notes for the examination committee", data.committee_notes],
         ])}
       </section>
 
