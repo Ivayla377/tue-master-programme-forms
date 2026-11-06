@@ -12,7 +12,7 @@ No installation is needed to fill in a form. Download the program form, then ope
 - [Download the IAM form](https://github.com/Ivayla377/tue-master-programme-forms/releases/latest/download/iam.html)
 - [Download the CYBR form](https://github.com/Ivayla377/tue-master-programme-forms/releases/latest/download/cybr.html)
 
-*Latest release: 20 July 2026*
+*Latest release: 21 August 2026*
 
 The forms work offline after download.
 
