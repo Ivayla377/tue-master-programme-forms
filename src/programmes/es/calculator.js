@@ -378,6 +378,7 @@ export function calculateEs(data = {}, choiceLookup = createEsChoiceLookup()) {
       internship,
       preparationProject: graduation.preparationProject,
       graduationProject: graduation.graduationProject,
+      additionalGraduationCourses: graduation.additionalCourses,
       incompatibleCombinations,
     },
     flags,
@@ -399,6 +400,7 @@ function resolveGraduation(config, readCourse) {
   return {
     preparationProject,
     graduationProject,
+    additionalCourses: definition.additionalCodes.map(readCourse(definition.questionName)),
     preparationDetail:
       "The fixed preparation graduation project is missing from the ES form definition.",
     graduationDetail:

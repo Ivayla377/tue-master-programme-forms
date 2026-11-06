@@ -1,10 +1,10 @@
 // Provides shared credit formatting, summing, and boolean helpers.
 export const DEFAULT_CREDITS = 5;
 
-export function formatCredits(value) {
+export function formatCredits(value, unit = "ECTS") {
   const number = Number(value) || 0;
   const display = Number.isInteger(number) ? String(number) : number.toFixed(1);
-  return `${display} ECTS`;
+  return `${display} ${unit}`;
 }
 
 export function sumCredits(items) {

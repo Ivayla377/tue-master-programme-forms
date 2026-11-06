@@ -75,6 +75,7 @@ export function buildEsFormConfig(surveyJson, lookup) {
     ES_QUESTION_NAMES.graduationCourses,
   );
   const graduationCourses = Object.freeze({
+    additionalCodes: Object.freeze(graduationCodes.slice(2)),
     questionName: ES_QUESTION_NAMES.graduationCourses,
     preparationCode: graduationCodes[0] ?? "",
     graduationCode: graduationCodes[1] ?? "",

@@ -12,8 +12,8 @@ export function buildCybrValidations(values) {
           : "error",
       detail:
         values.flags.mandatoryComponentsComplete
-          ? `Fixed mandatory and graduation courses total ${formatCredits(values.rules.mandatoryCredits)}.`
-          : `Fixed mandatory and graduation courses must total ${formatCredits(values.rules.mandatoryCredits)}.`,
+          ? `Fixed mandatory and graduation courses total ${formatCredits(values.rules.mandatoryCredits, "credits")}.`
+          : `Fixed mandatory and graduation courses must total ${formatCredits(values.rules.mandatoryCredits, "credits")}.`,
     },
     {
       label: "Cybersecurity electives",
@@ -103,7 +103,7 @@ export function buildCybrValidations(values) {
       label: "Manual course rows",
       status: "error",
       detail:
-        "Complete the course code, title and positive ECTS value for every manually entered row.",
+        "Complete the course code, title and positive credit value for every manually entered row.",
     });
   }
 
@@ -145,13 +145,13 @@ function totalValidation(total, programmeTarget) {
       label: "Total credits",
       status: "warning",
       detail:
-        `${formatCredits(total)} selected; `
-        + `${formatCredits(programmeTarget)} is the normal program size.`,
+        `${formatCredits(total, "credits")} selected; `
+        + `${formatCredits(programmeTarget, "credits")} is the normal program size.`,
     };
   }
   return {
     label: "Total credits",
     status: "success",
-    detail: `${formatCredits(total)} selected.`,
+    detail: `${formatCredits(total, "credits")} selected.`,
   };
 }

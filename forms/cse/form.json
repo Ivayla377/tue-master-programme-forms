@@ -170,7 +170,7 @@
           "type": "panel",
           "name": "foundational_panel",
           "title": "Foundational courses",
-          "description": "Select exactly one course from each of the three focus areas. Each selected course contributes 5 ECTS.",
+          "description": "Select exactly one course from each of the three focus areas. Each selected course contributes 5 credits.",
           "elements": [
             {
               "type": "dropdown",
@@ -426,7 +426,7 @@
     {
       "name": "specialization",
       "title": "Specialization electives and internship",
-      "description": "Fill 30 ECTS of specialization electives using the four grouped selectors below. If an internship is included, it contributes 15 ECTS. If you wish to follow more specialization courses than required, you can select them here and they will count towards the free-elective space.",
+      "description": "Fill 30 credits of specialization electives using the four grouped selectors below. If an internship is included, it contributes 15 credits. If you wish to follow more specialization courses than required, you can select them here and they will count towards the free-elective space.",
       "elements": [
         {
           "type": "panel",
@@ -662,7 +662,7 @@
           "type": "panel",
           "name": "internship_panel",
           "title": "Internship",
-          "description": "An internship is optional and contributes 15 ECTS to the specialization-elective total. For an external internship, the graduation project must be executed internally. For an internal internship, you cannot graduate with the same supervisor.",
+          "description": "An internship is optional and contributes 15 credits to the specialization-elective total. For an external internship, the graduation project must be executed internally. For an internal internship, you cannot graduate with the same supervisor.",
           "elements": [
             {
               "type": "boolean",
@@ -702,7 +702,7 @@
     {
       "name": "free_space",
       "title": "Free-elective space",
-      "description": "The free-elective space is 15 ECTS. It can be filled with additional specialization electives, other free electives or homologation courses.",
+      "description": "The free-elective space is 15 credits. It can be filled with additional specialization electives, other free electives or homologation courses.",
       "elements": [
         {
           "type": "panel",
@@ -741,20 +741,23 @@
             {
               "name": "credits",
               "title": "ECTS",
-              "cellType": "text",
-              "inputType": "number",
-              "min": 0.1,
-              "step": 0.1,
+              "cellType": "dropdown",
               "totalType": "sum",
               "totalDisplayStyle": "decimal",
               "isRequired": true,
               "width": "5em",
-              "validators": [
-                {
-                  "type": "numeric",
-                  "text": "Enter a positive ECTS value.",
-                  "minValue": 0.1
-                }
+              "choices": [
+                2.5,
+                3,
+                4,
+                5,
+                6,
+                7.5,
+                8,
+                9,
+                10,
+                12,
+                15
               ]
             }
           ],
@@ -844,7 +847,7 @@
     {
       "name": "graduation",
       "title": "Seminar and graduation project",
-      "description": "Choose one 5 ECTS seminar. The preparation graduation project and master project are fixed parts of the program and together count for 40 ECTS.",
+      "description": "Choose one seminar worth 5 credits. The preparation graduation project and master project are fixed parts of the program and together count for 40 credits.",
       "elements": [
         {
           "type": "radiogroup",
@@ -901,11 +904,13 @@
           "description": "These courses are fixed in the CSE form.",
           "defaultValue": [
             "2imc05",
-            "2imc00"
+            "2imc00",
+            "2imr10"
           ],
           "correctAnswer": [
             "2imc05",
-            "2imc00"
+            "2imc00",
+            "2imr10"
           ],
           "readOnly": true,
           "choices": [
@@ -916,6 +921,10 @@
             {
               "value": "2imc00",
               "text": "2IMC00 Master Project (30 ECTS)"
+            },
+            {
+                "value": "2imr10",
+                "text": "2IMR10 Study & Career Orientation Program (SCOP/e) (0 ECTS)"
             }
           ]
         }

@@ -273,7 +273,7 @@ export function renderCybrSummary(report, data, choiceLookup, labels = {}) {
       </section>
 
       <section class="summary-section">
-        <h3>ECTS subtotals</h3>
+        <h3>Credits subtotals</h3>
         ${renderSubtotalsTable(safeReport)}
       </section>
 

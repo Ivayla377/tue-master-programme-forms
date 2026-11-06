@@ -12,7 +12,7 @@ export function renderEctsPanel(report, subtotalRows) {
     <section class="ects-card">
       <div class="ects-card__header">
         <div>
-          <p class="eyebrow">ECTS overview</p>
+          <p class="eyebrow">Credits overview</p>
           <h2>${escapeHtml(formatCredits(report.subtotals.total))}</h2>
         </div>
         <span class="status-pill status-pill--${state.status}">${state.label}</span>

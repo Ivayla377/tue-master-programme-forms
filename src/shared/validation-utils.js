@@ -14,7 +14,7 @@ export function targetCreditValidation(label, value, target, successDetail, warn
     return { label, status: "error", detail: `${formatCredits(value)} / ${formatCredits(target)}` };
   }
   if (warnWhenOver && value > target) {
-    return { label, status: "warning", detail: `${formatCredits(value)} selected; ${formatCredits(target)} is required.` };
+    return { label, status: "warning", detail: `${formatCredits(value, "credits")} selected; ${formatCredits(target, "credits")} is required.` };
   }
   if (!warnWhenOver && value !== target) {
     return { label, status: "error", detail: `${formatCredits(value)} / ${formatCredits(target)}` };
@@ -27,7 +27,7 @@ export function minimumCreditValidation(label, value, target, successDetail, war
     return { label, status: "error", detail: `${formatCredits(value)} / ${formatCredits(target)}` };
   }
   if (warnWhenOver && value > target) {
-    return { label, status: "warning", detail: `${formatCredits(value)} selected; ${formatCredits(target)} is required.` };
+    return { label, status: "warning", detail: `${formatCredits(value, "credits")} selected; ${formatCredits(target, "credits")} is required.` };
   }
   return { label, status: "success", detail: successDetail };
 }

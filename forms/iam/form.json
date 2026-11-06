@@ -155,7 +155,7 @@
     {
       "name": "specialization",
       "title": "Specialization electives",
-      "description": "Specialization electives together with core electives must add up to at least 55 ECTS.",
+      "description": "Specialization electives together with core electives must add up to at least 55 credits.",
       "elements": [
         {
           "type": "tagbox",
@@ -299,7 +299,7 @@
               "validators": [
                 {
                   "type": "numeric",
-                  "text": "Enter a positive ECTS value.",
+                  "text": "Enter a positive credit value.",
                   "minValue": 0.1
                 }
               ]
@@ -315,7 +315,7 @@
     {
       "name": "free_space",
       "title": "Free-elective space",
-      "description": "The free-elective space is normally 30 ECTS. Additional core or specialization electives reduce the amount needed here. It can be filled with listed free electives, other free electives, homologation courses or an internship.",
+      "description": "The free-elective space is normally 30 credits. Additional core or specialization electives reduce the amount needed here. It can be filled with listed free electives, other free electives, homologation courses or an internship.",
       "elements": [
         {
           "type": "panel",
@@ -372,18 +372,21 @@
                   "title": "ECTS",
                   "isRequired": true,
                   "width": "6em",
-                  "cellType": "text",
-                  "inputType": "number",
-                  "min": 0.1,
-                  "step": 0.1,
+                  "cellType": "dropdown",
                   "totalType": "sum",
                   "totalDisplayStyle": "decimal",
-                  "validators": [
-                    {
-                      "type": "numeric",
-                      "text": "Enter a positive ECTS value.",
-                      "minValue": 0.1
-                    }
+                  "choices": [
+                    2.5,
+                    3,
+                    4,
+                    5,
+                    6,
+                    7.5,
+                    8,
+                    9,
+                    10,
+                    12,
+                    15
                   ]
                 }
               ],
@@ -442,7 +445,7 @@
                   "validators": [
                     {
                       "type": "numeric",
-                      "text": "Enter a positive ECTS value.",
+                      "text": "Enter a positive credit value.",
                       "minValue": 0.1
                     }
                   ]
@@ -480,7 +483,7 @@
           "type": "panel",
           "name": "internship_panel",
           "title": "Internship",
-          "description": "An internship is optional and contributes 15 ECTS to the free-elective total. For an external internship, the graduation project must be executed internally. For an internal internship, you cannot graduate with the same supervisor.",
+          "description": "An internship is optional and contributes 15 credits to the free-elective total. For an external internship, the graduation project must be executed internally. For an internal internship, you cannot graduate with the same supervisor.",
           "elements": [
             {
               "type": "boolean",

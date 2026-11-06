@@ -12,7 +12,7 @@ export function buildIamValidations(values) {
           : "error",
       detail:
         values.flags.coreMinimumMet && values.flags.coreCountMet
-          ? `${values.coreCount} core electives selected (${formatCredits(values.coreElectives)}).`
+          ? `${values.coreCount} core electives selected (${formatCredits(values.coreElectives, "credits")}).`
           : `${formatCredits(values.coreElectives)} / at least ${formatCredits(values.rules.coreMinimum)}.`,
     },
     {
@@ -70,7 +70,7 @@ export function buildIamValidations(values) {
       label: "Manual course rows",
       status: "error",
       detail:
-        "Complete the course code, title and positive ECTS value for every manually entered row.",
+        "Complete the course code, title and positive credit value for every manually entered row.",
     });
   }
 
@@ -148,12 +148,12 @@ function totalValidation(total, programmeTarget) {
       label: "Total credits",
       status: "warning",
       detail:
-        `${formatCredits(total)} selected; ${formatCredits(programmeTarget)} is the normal program size.`,
+        `${formatCredits(total, "credits")} selected; ${formatCredits(programmeTarget, "credits")} is the normal program size.`,
     };
   }
   return {
     label: "Total credits",
     status: "success",
-    detail: `${formatCredits(total)} selected.`,
+    detail: `${formatCredits(total, "credits")} selected.`,
   };
 }

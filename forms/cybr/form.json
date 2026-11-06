@@ -224,11 +224,13 @@
               "title": "Graduation project",
               "defaultValue": [
                 "2imc05 / 5t514",
-                "2imc00 / 5t746"
+                "2imc00 / 5t746",
+                "2imr10"
               ],
               "correctAnswer": [
                 "2imc05 / 5t514",
-                "2imc00 / 5t746"
+                "2imc00 / 5t746",
+                "2imr10"
               ],
               "readOnly": true,
               "choices": [
@@ -239,6 +241,10 @@
                 {
                   "value": "2imc00 / 5t746",
                   "text": "2IMC00 / 5T746 - Graduation Project (30 ECTS)"
+                },
+                {
+                    "value": "2imr10",
+                    "text": "2IMR10 Study & Career Orientation Program (SCOP/e) (0 ECTS)"
                 }
               ]
             }
@@ -253,7 +259,7 @@
               "type": "tagbox",
               "name": "cybr_electives",
               "title": "Select your Cybersecurity electives",
-              "description": "Select at least 15 ECTS of Cybersecurity electives.",
+              "description": "Select at least 15 credits of Cybersecurity electives.",
               "isRequired": true,
               "choices": [
                 {
@@ -290,7 +296,7 @@
               "type": "html",
               "name": "cybr_elective_excess_notice",
               "visibleIf": "{cybr_elective_credits_excess} > 0",
-              "html": "<p class='elective-allocation-note'>The 15 ECTS Cybersecurity-elective requirement is filled. Additional selected courses count toward the free-elective space.</p>"
+              "html": "<p class='elective-allocation-note'>The Cybersecurity-elective requirement of 15 credits is filled. Additional selected courses count toward the free-elective space.</p>"
             }
           ]
         }
@@ -299,7 +305,7 @@
     {
       "name": "free_space",
       "title": "Free-elective space",
-      "description": "The free-elective space is 35 ECTS. It includes at least 20 ECTS of IAM or CSE courses and can also be filled with Cybersecurity electives above the required 15 ECTS, other free electives, homologation courses or an internship.",
+      "description": "The free-elective space is 35 credits. It includes at least 20 credits of IAM or CSE courses and can also be filled with Cybersecurity electives above the required 15 credits, other free electives, homologation courses or an internship.",
       "elements": [
         {
           "type": "panel",
@@ -610,7 +616,7 @@
                   "validators": [
                     {
                       "type": "numeric",
-                      "text": "Enter a positive ECTS value.",
+                      "text": "Enter a positive credit value.",
                       "minValue": 0.1
                     }
                   ]
@@ -625,7 +631,7 @@
               "requiredIf": "{other_mcs_courses} = true"
             }
           ],
-          "description": "Include at least 20 ECTS from IAM and CSE courses. An included 2IMC10 internship also counts toward this subtotal."
+          "description": "Include at least 20 credits from IAM and CSE courses. An included 2IMC10 internship also counts toward this subtotal."
         },
         {
           "type": "panel",
@@ -637,7 +643,7 @@
               "type": "html",
               "name": "cybr_elective_excess_free_electives_notice",
               "visibleIf": "{cybr_elective_credits_excess} > 0",
-              "html": "<p class='elective-allocation-note'><strong>Note:</strong> Additional Cybersecurity electives already contribute {cybr_elective_credits_excess} ECTS to this free-elective space.</p>"
+              "html": "<p class='elective-allocation-note'><strong>Note:</strong> Additional Cybersecurity electives already contribute {cybr_elective_credits_excess} credits to this free-elective space.</p>"
             },
             {
               "type": "matrixdynamic",
@@ -663,18 +669,21 @@
                   "title": "ECTS",
                   "isRequired": true,
                   "width": "6em",
-                  "cellType": "text",
-                  "inputType": "number",
-                  "min": 0.1,
-                  "step": 0.1,
+                  "cellType": "dropdown",
                   "totalType": "sum",
                   "totalDisplayStyle": "decimal",
-                  "validators": [
-                    {
-                      "type": "numeric",
-                      "text": "Enter a positive ECTS value.",
-                      "minValue": 0.1
-                    }
+                  "choices": [
+                    2.5,
+                    3,
+                    4,
+                    5,
+                    6,
+                    7.5,
+                    8,
+                    9,
+                    10,
+                    12,
+                    15
                   ]
                 }
               ],
@@ -733,7 +742,7 @@
                   "validators": [
                     {
                       "type": "numeric",
-                      "text": "Enter a positive ECTS value.",
+                      "text": "Enter a positive credit value.",
                       "minValue": 0.1
                     }
                   ]
@@ -771,7 +780,7 @@
           "type": "panel",
           "name": "internship_panel",
           "title": "Internship",
-          "description": "An internship is optional and contributes 15 ECTS to the free-elective total. For an external internship, the graduation project must be executed internally. For an internal internship, you cannot graduate with the same supervisor.",
+          "description": "An internship is optional and contributes 15 credits to the free-elective total. For an external internship, the graduation project must be executed internally. For an internal internship, you cannot graduate with the same supervisor.",
           "elements": [
             {
               "type": "boolean",

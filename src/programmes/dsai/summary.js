@@ -116,6 +116,12 @@ export function renderSummary(report, data, choiceLookup, labels = {}) {
 
       <section class="summary-section">
         <h3>Free Electives and Homologation</h3>
+        ${renderDetailsTable([
+          ["Homologation included", yesNo(data.homologation)],
+          ...(isTrue(data.homologation)
+            ? [["Self-chosen homologation included", yesNo(data.unassigned_homologation)]]
+            : []),
+        ])}
         ${renderReportTable(["Area", "Selection", "Value / credits"], [
           ...renderFreeRows(report.selected.freeRows),
           ...(hasHomologationCourses
@@ -145,14 +151,14 @@ export function renderSummary(report, data, choiceLookup, labels = {}) {
         ${renderNotes([
           ["Changes to previous program", data.changes],
           ["Core course explanation", data.core_deselected],
-          ["Unassigned homologation motivation", data.unassigned_motivation],
+          ["Self-chosen homologation motivation", data.unassigned_motivation],
           ["Seminar mismatch explanation", data.mismatch],
           ["Additional notes for the examination committee", data.committee_notes],
         ])}
       </section>
 
       <section class="summary-section">
-        <h3>ECTS Subtotals</h3>
+        <h3>Credits subtotals</h3>
         ${renderSubtotalsTable(report)}
       </section>
 

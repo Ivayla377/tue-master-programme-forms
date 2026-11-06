@@ -7,6 +7,7 @@
     "showProgressBar":  "top",
     "progressBarType":  "pages",
     "checkErrorsMode":  "onNextPage",
+    "clearInvisibleValues":  "onHidden",
     "pages":  [
                   {
                       "name":  "frontmatter",
@@ -192,7 +193,7 @@
                                            "type":  "panel",
                                            "name":  "core_panel",
                                            "title":  "Mandatory courses",
-                                           "description":  "The mandatory courses of the DS\u0026AI program consist of 5 core courses and a mandatory choice of one out of three core electives. (All these courses are 5 EC.)",
+                                           "description":  "The mandatory courses of the DS\u0026AI program consist of 5 core courses and a mandatory choice of one out of three core electives. (All these courses are 5 credits.)",
                                            "elements":  [
                                                             {
                                                                 "type":  "checkbox",
@@ -271,7 +272,7 @@
                                            "type":  "panel",
                                            "name":  "specialization_panel",
                                            "title":  "Specialization electives",
-                                           "description":  "As part of your program, you must choose at least six specialization electives. (All these courses are 5 EC.) These are grouped per trajectory. You must have two major trajectories from which you choose at least two courses and also choose two courses from one or more further trajectories (minors).",
+                                           "description":  "As part of your program, you must choose at least six specialization electives. (All these courses are 5 credits.) These are grouped per trajectory. You must have two major trajectories from which you choose at least two courses and also choose two courses from one or more further trajectories (minors).",
                                            "isRequired":  true,
                                            "elements":  [
                                                             {
@@ -423,7 +424,7 @@
                                                                 "name":  "selected_major_trajectories",
                                                                 "visibleIf":  "{number_of_major_candidates} \u003e {rule_major_min_count}",
                                                                 "title":  "Which two qualifying trajectories do you want to use as your majors?",
-                                                                "description":  "More than two trajectories meet the {rule_major_min_credits} ECTS threshold. Select two as majors; the others count toward the minor.",
+                                                                "description":  "More than two trajectories meet the threshold of {rule_major_min_credits} credits. Select two as majors; the others count toward the minor.",
                                                                 "isRequired":  true,
                                                                 "requiredErrorText":  "Select exactly two major trajectories.",
                                                                 "clearIfInvisible":  "onHidden",
@@ -517,7 +518,7 @@
                   {
                       "name":  "free_elective_space",
                         "title":  "Free-elective space",
-                        "description":  "The free-elective space is 15 ECTS. It can be filled with free electives, homologation courses or an internship.",
+                        "description":  "The free-elective space is 15 credits. It can be filled with free electives, homologation courses or an internship.",
                       "elements":  [
                                        {
                                            "type":  "panel",
@@ -546,21 +547,24 @@
                                                                                 {
                                                                                     "name":  "credits",
                                                                                     "title":  "ECTS",
-                                                                                    "cellType":  "text",
+                                                                                    "cellType":  "dropdown",
                                                                                     "isRequired":  true,
                                                                                     "width":  "3em",
                                                                                     "totalType":  "sum",
                                                                                     "totalDisplayStyle":  "decimal",
-                                                                                    "inputType":  "number",
-                                                                                    "min":  0.1,
-                                                                                    "step":  0.1,
-                                                                                    "validators":  [
-                                                                                                       {
-                                                                                                           "type":  "numeric",
-                                                                                                           "text":  "Enter a positive ECTS value.",
-                                                                                                           "minValue":  0.1
-                                                                                                       }
-                                                                                                   ]
+                                                                                    "choices":  [
+                                                                                                    2.5,
+                                                                                                    3,
+                                                                                                    4,
+                                                                                                    5,
+                                                                                                    6,
+                                                                                                    7.5,
+                                                                                                    8,
+                                                                                                    9,
+                                                                                                    10,
+                                                                                                    12,
+                                                                                                    15
+                                                                                                ]
                                                                                 }
                                                                             ],
                                                                 "cellType":  "text",
@@ -596,8 +600,8 @@
                                                                                 "Item 1",
                                                                                 "Item 2",
                                                                                 {
-                                                                                    "value":  "Item 3",
-                                                                                    "text":  "Visualization"
+                                                                                    "value":  "jbi100",
+                                                                                    "text":  "JBI100 Visualization"
                                                                                 }
                                                                             ],
                                                                 "maxSelectedChoices":  3
@@ -624,7 +628,7 @@
                                            "type":  "panel",
                                            "name":  "internship_panel",
                                            "title":  "Internship",
-                                           "description":  "An internship is optional and contributes 15 ECTS to the free-elective total. For an external internship, the graduation project must be executed internally. For an internal internship, you cannot graduate with the same supervisor.",
+                                           "description":  "An internship is optional and contributes 15 credits to the free-elective total. For an external internship, the graduation project must be executed internally. For an internal internship, you cannot graduate with the same supervisor.",
                                            "elements":  [
                                                             {
                                                                 "type":  "boolean",
@@ -672,7 +676,7 @@
                                                                 "type":  "radiogroup",
                                                                 "name":  "seminar",
                                                                 "title":  "What seminar is included in your study program?",
-                                                                "description":  "Choose the seminar that corresponds to your intended graduation cluster. Seminars are 5 ECTS courses.",
+                                                                "description":  "Choose the seminar that corresponds to your intended graduation cluster. Seminars are worth 5 credits.",
                                                                 "isRequired":  true,
                                                                 "choices":  [
                                                                                 {
@@ -738,11 +742,13 @@
                                            "description":  "The following study components will in any case be part of your study program.",
                                            "defaultValue":  [
                                                                 "2amc05",
-                                                                "2amc00"
+                                                                "2amc00",
+                                                                "2imr10"
                                                             ],
                                            "correctAnswer":  [
                                                                  "2amc05",
-                                                                 "2amc00"
+                                                                 "2amc00",
+                                                                 "2imr10"
                                                              ],
                                            "readOnly":  true,
                                            "choices":  [
@@ -753,6 +759,10 @@
                                                            {
                                                                "value":  "2amc00",
                                                                "text":  "2AMC00 Master Project (30 ECTS)"
+                                                           },
+                                                           {
+                                                               "value":  "2imr10",
+                                                               "text":  "2IMR10 Study \u0026 Career Orientation Program (SCOP/e) (0 ECTS)"
                                                            }
                                                        ]
                                        }

@@ -141,7 +141,7 @@ export function buildDsaiValidations(values) {
       "Core and core electives",
       values.coreTotal,
       rules.coreCredits,
-      `Core courses plus one core elective should total ${formatCredits(rules.coreCredits)}.`,
+      `Core courses plus one core elective should total ${formatCredits(rules.coreCredits, "credits")}.`,
     ),
     minimumCreditValidation(
       "Specialization total",
@@ -167,7 +167,7 @@ export function buildDsaiValidations(values) {
       detail:
         values.majorClassificationState === "choice_required"
           ? "Choose the two major trajectories before the minor courses can be classified."
-          : `${formatCredits(values.specializationMinor)} classified toward the minor requirement.`,
+          : `${formatCredits(values.specializationMinor, "credits")} classified toward the minor requirement.`,
     },
     {
       label: "Project course",
@@ -203,7 +203,7 @@ export function buildDsaiValidations(values) {
       "Graduation project",
       values.graduationCredits,
       rules.graduationCredits,
-      `Graduation Preparation and Master Project total ${formatCredits(rules.graduationCredits)}.`,
+      `Graduation Preparation and Master Project total ${formatCredits(rules.graduationCredits, "credits")}.`,
     ),
     {
       label: "Total credits",
@@ -222,7 +222,7 @@ export function buildDsaiValidations(values) {
       label: "Free elective credits",
       status: "warning",
       detail:
-        "One or more free elective rows has an empty or invalid credit value and is counted as 0 ECTS.",
+        "One or more free elective rows has an empty or invalid credit value and is counted as 0 credits.",
     });
   }
 
@@ -231,7 +231,7 @@ export function buildDsaiValidations(values) {
       label: "Internship and free elective rows",
       status: "warning",
       detail:
-        `The internship already contributes ${formatCredits(values.internshipCredits)} to the free elective space.`,
+        `The internship already contributes ${formatCredits(values.internshipCredits, "credits")} to the free elective space.`,
     });
   }
 
@@ -256,5 +256,5 @@ function majorTrajectoryValidationDetail(values) {
       + `${rules.majorMinimumCount} as majors.`;
   }
   return `${candidateCount}/${rules.majorMinimumCount} trajectories currently `
-    + `have at least ${formatCredits(rules.majorMinimumCredits)}.`;
+    + `have at least ${formatCredits(rules.majorMinimumCredits, "credits")}.`;
 }

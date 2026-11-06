@@ -41,28 +41,28 @@ export function buildCseValidations(values) {
       values.specializationCredits,
       rules.specializationTarget,
       values.specializationExcessCredits > 0
-        ? `${formatCredits(rules.specializationTarget)} allocated to specialization. Additional specialization courses (${formatCredits(values.specializationExcessCredits)}) count towards the free-elective space.`
-        : `Specialization courses and the optional internship total exactly ${formatCredits(rules.specializationTarget)}.`,
+        ? `${formatCredits(rules.specializationTarget, "credits")} allocated to specialization. Additional specialization courses (${formatCredits(values.specializationExcessCredits, "credits")}) count towards the free-elective space.`
+        : `Specialization courses and the optional internship total exactly ${formatCredits(rules.specializationTarget, "credits")}.`,
     ),
     exactCreditValidation(
       "Free elective space",
       values.freeSpaceTotal,
       rules.freeElectiveSpaceTarget,
-      `Additional specialization courses, free electives and homologation courses together total ${formatCredits(rules.freeElectiveSpaceTarget)}.`,
+      `Additional specialization courses, free electives and homologation courses together total ${formatCredits(rules.freeElectiveSpaceTarget, "credits")}.`,
     ),
     {
       label: "Seminar",
       status: values.seminarCredits === rules.seminarCredits ? "success" : "error",
       detail:
         values.seminarCredits === rules.seminarCredits
-          ? `One ${formatCredits(rules.seminarCredits)} seminar selected.`
-          : `Select one ${formatCredits(rules.seminarCredits)} seminar.`,
+          ? `One seminar worth ${formatCredits(rules.seminarCredits, "credits")} selected.`
+          : `Select one seminar worth ${formatCredits(rules.seminarCredits, "credits")}.`,
     },
     exactCreditValidation(
       "Graduation project",
       values.graduationCredits,
       rules.graduationCredits,
-      `Preparation Graduation Project and Master Project total ${formatCredits(rules.graduationCredits)}.`,
+      `Preparation Graduation Project and Master Project total ${formatCredits(rules.graduationCredits, "credits")}.`,
     ),
     {
       label: "Total credits",
@@ -79,7 +79,7 @@ export function buildCseValidations(values) {
       detail:
         `Duplicate course code(s): ${values.doubleCountedCourses
           .map(formatDuplicateLabel)
-          .join(", ")}. The later entry was excluded from the ECTS totals.`,
+          .join(", ")}. The later entry was excluded from the credit totals.`,
     });
   }
 
@@ -150,7 +150,7 @@ export function buildCseValidations(values) {
       label: "Internship",
       status: "success",
       detail:
-        `${values.internshipCourse?.displayCode ?? "Internship"} contributes ${formatCredits(values.internshipCourse?.credits ?? rules.internshipCredits)} to specialization electives.`,
+        `${values.internshipCourse?.displayCode ?? "Internship"} contributes ${formatCredits(values.internshipCourse?.credits ?? rules.internshipCredits, "credits")} to specialization electives.`,
     });
   }
 

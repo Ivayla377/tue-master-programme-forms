@@ -326,6 +326,7 @@ export function renderEsSummary(report, data, choiceLookup, labels = {}) {
           [
             ...preparationCourses.map((course) => ({ cells: ["Preparation graduation project", courseCode(course), courseTitle(course), courseCredits(course)] })),
             ...graduationCourses.map((course) => ({ cells: ["Graduation project", courseCode(course), courseTitle(course), courseCredits(course)] })),
+            ...selected.additionalGraduationCourses.map((course) => ({ cells: ["Mandatory graduation course", courseCode(course), courseTitle(course), courseCredits(course)] })),
           ],
           "No valid fixed graduation courses were reported.",
           "summary-table--course-data summary-table--completion",
@@ -361,7 +362,7 @@ export function renderEsSummary(report, data, choiceLookup, labels = {}) {
       </section>
 
       <section class="summary-section">
-        <h3>ECTS subtotals</h3>
+        <h3>Credits subtotals</h3>
         ${renderSubtotalsTable(safeReport)}
       </section>
 
@@ -441,10 +442,11 @@ export function compactEsSummaryValidations(validations, options = {}) {
     ordinary.push(compactValidationGroup(
       "Homologation",
       homologation,
-      `Selection, course entries and the ${formatCredits(
+      `Selection, course entries and the limit of ${formatCredits(
         options.homologationMaximum
           ?? DEFAULT_ES_CONFIG.rules.homologationMaximum,
-      )} limit are valid.`,
+        "credits",
+      )} are valid.`,
     ));
   }
   if (options.hasSelfChosenHomologation && selfChosen.length > 0) {
@@ -465,7 +467,7 @@ function compactGraduationValidation(
   return compactValidationGroup(
     "Graduation phase",
     validations,
-    `The two fixed graduation courses total ${formatCredits(graduationCredits)}.`,
+    `The two fixed graduation courses total ${formatCredits(graduationCredits, "credits")}.`,
   );
 }
 
@@ -528,6 +530,7 @@ function normalizeReport(report) {
       internship: coalesce(sourceSelected.internship, {}),
       preparationProject: coalesce(sourceSelected.preparationProject, sourceSelected.preparationCourse),
       graduationProject: coalesce(sourceSelected.graduationProject, sourceSelected.masterProject),
+      additionalGraduationCourses: arrayFromAliases(sourceSelected, ["additionalGraduationCourses"]),
       invalidGraduationSelections: arrayFromAliases(sourceSelected, ["invalidGraduationSelections"]),
     },
     validations,

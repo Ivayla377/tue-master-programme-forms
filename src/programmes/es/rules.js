@@ -9,8 +9,8 @@ export function buildEsValidations(values) {
       label: "Common mandatory courses",
       status: values.flags.commonMandatoryComplete ? "success" : "error",
       detail: values.flags.commonMandatoryComplete
-        ? `The ${values.commonMandatoryCount} fixed common courses total ${formatCredits(rules.commonMandatoryCredits)}.`
-        : `The fixed common courses must total ${formatCredits(rules.commonMandatoryCredits)}.`,
+        ? `The ${values.commonMandatoryCount} fixed common courses total ${formatCredits(rules.commonMandatoryCredits, "credits")}.`
+        : `The fixed common courses must total ${formatCredits(rules.commonMandatoryCredits, "credits")}.`,
     },
     {
       label: "Stream selection",
@@ -28,27 +28,27 @@ export function buildEsValidations(values) {
       label: "Stream electives",
       status: values.flags.streamElectiveTargetMet ? "success" : "error",
       detail: values.streamElectivesExcess > 0
-        ? `${formatCredits(rules.streamElectiveTarget)} fills the stream-elective requirement; the additional ${formatCredits(values.streamElectivesExcess)} counts in free-elective space.`
+        ? `${formatCredits(rules.streamElectiveTarget, "credits")} fill the stream-elective requirement; the additional ${formatCredits(values.streamElectivesExcess, "credits")} count in free-elective space.`
         : `${formatCredits(values.streamElectivesSelected)} / ${formatCredits(rules.streamElectiveTarget)} from the selected stream's electives list.`,
     },
     targetWithOverWarning(
       "Free elective space",
       values.freeElectiveSpace,
       rules.freeElectiveSpaceTarget,
-      `Additional stream electives, other free electives, homologation and internship together fill ${formatCredits(rules.freeElectiveSpaceTarget)}.`,
+      `Additional stream electives, other free electives, homologation and internship together fill ${formatCredits(rules.freeElectiveSpaceTarget, "credits")}.`,
     ),
     {
       label: "Preparation project",
       status: values.flags.preparationProjectValid ? "success" : "error",
       detail: values.flags.preparationProjectValid
-        ? `${values.graduation.preparationProject.displayCode} contributes ${formatCredits(values.graduation.preparationProject.credits)}.`
+        ? `${values.graduation.preparationProject.displayCode} contributes ${formatCredits(values.graduation.preparationProject.credits, "credits")}.`
         : values.graduation.preparationDetail,
     },
     {
       label: "Graduation project",
       status: values.flags.graduationProjectValid ? "success" : "error",
       detail: values.flags.graduationProjectValid
-        ? `${values.graduation.graduationProject.displayCode} contributes ${formatCredits(values.graduation.graduationProject.credits)}.`
+        ? `${values.graduation.graduationProject.displayCode} contributes ${formatCredits(values.graduation.graduationProject.credits, "credits")}.`
         : values.graduation.graduationDetail,
     },
     {
@@ -60,7 +60,7 @@ export function buildEsValidations(values) {
       "Total credits",
       values.total,
       rules.programmeTarget,
-      `The program totals exactly ${formatCredits(rules.programmeTarget)}.`,
+      `The program totals exactly ${formatCredits(rules.programmeTarget, "credits")}.`,
     ),
     {
       label: "Course incompatibilities",
@@ -76,7 +76,7 @@ export function buildEsValidations(values) {
       status: values.invalidManualRows.length === 0 ? "success" : "error",
       detail: values.invalidManualRows.length === 0
         ? "Every entered manual row has a code, title and finite positive credit value."
-        : `${values.invalidManualRows.length} incomplete or invalid row(s) are retained for review but counted as 0 ECTS.`,
+        : `${values.invalidManualRows.length} incomplete or invalid row(s) are retained for review but counted as 0 credits.`,
     },
     {
       label: "Homologation choice",
@@ -131,7 +131,7 @@ export function buildEsValidations(values) {
       detail: !values.internshipAnswered
         ? "Indicate whether an internship is included."
         : values.internship.selected
-        ? `The internship contributes ${formatCredits(values.internship.credits)} inside free-elective space.`
+        ? `The internship contributes ${formatCredits(values.internship.credits, "credits")} inside free-elective space.`
         : "No internship selected.",
     },
     {
@@ -232,7 +232,7 @@ function targetWithOverWarning(label, value, target, successDetail) {
     return {
       label,
       status: "warning",
-      detail: `${formatCredits(value)} selected; ${formatCredits(target)} is the normal target and the excess requires review.`,
+      detail: `${formatCredits(value, "credits")} selected; ${formatCredits(target, "credits")} is the normal target and the excess requires review.`,
     };
   }
   return { label, status: "success", detail: successDetail };
