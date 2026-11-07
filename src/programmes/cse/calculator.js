@@ -6,17 +6,16 @@ import {
 } from "../../shared/course-catalog.js";
 import {
   isTrue,
-  sumCredits as sumSharedCredits,
 } from "../../shared/credit-utils.js";
 import {
   claimCourse as claim,
+  createCourseClaims,
+  finalizeCourseClaims,
   claimManualCourseRows as processRows,
   normalizeManualCourseRows as normalizeRows,
   renameCourseClaim as renameClaimedComponent,
-  repeatedCourseCodes as repeatedCodes,
   sumCountedCourses,
   sumCountedRows,
-  uniqueCourseCodes as uniqueCodes,
 } from "../../shared/course-selection.js";
 import { allocateCoursesToTarget } from "../../shared/elective-allocation.js";
 import { validationState } from "../../shared/validation-utils.js";
@@ -44,36 +43,41 @@ export function calculateCse(data = {}, choiceLookup = createCseChoiceLookup()) 
   const config = choiceLookup.cseConfig;
   const rules = resolveCseRules(data, config);
   const doubleCountedCourses = [];
-  const claimed = new Map();
+  const claimed = createCourseClaims(choiceLookup);
+  const graduationCodes = data.graduation_courses === undefined
+    ? config.graduationCodes
+    : selectedValues(data.graduation_courses);
+  const graduationCourses = graduationCodes.map((code) =>
+    makeCourse(code, "graduation_courses", choiceLookup, rules),
+  );
+  for (const course of graduationCourses) {
+    course.counted = claim(course, "Graduation courses", claimed, doubleCountedCourses);
+  }
+
   const foundationalSelections = config.foundationalFields.map(({ focus, field }) => ({
     focus,
     field,
     code: normalizeCode(data[field]),
   })).filter((selection) => selection.code !== "");
-  const foundationalCodes = uniqueCodes(foundationalSelections.map((selection) => selection.code));
-  const foundationalCourses = foundationalCodes.map((code) =>
-    makeCourse(code, "foundational_algorithms", choiceLookup, rules),
-  );
-  for (const course of foundationalCourses) {
-    course.counted = claim(course, "foundational course", claimed, doubleCountedCourses);
-  }
-  const foundationAssignment = new Map(
-    foundationalSelections.map((selection) => [
-      selection.focus,
-      makeCourse(selection.code, selection.field, choiceLookup, rules),
-    ]),
-  );
+  const foundationAssignment = new Map();
+  const foundationalCourses = foundationalSelections.map((selection) => {
+    const course = makeCourse(selection.code, selection.field, choiceLookup, rules);
+    const area = config.focusAreas.find(({ value }) => value === selection.focus)?.label ?? selection.focus;
+    claim(course, `Foundational courses (${area})`, claimed, doubleCountedCourses);
+    foundationAssignment.set(selection.focus, course);
+    return course;
+  });
 
   const extraFocus = String(data.extra_focus_area ?? "");
   const extraField = config.focusAreas.some((area) => area.value === extraFocus)
     ? `extra_${extraFocus}`
     : "extra";
-  const extraCodes = uniqueCodes(data[extraField] ?? data.extra);
+  const extraCodes = selectedValues(data[extraField] ?? data.extra);
   const extraCandidateCourses = extraCodes.map((code) =>
     makeCourse(code, extraField, choiceLookup, rules));
   const extraCourses = [];
   for (const course of extraCandidateCourses) {
-    if (claim(course, "extra course", claimed, doubleCountedCourses)) {
+    if (claim(course, "Extra courses", claimed, doubleCountedCourses)) {
       course.counted = true;
       extraCourses.push(course);
     } else {
@@ -84,33 +88,10 @@ export function calculateCse(data = {}, choiceLookup = createCseChoiceLookup()) 
     (course) => !config.courseFocuses.get(course.code)?.has(extraFocus),
   );
 
-  const legacySpecialization = selectedValues(data.specialization_courses).filter(
-    (code) => normalizeCode(code)
-      !== normalizeCode(config.internshipCodes[0]),
-  );
-  const specializationRawCodes = [
-    ...config.specializationFields.flatMap((field) => selectedValues(data[field])),
-    ...legacySpecialization,
-  ].map(normalizeCode).filter(Boolean);
-  const duplicateSpecializationCodes = repeatedCodes(specializationRawCodes);
-  const specializationCodes = uniqueCodes(specializationRawCodes);
-  const specializationCandidateCourses = specializationCodes.map((code) =>
-    makeCourse(code, "specialization_additional", choiceLookup, rules),
-  );
-  const selectedSpecializationCourses = [];
-  for (const course of specializationCandidateCourses) {
-    if (claim(course, "specialization elective", claimed, doubleCountedCourses)) {
-      course.counted = true;
-      selectedSpecializationCourses.push(course);
-    } else {
-      course.counted = false;
-    }
-  }
-
   const internshipSelected = isTrue(data.internship)
     || selectedValues(data.specialization_courses)
-      .map(normalizeCode)
-      .includes(normalizeCode(config.internshipCodes[0]));
+      .map(claimed.identity)
+      .includes(claimed.identity(config.internshipCodes[0]));
   const internshipCourse = internshipSelected
     ? makeCourse(
       config.internshipCodes[0],
@@ -120,9 +101,28 @@ export function calculateCse(data = {}, choiceLookup = createCseChoiceLookup()) 
     )
     : null;
   if (internshipCourse) {
-    internshipCourse.counted = claim(internshipCourse, "internship", claimed, doubleCountedCourses);
+    internshipCourse.counted = claim(internshipCourse, "Internship", claimed, doubleCountedCourses);
   }
   const internshipCredits = internshipCourse?.counted ? internshipCourse.credits : 0;
+
+  const legacySpecialization = selectedValues(data.specialization_courses).filter(
+    (code) => claimed.identity(code)
+      !== claimed.identity(config.internshipCodes[0]),
+  );
+  const specializationSelections = [
+    ...config.specializationFields.flatMap((field) =>
+      selectedValues(data[field]).map((code) => ({ code, field }))),
+    ...legacySpecialization.map((code) => ({ code, field: "specialization_courses" })),
+  ];
+  const specializationCandidateCourses = specializationSelections.map(({ code, field }) => {
+    const course = makeCourse(code, field, choiceLookup, rules);
+    const section = choiceLookup.getQuestion(field)?.title ?? "Specialization electives";
+    claim(course, `Specialization electives (${section})`, claimed, doubleCountedCourses);
+    return course;
+  });
+  const selectedSpecializationCourses = specializationCandidateCourses.filter((course) => course.counted);
+  const duplicateSpecializationCourses = specializationCandidateCourses.filter((course) => course.duplicate);
+
   const specializationCourseTarget = Math.max(
     0,
     rules.specializationTarget - internshipCredits,
@@ -136,44 +136,32 @@ export function calculateCse(data = {}, choiceLookup = createCseChoiceLookup()) 
   for (const course of excessSpecializationCourses) {
     renameClaimedComponent(
       course,
-      "additional specialization elective in free-elective space",
+      "Additional specialization electives",
       claimed,
     );
   }
-
-  const duplicateSpecializationCourses = duplicateSpecializationCodes.map((code) =>
-    makeCourse(code, "specialization_additional", choiceLookup, rules),
-  );
 
   const seminar = data.seminar
     ? makeCourse(data.seminar, "seminar", choiceLookup, rules)
     : null;
   if (seminar) {
-    seminar.counted = claim(seminar, "seminar", claimed, doubleCountedCourses);
-  }
-
-  const graduationCodes = data.graduation_courses === undefined
-    ? config.graduationCodes
-    : uniqueCodes(data.graduation_courses);
-  const graduationCourses = graduationCodes.map((code) =>
-    makeCourse(code, "graduation_courses", choiceLookup, rules),
-  );
-  for (const course of graduationCourses) {
-    course.counted = claim(course, "graduation project", claimed, doubleCountedCourses);
+    seminar.counted = claim(seminar, "Seminar", claimed, doubleCountedCourses);
   }
 
   const homologationRows = processRows(
     isTrue(data.homologation) ? normalizeRows(data.homologation_courses) : [],
-    "homologation",
+    "Homologation",
     claimed,
     doubleCountedCourses,
   );
   const freeRows = processRows(
     normalizeRows(data.free_electives),
-    "free elective",
+    "Free electives",
     claimed,
     doubleCountedCourses,
   );
+  finalizeCourseClaims(claimed, doubleCountedCourses);
+
   const invalidFreeRows = freeRows.filter((row) => !row.validCredits);
   const invalidHomologationRows = homologationRows.filter((row) => !row.validCredits);
   const manualFreeCredits = sumCountedRows(freeRows);
@@ -198,7 +186,7 @@ export function calculateCse(data = {}, choiceLookup = createCseChoiceLookup()) 
 
   const validations = buildCseValidations({
     foundationalSelections,
-    foundationalCourses,
+    foundationalCourses: foundationalCourses.filter((course) => course.counted),
     extraCourses,
     extraFocus,
     extraOutsideFocus,
@@ -223,6 +211,13 @@ export function calculateCse(data = {}, choiceLookup = createCseChoiceLookup()) 
   });
 
   return {
+    allocationCredits: {
+      credits_specialization_excess: specializationExcessCredits,
+    },
+    manualCourseTables: {
+      free_electives: freeRows,
+      homologation_courses: homologationRows,
+    },
     subtotals: {
       foundational: foundationalCredits,
       extra: extraCredits,
@@ -241,8 +236,8 @@ export function calculateCse(data = {}, choiceLookup = createCseChoiceLookup()) 
     },
     selected: {
       foundationalCourses,
-      extraCourses,
-      specializationCourses,
+      extraCourses: extraCandidateCourses,
+      specializationCourses: [...specializationCourses, ...duplicateSpecializationCourses],
       allSpecializationCourses: selectedSpecializationCourses,
       excessSpecializationCourses,
       foundationAssignment,
@@ -280,8 +275,4 @@ function makeCourse(code, questionName, choiceLookup, rules) {
     ...course,
     label: metadata?.text ?? course.label,
   };
-}
-
-function sumCredits(items) {
-  return sumSharedCredits(items);
 }

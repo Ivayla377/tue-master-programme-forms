@@ -311,7 +311,7 @@
                   "text": "2IMA50 Algorithms for Collective Decision Making (5 ECTS)"
                 }
               ],
-              "choicesVisibleIf": "{item} <> {foundational_algorithms}"
+              "choicesVisibleIf": "({item} <> {foundational_algorithms}) or {extra_algorithms} contains {item}"
             },
             {
               "type": "checkbox",
@@ -360,7 +360,7 @@
                   "text": "2IMN30 Machine Learning for Industry (5 ECTS)"
                 }
               ],
-              "choicesVisibleIf": "{item} <> {foundational_architectures}"
+              "choicesVisibleIf": "({item} <> {foundational_architectures}) or {extra_architectures} contains {item}"
             },
             {
               "type": "checkbox",
@@ -417,7 +417,7 @@
                   "text": "2IMP60 Human-Computer Interaction (5 ECTS)"
                 }
               ],
-              "choicesVisibleIf": "{item} <> {foundational_software}"
+              "choicesVisibleIf": "({item} <> {foundational_software}) or {extra_software} contains {item}"
             }
           ]
         }
@@ -480,7 +480,7 @@
                   "text": "2IMA50 Algorithms for Collective Decision Making (5 ECTS)"
                 }
               ],
-              "choicesVisibleIf": "{item} <> {foundational_algorithms} and {extra_algorithms} notcontains {item}"
+              "choicesVisibleIf": "({item} <> {foundational_algorithms} and {extra_algorithms} notcontains {item}) or {specialization_algorithms} contains {item}"
             },
             {
               "type": "tagbox",
@@ -524,7 +524,7 @@
                   "text": "2IMN30 Machine Learning for Industry (5 ECTS)"
                 }
               ],
-              "choicesVisibleIf": "{item} <> {foundational_architectures} and {extra_architectures} notcontains {item}"
+              "choicesVisibleIf": "({item} <> {foundational_architectures} and {extra_architectures} notcontains {item}) or {specialization_architectures} contains {item}"
             },
             {
               "type": "tagbox",
@@ -576,7 +576,7 @@
                   "text": "2IMP60 Human-Computer Interaction (5 ECTS)"
                 }
               ],
-              "choicesVisibleIf": "{item} <> {foundational_software} and {extra_software} notcontains {item}"
+              "choicesVisibleIf": "({item} <> {foundational_software} and {extra_software} notcontains {item}) or {specialization_software} contains {item}"
             },
             {
               "type": "tagbox",
@@ -648,7 +648,7 @@
                   "text": "2IMV15 Simulation in Computer Graphics (5 ECTS)"
                 }
               ],
-              "choicesVisibleIf": "{item} <> {foundational_software} and {extra_software} notcontains {item}"
+              "choicesVisibleIf": "({item} <> {foundational_software} and {extra_software} notcontains {item}) or {specialization_additional} contains {item}"
             },
             {
               "type": "html",
@@ -726,7 +726,6 @@
               "name": "code",
               "title": "Course code",
               "isRequired": true,
-              "isUnique": true,
               "width": "7em",
               "cellType": "text",
               "inputType": "text"
@@ -794,7 +793,6 @@
                   "name": "code",
                   "title": "Course code",
                   "isRequired": true,
-                  "isUnique": true,
                   "width": "7em",
                   "cellType": "text",
                   "inputType": "text"

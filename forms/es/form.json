@@ -697,7 +697,6 @@
                   "name": "code",
                   "title": "Course code",
                   "isRequired": true,
-                  "isUnique": true,
                   "width": "8em",
                   "cellType": "text",
                   "inputType": "text"
@@ -764,7 +763,6 @@
                   "name": "code",
                   "title": "Course code",
                   "isRequired": true,
-                  "isUnique": true,
                   "width": "8em",
                   "cellType": "text"
                 },

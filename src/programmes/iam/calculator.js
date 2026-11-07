@@ -6,6 +6,9 @@ import {
 import { isTrue } from "../../shared/credit-utils.js";
 import {
   claimCourse,
+  createCourseClaims,
+  finalizeCourseClaims,
+  sumCountedCourses,
   claimListedCourses,
   claimManualCourseRows,
   normalizeManualCourseRows,
@@ -44,7 +47,7 @@ export function calculateIam(data = {}, choiceLookup = createIamChoiceLookup()) 
   const config = choiceLookup.iamConfig;
   const rules = resolveIamRules(data, config);
   const duplicates = [];
-  const claimed = new Map();
+  const claimed = createCourseClaims(choiceLookup);
   const readCourse = (value, questionName) =>
     courseFromValue(value, choiceLookup, questionName);
 
@@ -52,14 +55,27 @@ export function calculateIam(data = {}, choiceLookup = createIamChoiceLookup()) 
     readCourse(code, IAM_QUESTION_NAMES.mandatory),
   );
   for (const course of mandatoryCourses) {
-    claimCourse(course, "mandatory component", claimed, duplicates);
+    course.counted = claimCourse(course, "Mandatory courses", claimed, duplicates);
+  }
+
+  const internship = resolveInternship(data, choiceLookup, config);
+  if (internship.course) {
+    internship.counted = claimCourse(
+      internship.course,
+      "Internship",
+      claimed,
+      duplicates,
+    );
+    internship.exclusionReason = internship.counted
+      ? ""
+      : "Duplicate course; excluded from totals.";
   }
 
   const coreSelection = claimListedCourses({
     values: data.core_electives,
     allowedCodes: config.coreElectiveCodes,
     questionName: IAM_QUESTION_NAMES.core,
-    component: "core elective",
+    component: "Core electives",
     choiceLookup,
     claimed,
     duplicates,
@@ -69,7 +85,7 @@ export function calculateIam(data = {}, choiceLookup = createIamChoiceLookup()) 
     values: data.specialization_electives,
     allowedCodes: config.specializationElectiveCodes,
     questionName: IAM_QUESTION_NAMES.specialization,
-    component: "special elective",
+    component: "Specialization electives",
     choiceLookup,
     claimed,
     duplicates,
@@ -77,7 +93,7 @@ export function calculateIam(data = {}, choiceLookup = createIamChoiceLookup()) 
   });
   const mastermathRows = claimManualCourseRows(
     normalizeManualCourseRows(data.mastermath_special_electives),
-    "Mastermath/special elective",
+    "Mastermath / approved specialization",
     claimed,
     duplicates,
   );
@@ -85,25 +101,12 @@ export function calculateIam(data = {}, choiceLookup = createIamChoiceLookup()) 
     values: data.listed_free_electives,
     allowedCodes: config.listedFreeElectiveCodes,
     questionName: IAM_QUESTION_NAMES.listedFree,
-    component: "free elective",
+    component: "Free electives",
     choiceLookup,
     claimed,
     duplicates,
     invalidReason: "Not in the current PER list.",
   });
-
-  const internship = resolveInternship(data, choiceLookup, config);
-  if (internship.course) {
-    internship.counted = claimCourse(
-      internship.course,
-      "internship",
-      claimed,
-      duplicates,
-    );
-    internship.exclusionReason = internship.counted
-      ? ""
-      : "Duplicate course; excluded from totals.";
-  }
 
   const homologationActive = isTrue(data.homologation);
   const selfChosenHomologationActive =
@@ -111,7 +114,7 @@ export function calculateIam(data = {}, choiceLookup = createIamChoiceLookup()) 
   const homologationRows = homologationActive
     ? claimManualCourseRows(
         normalizeManualCourseRows(data.homologation_courses),
-        "homologation",
+        "Homologation",
         claimed,
         duplicates,
       )
@@ -121,17 +124,19 @@ export function calculateIam(data = {}, choiceLookup = createIamChoiceLookup()) 
         normalizeManualCourseRows(data.bachelor_free_electives, {
           requireLinkedCourse: true,
         }),
-        "self-chosen homologation",
+        "Self-chosen homologation",
         claimed,
         duplicates,
       )
     : [];
   const freeElectiveRows = claimManualCourseRows(
     normalizeManualCourseRows(data.free_electives),
-    "free elective",
+    "Free electives",
     claimed,
     duplicates,
   );
+
+  finalizeCourseClaims(claimed, duplicates);
 
   const useCalculatedValues =
     duplicates.length === 0
@@ -142,7 +147,7 @@ export function calculateIam(data = {}, choiceLookup = createIamChoiceLookup()) 
   const subtotal = (name, fallback) =>
     useCalculatedValues ? readNumericValue(data, name, fallback) : fallback;
   const mandatoryCredits = new Map(
-    mandatoryCourses.map((course) => [course.code, course.credits]),
+    mandatoryCourses.filter((course) => course.counted).map((course) => [course.code, course.credits]),
   );
 
   const professionalPortfolio = subtotal(
@@ -153,7 +158,7 @@ export function calculateIam(data = {}, choiceLookup = createIamChoiceLookup()) 
     "final_project_credits",
     mandatoryCredits.get(normalizeCourseCode(config.finalProjectCode)) ?? 0,
   );
-  const mandatory = subtotal("mandatory_credits", sumCourses(mandatoryCourses));
+  const mandatory = subtotal("mandatory_credits", sumCountedCourses(mandatoryCourses));
   const coreElectives = subtotal(
     "core_elective_credits",
     sumCourses(coreSelection.courses),
@@ -269,6 +274,12 @@ export function calculateIam(data = {}, choiceLookup = createIamChoiceLookup()) 
 
   return {
     rules,
+    manualCourseTables: {
+      free_electives: freeElectiveRows,
+      homologation_courses: homologationRows,
+      mastermath_special_electives: mastermathRows,
+      bachelor_free_electives: selfChosenHomologationRows,
+    },
     subtotals: {
       mandatory,
       professionalPortfolio,
@@ -289,12 +300,12 @@ export function calculateIam(data = {}, choiceLookup = createIamChoiceLookup()) 
     },
     selected: {
       mandatoryCourses,
-      coreElectiveCourses: coreSelection.courses,
+      coreElectiveCourses: [...coreSelection.courses, ...coreSelection.duplicateCourses],
       invalidCoreCourses: coreSelection.invalidCourses,
-      specializationElectiveCourses: specializationSelection.courses,
+      specializationElectiveCourses: [...specializationSelection.courses, ...specializationSelection.duplicateCourses],
       invalidSpecializationCourses: specializationSelection.invalidCourses,
       mastermathSpecializationRows: mastermathRows,
-      listedFreeElectiveCourses: listedFreeSelection.courses,
+      listedFreeElectiveCourses: [...listedFreeSelection.courses, ...listedFreeSelection.duplicateCourses],
       invalidListedFreeCourses: listedFreeSelection.invalidCourses,
       internship,
       homologationRows,

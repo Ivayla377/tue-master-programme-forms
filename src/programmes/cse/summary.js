@@ -11,6 +11,7 @@ import {
   renderDetailsTable,
   renderEctsPanel as renderSharedEctsPanel,
   renderReportTable as renderSharedReportTable,
+  renderValidationItem,
 } from "../../shared/summary-rendering.js";
 
 const PANEL_SUBTOTAL_ROWS = [
@@ -152,7 +153,7 @@ export function renderCseSummary(report, data, choiceLookup, labels = {}) {
               "Free elective",
               row.code,
               row.title,
-              row.validCredits && row.counted !== false ? formatCredits(row.credits) : "Not counted",
+              row.duplicate ? "Not counted (duplicate)" : row.validCredits && row.counted !== false ? formatCredits(row.credits) : "Not counted",
             ],
           })),
           ...report.selected.homologationRows.map((row) => ({
@@ -160,7 +161,7 @@ export function renderCseSummary(report, data, choiceLookup, labels = {}) {
               "Homologation",
               row.code,
               row.title,
-              row.validCredits && row.counted !== false ? formatCredits(row.credits) : "Not counted",
+              row.duplicate ? "Not counted (duplicate)" : row.validCredits && row.counted !== false ? formatCredits(row.credits) : "Not counted",
             ],
           })),
         ], "None selected")}
@@ -278,11 +279,8 @@ function renderNotes(notes) {
   ).join("");
 }
 
-function renderValidationItem(validation) {
-  return `<li class="validation-item validation-item--${escapeHtml(validation.status)}"><strong>${escapeHtml(validation.label)}</strong><span>${escapeHtml(validation.detail)}</span></li>`;
-}
-
 function formatCourseCredits(course) {
+  if (course?.duplicate) return "Not counted (duplicate)";
   return course?.counted === false ? "Not counted" : formatCredits(course?.credits ?? 0);
 }
 

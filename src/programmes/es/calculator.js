@@ -5,7 +5,13 @@ import {
   selectedValues,
 } from "../../shared/course-catalog.js";
 import {
+  claimCourse,
+  claimManualCourseRows,
+  createCourseClaims,
+  finalizeCourseClaims,
   normalizeManualCourseRows,
+  sumCountedCourses,
+  sumCountedRows,
   sumCourses,
 } from "../../shared/course-selection.js";
 import { allocateCoursesToTarget } from "../../shared/elective-allocation.js";
@@ -51,6 +57,8 @@ export const createChoiceLookup = createEsChoiceLookup;
 export function calculateEs(data = {}, choiceLookup = createEsChoiceLookup()) {
   const config = choiceLookup.esConfig ?? DEFAULT_ES_CONFIG;
   const rules = resolveEsRules(data, config);
+  const claimed = createCourseClaims(choiceLookup);
+  const duplicates = [];
 
   function readCourse(questionName) {
     return (value) => {
@@ -92,20 +100,33 @@ export function calculateEs(data = {}, choiceLookup = createEsChoiceLookup()) {
     )
     : [];
   const graduation = resolveGraduation(config, readCourse);
-  const internship = resolveInternship(data, rules);
+  const internship = resolveInternship(data, rules, choiceLookup, config);
+  const claim = (courses, section) => {
+    for (const course of courses.filter(Boolean)) claimCourse(course, section, claimed, duplicates);
+  };
+  claim(commonMandatoryCourses, "Common mandatory courses");
+  claim([graduation.preparationProject, graduation.graduationProject, ...graduation.additionalCourses], "Graduation courses");
+  claim(streamMandatoryCourses, "Stream mandatory courses");
+  claim([internship.course], "Internship");
+  internship.counted = internship.course?.counted ?? false;
 
   const activeElectiveValues = streamDefinition
     ? selectedValues(data[streamDefinition.electiveQuestion])
     : [];
   const allowedElectiveCodes = new Set(
-    (streamDefinition?.electiveCodes ?? []).map(normalizeEsCode),
+    (streamDefinition?.electiveCodes ?? []).map(claimed.identity),
   );
   const streamElectiveCourses = [];
   const invalidStreamElectiveCourses = [];
+  const duplicateStreamElectiveCourses = [];
   for (const value of activeElectiveValues) {
     const course = readCourse(streamDefinition.electiveQuestion)(value);
-    if (allowedElectiveCodes.has(course.code)) {
-      streamElectiveCourses.push(course);
+    if (allowedElectiveCodes.has(claimed.identity(course.code))) {
+      if (claimCourse(course, "Stream electives", claimed, duplicates)) {
+        streamElectiveCourses.push(course);
+      } else {
+        duplicateStreamElectiveCourses.push(course);
+      }
     } else {
       invalidStreamElectiveCourses.push({
         ...course,
@@ -132,60 +153,56 @@ export function calculateEs(data = {}, choiceLookup = createEsChoiceLookup()) {
           : "No single valid stream is selected.",
       })));
 
-  const freeElectiveRows = normalizeManualCourseRows(data.free_electives);
   const homologationActive = booleanValue(data.homologation) === true;
   const homologationRows = homologationActive
-    ? normalizeManualCourseRows(data.homologation_courses)
+    ? claimManualCourseRows(normalizeManualCourseRows(data.homologation_courses), "Homologation", claimed, duplicates)
     : [];
+  const freeElectiveRows = claimManualCourseRows(
+    normalizeManualCourseRows(data.free_electives), "Free electives", claimed, duplicates,
+  );
+  finalizeCourseClaims(claimed, duplicates);
+  const subtotal = (name, fallback) => duplicates.length > 0
+    ? fallback : readNumericValue(data, name, fallback);
   const selfChosenActive = homologationActive
     && booleanValue(data.self_chosen_homologation) === true;
   const validHomologationCount = homologationRows.filter(
-    ({ validCredits }) => validCredits,
+    ({ validCredits, counted }) => validCredits && counted,
   ).length;
   const selfChosenCount = selfChosenActive ? validHomologationCount : 0;
 
-  const commonMandatory = readNumericValue(
-    data,
+  const commonMandatory = subtotal(
     "credits_common_mandatory",
-    sumCourses(commonMandatoryCourses),
+    sumCountedCourses(commonMandatoryCourses),
   );
-  const streamMandatory = readNumericValue(
-    data,
+  const streamMandatory = subtotal(
     "credits_stream_mandatory",
-    sumCourses(streamMandatoryCourses),
+    sumCountedCourses(streamMandatoryCourses),
   );
-  const streamElectivesSelected = readNumericValue(
-    data,
+  const streamElectivesSelected = subtotal(
     "credits_stream_electives_selected",
     sumCourses(streamElectiveCourses),
   );
-  const streamElectivesRequired = readNumericValue(
-    data,
+  const streamElectivesRequired = subtotal(
     "credits_stream_electives_required",
     streamElectiveAllocation.requiredCredits,
   );
-  const streamElectivesExcess = readNumericValue(
-    data,
+  const streamElectivesExcess = subtotal(
     "credits_stream_electives_excess",
     streamElectiveAllocation.excessCredits,
   );
-  const freeElectiveRowCredits = readNumericValue(
-    data,
+  const freeElectiveRowCredits = subtotal(
     "credits_free_rows",
-    sumValidRows(freeElectiveRows),
+    sumCountedRows(freeElectiveRows),
   );
-  const homologationCredits = readNumericValue(
-    data,
+  const homologationCredits = subtotal(
     "credits_homologation",
-    sumValidRows(homologationRows),
+    sumCountedRows(homologationRows),
   );
-  const internshipCredits = readNumericValue(
-    data,
+  const internshipCredits = subtotal(
     "credits_internship",
-    internship.selected && internship.valid ? internship.credits : 0,
+    internship.selected && internship.valid && internship.counted ? internship.credits : 0,
   );
-  const freeElectiveSpace = readNumericValue(
-    data,
+  const freeElectiveSpace = subtotal(
     "credits_free_space",
     sumCourses([
       { credits: streamElectivesExcess },
@@ -194,34 +211,30 @@ export function calculateEs(data = {}, choiceLookup = createEsChoiceLookup()) {
       { credits: internshipCredits },
     ]),
   );
-  const preparationProjectCredits = readNumericValue(
-    data,
+  const preparationProjectCredits = subtotal(
     "credits_preparation_project",
-    graduation.preparationProject?.credits ?? 0,
+    graduation.preparationProject?.counted ? graduation.preparationProject.credits : 0,
   );
-  const graduationProjectCredits = readNumericValue(
-    data,
+  const graduationProjectCredits = subtotal(
     "credits_graduation_project",
-    graduation.graduationProject?.credits ?? 0,
+    graduation.graduationProject?.counted ? graduation.graduationProject.credits : 0,
   );
-  const graduationPhase = readNumericValue(
-    data,
+  const graduationPhase = subtotal(
     "credits_graduation_phase",
     sumCourses([
       { credits: preparationProjectCredits },
       { credits: graduationProjectCredits },
+      ...graduation.additionalCourses.filter((course) => course.counted),
     ]),
   );
-  const mandatoryAndGraduation = readNumericValue(
-    data,
+  const mandatoryAndGraduation = subtotal(
     "credits_mandatory_and_graduation",
     sumCourses([
       { credits: commonMandatory },
       { credits: graduationPhase },
     ]),
   );
-  const total = readNumericValue(
-    data,
+  const total = subtotal(
     "credits_total",
     sumCourses([
       { credits: commonMandatory },
@@ -306,6 +319,7 @@ export function calculateEs(data = {}, choiceLookup = createEsChoiceLookup()) {
   };
 
   const validations = buildEsValidations({
+    duplicates,
     flags,
     stream,
     streamMandatory,
@@ -344,6 +358,13 @@ export function calculateEs(data = {}, choiceLookup = createEsChoiceLookup()) {
   });
 
   return {
+    allocationCredits: {
+      credits_stream_electives_excess: streamElectivesExcess,
+    },
+    manualCourseTables: {
+      free_electives: freeElectiveRows,
+      homologation_courses: homologationRows,
+    },
     subtotals: {
       commonMandatory,
       streamMandatory,
@@ -367,7 +388,7 @@ export function calculateEs(data = {}, choiceLookup = createEsChoiceLookup()) {
       stream,
       streamMandatoryCourses,
       streamElectiveCourses,
-      requiredStreamElectiveCourses,
+      requiredStreamElectiveCourses: [...requiredStreamElectiveCourses, ...duplicateStreamElectiveCourses],
       excessStreamElectiveCourses,
       invalidStreamElectiveCourses,
       staleStreamElectiveCourses,
@@ -380,6 +401,7 @@ export function calculateEs(data = {}, choiceLookup = createEsChoiceLookup()) {
       graduationProject: graduation.graduationProject,
       additionalGraduationCourses: graduation.additionalCourses,
       incompatibleCombinations,
+      duplicates,
     },
     flags,
     validations,
@@ -408,21 +430,22 @@ function resolveGraduation(config, readCourse) {
   };
 }
 
-function resolveInternship(data, rules) {
+function resolveInternship(data, rules, choiceLookup, config) {
   const selected = booleanValue(data.internship) === true;
+  const code = config.internshipCodes[0];
+  const course = selected && code
+    ? courseFromValue(code, choiceLookup, "internship_course_display")
+    : null;
+  if (course) course.credits = rules.internshipCredits;
   return {
     selected,
-    valid: true,
-    code: "",
-    course: null,
+    valid: !selected || Boolean(course),
+    code: course?.code ?? "",
+    course,
     credits: selected ? rules.internshipCredits : 0,
     supervisor: data.internship_supervisor ?? "",
     invalidValues: [],
   };
-}
-
-function sumValidRows(rows) {
-  return sumCourses(rows.filter(({ validCredits }) => validCredits));
 }
 
 function normalizeStreamValue(value) {

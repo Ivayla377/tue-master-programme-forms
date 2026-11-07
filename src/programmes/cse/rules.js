@@ -1,4 +1,5 @@
 // Builds CSE-specific academic validation results from calculated programme data.
+import { duplicateCourseValidations } from "../../shared/course-selection.js";
 import {
   formatCredits,
   isTrue,
@@ -72,25 +73,7 @@ export function buildCseValidations(values) {
     },
   ];
 
-  if (values.doubleCountedCourses.length > 0) {
-    validations.push({
-      label: "Double counting",
-      status: "error",
-      detail:
-        `Duplicate course code(s): ${values.doubleCountedCourses
-          .map(formatDuplicateLabel)
-          .join(", ")}. The later entry was excluded from the credit totals.`,
-    });
-  }
-
-  if (values.duplicateSpecializationCourses.length > 0) {
-    validations.push({
-      label: "Repeated specialization course",
-      status: "error",
-      detail:
-        `${values.duplicateSpecializationCourses.map((course) => course.label).join(", ")} is selected in more than one specialization list and is counted once.`,
-    });
-  }
+  validations.push(...duplicateCourseValidations(values.doubleCountedCourses));
 
   if (values.invalidFreeRows.length > 0) {
     validations.push({
@@ -155,11 +138,6 @@ export function buildCseValidations(values) {
   }
 
   return validations;
-}
-
-function formatDuplicateLabel(item) {
-  const label = String(item.label ?? "").trim();
-  return label || item.code?.toUpperCase?.() || item.code || "";
 }
 
 function focusLabel(value, focusAreas) {

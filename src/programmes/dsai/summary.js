@@ -9,6 +9,7 @@ import {
   renderDetailsTable,
   renderEctsPanel as renderSharedEctsPanel,
   renderReportTable,
+  renderValidationItem,
 } from "../../shared/summary-rendering.js";
 
 const SUBTOTAL_ROWS = [
@@ -222,7 +223,7 @@ function renderFreeRows(rows) {
     cells: [
       "Free elective",
       [row.code, row.title].filter(Boolean).join(" "),
-      row.validCredits ? formatCredits(row.credits) : "Not counted",
+      row.duplicate ? "Not counted (duplicate)" : row.validCredits ? formatCredits(row.credits) : "Not counted",
     ],
   }));
 }
@@ -243,16 +244,8 @@ function renderNotes(notes) {
     .join("");
 }
 
-function renderValidationItem(validation) {
-  return `
-    <li class="validation-item validation-item--${escapeHtml(validation.status)}">
-      <strong>${escapeHtml(validation.label)}</strong>
-      <span>${escapeHtml(validation.detail)}</span>
-    </li>
-  `;
-}
-
 function formatCourseCredits(course) {
+  if (course?.duplicate) return "Not counted (duplicate)";
   return formatCredits(course?.credits ?? 0);
 }
 

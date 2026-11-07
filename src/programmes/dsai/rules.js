@@ -1,4 +1,5 @@
 // Builds DS&AI-specific trajectory and academic validation results.
+import { duplicateCourseValidations } from "../../shared/course-selection.js";
 import { normalizeCourseCode } from "../../shared/course-catalog.js";
 import { formatCredits } from "../../shared/credit-utils.js";
 import {
@@ -235,6 +236,7 @@ export function buildDsaiValidations(values) {
     });
   }
 
+  validations.push(...duplicateCourseValidations(values.duplicates));
   return validations;
 }
 

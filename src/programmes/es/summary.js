@@ -110,6 +110,7 @@ const SIDEBAR_ERROR_ONLY = new Set([
 ]);
 
 const SIDEBAR_EXCEPTION_ONLY = new Set([
+  "Double counting",
   "Stale stream selections",
   "University of Twente secondary enrollment",
   "Seminar scheduling",
@@ -595,7 +596,8 @@ function hasEnteredManualRow(row) {
 function manualRowIsValid(row) {
   const item = asRecord(row);
   if (
-    item.validCredits === false
+    item.counted === false
+    || item.validCredits === false
     || item.valid === false
     || item.isValid === false
     || item.complete === false
@@ -605,6 +607,7 @@ function manualRowIsValid(row) {
 
 function manualCredits(row) {
   const item = asRecord(row);
+  if (item.duplicate) return "Not counted (duplicate)";
   const rawValue = coalesceNonBlank(item.rawCredits, item.enteredCredits, item.credits);
   if (rawValue === undefined) return "Not entered";
   const parsed = parseCreditValue(rawValue);
@@ -635,6 +638,7 @@ function courseTitle(course, fallback = "Course title not available") {
 
 function courseCredits(course) {
   const item = asRecord(course);
+  if (item.duplicate) return "Not counted (duplicate)";
   const value = coalesceNonBlank(item.credits, item.rawCredits);
   if (value === undefined) return "Not reported";
   const parsed = parseCreditValue(value);

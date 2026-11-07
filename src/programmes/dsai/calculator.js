@@ -7,7 +7,13 @@ import {
   selectedValues,
 } from "../../shared/course-catalog.js";
 import {
+  claimCourse,
+  claimManualCourseRows,
+  createCourseClaims,
+  finalizeCourseClaims,
   normalizeManualCourseRows,
+  sumCountedCourses,
+  sumCountedRows,
   sumCourses,
 } from "../../shared/course-selection.js";
 import { isTrue } from "../../shared/credit-utils.js";
@@ -66,10 +72,61 @@ export function calculateEcts(
   const graduation = buildGraduation(context);
 
   const freeElectives = buildFreeElectives(context);
+  const claimed = createCourseClaims(choiceLookup);
+  const duplicates = [];
+  const claim = (courses, section) => {
+    for (const course of courses.filter(Boolean)) {
+      claimCourse(course, section, claimed, duplicates);
+    }
+  };
+  claim(core.courses, "Mandatory courses");
+  claim(graduation.courses, "Graduation courses");
+  claim([core.elective], "Core elective");
+  claim([seminar.course], "Seminar");
+  claim([internship.course], "Internship");
+  for (const trajectory of specialization.trajectories) {
+    claim(trajectory.courses, trajectory.label);
+  }
+  claim(homologation.courses, "Homologation");
+  freeElectives.rows = claimManualCourseRows(
+    freeElectives.rows, "Free electives", claimed, duplicates,
+  );
+  finalizeCourseClaims(claimed, duplicates);
+
+  // SurveyJS expressions sum entered values. Reconcile every dependent subtotal
+  // when exclusions exist, so a duplicate cannot satisfy another requirement.
+  if (duplicates.length > 0) {
+    core.credits = sumCountedCourses([...core.courses, ...(core.elective ? [core.elective] : [])]);
+    graduation.credits = sumCountedCourses(graduation.courses);
+    seminar.credits = seminar.course?.counted ? seminar.course.credits : 0;
+    internship.credits = internship.course?.counted ? internship.course.credits : 0;
+    homologation.credits = sumCountedCourses(homologation.courses);
+    freeElectives.credits = sumCountedRows(freeElectives.rows);
+    for (const trajectory of specialization.trajectories) {
+      trajectory.credits = sumCountedCourses(trajectory.courses);
+      trajectory.count = trajectory.courses.filter((course) => course.counted).length;
+    }
+    specialization.credits = sumCountedCourses(specialization.courses);
+    const classification = classifyTrajectories(
+      specialization.trajectories,
+      selectedValues(data[QUESTION_NAMES.majorTrajectories]),
+      rules,
+    );
+    Object.assign(specialization, {
+      majorCandidates: classification.majorCandidates,
+      majorTrajectories: classification.majorTrajectories,
+      minorTrajectories: classification.minorTrajectories,
+      trajectoryClassifications: classification.trajectoryClassifications,
+      majorClassificationState: classification.state,
+      majorCredits: sumCourses(classification.majorTrajectories),
+      minorCredits: sumCourses(classification.minorTrajectories),
+    });
+  }
+  const subtotal = (name, fallback) => duplicates.length > 0
+    ? fallback : readNumericValue(data, name, fallback);
   const freeSpaceFallback =
     freeElectives.credits + homologation.credits + internship.credits;
-  const freeSpaceTotal = readNumericValue(
-    data,
+  const freeSpaceTotal = subtotal(
     "credits_free_space",
     freeSpaceFallback,
   );
@@ -80,8 +137,7 @@ export function calculateEcts(
     { credits: freeSpaceTotal },
     graduation,
   ]);
-  const totalCredits = readNumericValue(
-    data,
+  const totalCredits = subtotal(
     "credits_total",
     totalFallback,
   );
@@ -92,6 +148,7 @@ export function calculateEcts(
   );
 
   const validations = buildDsaiValidations({
+    duplicates,
     rules,
     coreTotal: core.credits,
     specializationTotal: specialization.credits,
@@ -114,6 +171,9 @@ export function calculateEcts(
 
   return {
     rules,
+    manualCourseTables: {
+      free_electives: freeElectives.rows,
+    },
     subtotals: {
       core: core.credits,
       specializationMajor: specialization.majorCredits,
@@ -142,6 +202,7 @@ export function calculateEcts(
       internship,
       graduationCourses: graduation.courses,
       projectCourses,
+      duplicates,
     },
     validations,
     ...validationState(validations),
@@ -318,7 +379,7 @@ function findProjectCourses(core, specialization, choiceLookup) {
     ...core.courses,
     ...(core.elective ? [core.elective] : []),
     ...specialization.courses,
-  ].filter((course) => projectCodes.has(course.code));
+  ].filter((course) => course.counted !== false && projectCodes.has(course.code));
 }
 
 function selectedOrDefaultCodes(

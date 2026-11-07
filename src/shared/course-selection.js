@@ -1,9 +1,18 @@
 // Normalizes selected courses, handles duplicates, and calculates counted ECTS.
 import {
   courseFromValue,
+  createCourseCodeResolver,
   normalizeCourseCode,
   selectedValues,
 } from "./course-catalog.js";
+
+export function createCourseClaims(choiceLookup) {
+  return {
+    courses: new Map(),
+    identity: choiceLookup?.courseIdentity ?? createCourseCodeResolver(),
+    incompleteRows: [],
+  };
+}
 
 export function claimListedCourses({
   values,
@@ -15,17 +24,16 @@ export function claimListedCourses({
   allowedCodes = choiceLookup?.getCodes?.(questionName) ?? [],
   invalidReason = "Not in the current form list.",
 }) {
-  const allowed = new Set(allowedCodes.map(normalizeCourseCode));
-  const seen = new Set();
+  const allowed = new Set(allowedCodes.map(claimed.identity));
   const courses = [];
   const invalidCourses = [];
+  const duplicateCourses = [];
 
   for (const value of selectedValues(values)) {
     const code = normalizeCourseCode(value);
-    if (!code || seen.has(code)) continue;
-    seen.add(code);
+    if (!code) continue;
 
-    if (!allowed.has(code)) {
+    if (!allowed.has(claimed.identity(code))) {
       invalidCourses.push({
         ...unknownCourse(value),
         counted: false,
@@ -38,15 +46,11 @@ export function claimListedCourses({
     if (claimCourse(course, component, claimed, duplicates)) {
       courses.push(course);
     } else {
-      invalidCourses.push({
-        ...course,
-        counted: false,
-        exclusionReason: "Duplicate selection; excluded from totals.",
-      });
+      duplicateCourses.push(course);
     }
   }
 
-  return { courses, invalidCourses };
+  return { courses, invalidCourses, duplicateCourses };
 }
 
 export function normalizeManualCourseRows(rows, options = {}) {
@@ -118,12 +122,14 @@ export function repeatedCourseCodes(values) {
 
 export function claimCourse(item, component, claimed, duplicates) {
   if (!item?.code) return false;
-  const prior = claimed.get(item.code);
+  const identity = claimed.identity(item.code);
+  const prior = claimed.courses.get(identity);
+  item.counted = !prior;
   if (prior) {
     recordCourseDuplicate(item, component, prior, duplicates);
     return false;
   }
-  claimed.set(item.code, { component, item });
+  claimed.courses.set(identity, { component, item });
   return true;
 }
 
@@ -133,17 +139,25 @@ export function recordCourseDuplicate(
   prior,
   duplicates,
 ) {
+  item.duplicate = true;
+  item.counted = false;
+  item.exclusionReason = "Not counted (duplicate)";
   duplicates.push({
     ...item,
+    displayCode: normalizeCourseCode(item.value ?? item.displayCode ?? item.code).toUpperCase(),
     keptComponent: prior.component,
     excludedComponent: component,
-    exclusionReason: `Already counted as ${prior.component}.`,
+    keptCode: prior.item.displayCode,
+    keptRowNumber: prior.item.rowNumber,
+    keptCredits: prior.item.credits,
+    creditMismatch: item.validCredits !== false && item.credits !== prior.item.credits,
   });
 }
 
 export function renameCourseClaim(item, component, claimed) {
-  if (!item?.code || !claimed.has(item.code)) return;
-  claimed.set(item.code, { component, item });
+  if (!item?.code) return;
+  const prior = claimed.courses.get(claimed.identity(item.code));
+  if (prior?.item === item) prior.component = component;
 }
 
 export function claimManualCourseRows(
@@ -153,7 +167,10 @@ export function claimManualCourseRows(
   duplicates,
 ) {
   return rows.map((row) => {
-    if (!row.validCredits) return row;
+    if (!row.validCredits) {
+      claimed.incompleteRows.push({ row, component });
+      return row;
+    }
     const displayCode = row.displayCode || row.normalizedCode.toUpperCase();
     const item = {
       code: row.normalizedCode,
@@ -162,16 +179,47 @@ export function claimManualCourseRows(
       title: row.title,
       label: [displayCode, row.title].filter(Boolean).join(" "),
       credits: row.credits,
+      rowNumber: row.rowNumber,
     };
     const counted = claimCourse(item, component, claimed, duplicates);
     return {
       ...row,
       counted,
+      duplicate: item.duplicate === true,
       exclusionReason: counted
         ? ""
-        : "Duplicate course; excluded from totals.",
+        : "Not counted (duplicate)",
     };
   });
+}
+
+// Incomplete rows cannot reserve a code or displace a later valid course.
+export function finalizeCourseClaims(claimed, duplicates) {
+  for (const { row, component } of claimed.incompleteRows) {
+    const prior = claimed.courses.get(claimed.identity(row.normalizedCode));
+    if (prior) recordCourseDuplicate(row, component, prior, duplicates);
+  }
+  claimed.incompleteRows.length = 0;
+}
+
+export function duplicateCourseDetail(duplicate) {
+  const kept = duplicate.keptComponent
+    + (duplicate.keptRowNumber ? `, row ${duplicate.keptRowNumber}` : "");
+  const excluded = duplicate.excludedComponent
+    + (duplicate.rowNumber ? `, row ${duplicate.rowNumber}` : "");
+  return `Already counted under ${kept}. It does not contribute additional credits in ${excluded}.`
+    + (duplicate.creditMismatch
+      ? ` Credits differ: ${duplicate.keptCredits} and ${duplicate.credits}.`
+      : "");
+}
+
+export function duplicateCourseValidations(duplicates = []) {
+  return duplicates.map((duplicate) => ({
+    label: "Double counting",
+    status: "error",
+    duplicateCode: duplicate.displayCode,
+    detail: `Duplicate course detected: ${duplicate.displayCode}. ${duplicateCourseDetail(duplicate)}`,
+  }));
 }
 
 export function sumCountedCourses(items) {

@@ -1,4 +1,5 @@
 // Renders IAM credit panels and printable programme summaries.
+import { duplicateCourseDetail } from "../../shared/course-selection.js";
 import { formatCredits } from "../../shared/credit-utils.js";
 import {
   asArray,
@@ -209,7 +210,7 @@ export function renderIamSummary(report, data, choiceLookup, labels = {}) {
             ${renderReportTable(
               ["Course code", "Duplicate handling"],
               selected.duplicates.map((duplicate) => ({
-                cells: [courseCode(duplicate), duplicateDetail(duplicate)],
+                cells: [courseCode(duplicate), duplicateCourseDetail(duplicate)],
                 className: "summary-row--not-counted",
               })),
               "",
@@ -378,6 +379,7 @@ function manualRowIsCounted(row) {
 
 function manualCredits(row) {
   const item = asRecord(row);
+  if (item.duplicate) return "Not counted (duplicate)";
   const rawValue = coalesceNonBlank(item.rawCredits, item.credits);
   if (rawValue === undefined) return "Not entered";
   const parsed = parseCreditValue(rawValue);
@@ -408,20 +410,11 @@ function courseTitle(course, fallback = "Course title not available") {
 
 function courseCredits(course) {
   const item = asRecord(course);
+  if (item.duplicate) return "Not counted (duplicate)";
   const value = coalesceNonBlank(item.credits, item.rawCredits);
   if (value === undefined) return "Not reported";
   const parsed = parseCreditValue(value);
   return parsed === null ? displayText(value) : formatCredits(parsed);
-}
-
-function duplicateDetail(duplicate) {
-  const item = asRecord(duplicate);
-  const details = [];
-  if (hasText(item.excludedComponent)) details.push(`Excluded from ${displayText(item.excludedComponent)}`);
-  if (hasText(item.exclusionReason)) details.push(displayText(item.exclusionReason));
-  return details.length > 0
-    ? details.join(". ")
-    : "Repeated course code; the lower-priority occurrence was excluded.";
 }
 
 function yesNo(value) {

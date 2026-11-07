@@ -23,6 +23,14 @@ export function createChoiceLookup(surveyJson = {}) {
     });
   }
 
+  const courseIdentity = createCourseCodeResolver([...coursesByCode.values()]);
+  const coursesByIdentity = new Map();
+  for (const course of coursesByCode.values()) {
+    if (Number.isFinite(course.credits) && !coursesByIdentity.has(courseIdentity(course.code))) {
+      coursesByIdentity.set(courseIdentity(course.code), course);
+    }
+  }
+
   function findChoice(questionName, value) {
     if (value === undefined || value === null || value === "") return null;
     const rawValue = String(value);
@@ -32,6 +40,7 @@ export function createChoiceLookup(surveyJson = {}) {
   }
 
   return {
+    courseIdentity,
     getLabel(questionName, value) {
       if (value === undefined || value === null || value === "") return "";
       return findChoice(questionName, value)?.text
@@ -45,6 +54,7 @@ export function createChoiceLookup(surveyJson = {}) {
     getCourse(questionName, value) {
       return findChoice(questionName, value)
         ?? coursesByCode.get(normalizeCode(value))
+        ?? coursesByIdentity.get(courseIdentity(value))
         ?? null;
     },
     getChoice(questionName, value) {
@@ -180,6 +190,41 @@ export function normalizeCode(value) {
 }
 
 export const normalizeCourseCode = normalizeCode;
+
+// Alternative codes for the same study components in the ES PER/source form.
+// Other equivalences come only from combined codes in the supplied catalogue.
+const COURSE_CODE_ALIASES = [
+  ["2imc05", "5t514"],
+  ["2imc00", "5t746"],
+  ["2imc10", "5l990"],
+];
+
+export function createCourseCodeResolver(courses = []) {
+  const aliases = new Map();
+  const groups = [
+    ...COURSE_CODE_ALIASES,
+    ...courses.filter((course) => Number.isFinite(course.credits))
+      .map((course) => normalizeCode(course.code).split("/")),
+  ];
+  for (const group of groups) {
+    const codes = group.map(normalizeCode).filter(Boolean);
+    if (codes.length < 2) continue;
+    const identities = new Set(codes.map((code) => aliases.get(code) ?? code));
+    const identity = aliases.get(codes[0]) ?? codes[0];
+    for (const [code, existing] of aliases) {
+      if (identities.has(existing)) aliases.set(code, identity);
+    }
+    for (const code of codes) aliases.set(code, identity);
+  }
+  return (value) => {
+    const code = normalizeCode(value);
+    const parts = code.split("/");
+    const identities = parts.map((part) => aliases.get(part) ?? part);
+    return identities.every((identity) => identity === identities[0])
+      ? identities[0]
+      : code;
+  };
+}
 
 export function selectedValues(value) {
   if (Array.isArray(value)) {

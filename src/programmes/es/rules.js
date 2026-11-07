@@ -1,4 +1,5 @@
 // Builds ES-specific academic validation results from calculated programme data.
+import { duplicateCourseValidations } from "../../shared/course-selection.js";
 import { formatCredits } from "../../shared/credit-utils.js";
 
 export function buildEsValidations(values) {
@@ -220,6 +221,7 @@ export function buildEsValidations(values) {
     detail: "Substantive course overlap, academic level and overall program coherence require Examination Committee review and were not verified automatically.",
   });
 
+  validations.push(...duplicateCourseValidations(values.duplicates));
   return validations;
 }
 

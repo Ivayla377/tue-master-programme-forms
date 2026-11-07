@@ -1,4 +1,5 @@
 // Builds IAM-specific academic validation results from calculated programme data.
+import { duplicateCourseValidations } from "../../shared/course-selection.js";
 import { formatCredits } from "../../shared/credit-utils.js";
 export { resolveIamRules } from "./form-config.js";
 
@@ -74,14 +75,7 @@ export function buildIamValidations(values) {
     });
   }
 
-  if (values.duplicates.length > 0) {
-    validations.push({
-      label: "Double counting",
-      status: "error",
-      detail:
-        `${values.duplicates.map((course) => course.displayCode).join(", ")} excluded from lower-priority selections because each course may count only once.`,
-    });
-  }
+  validations.push(...duplicateCourseValidations(values.duplicates));
 
   if (values.flags.hasAssignedHomologation) {
     validations.push({

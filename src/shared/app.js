@@ -5,6 +5,7 @@ import "survey-core/survey-core.min.css";
 import "survey-js-ui";
 
 import "../styles.scss";
+import { syncCourseCreditDisplays } from "./survey-rules.js";
 
 const SUMMARY_QUESTION_NAME = "program_summary_html";
 const REPORTING_PAGE_NAME = "reporting";
@@ -55,6 +56,7 @@ export function mountProgramForm(config) {
     try {
       config.beforeCalculate?.(survey);
       const report = config.calculateReport(survey.data, choiceLookup);
+      syncCourseCreditDisplays(survey, report, choiceLookup);
       const summaryHtml = config.renderSummary(report, survey.data, choiceLookup, labels);
 
       for (const [questionName, renderHtml] of Object.entries(

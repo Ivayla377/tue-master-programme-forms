@@ -6,6 +6,8 @@ import {
 import { isTrue } from "../../shared/credit-utils.js";
 import {
   claimCourse,
+  createCourseClaims,
+  finalizeCourseClaims,
   claimListedCourses,
   claimManualCourseRows,
   normalizeManualCourseRows,
@@ -47,7 +49,7 @@ export function calculateCybr(data = {}, choiceLookup = createCybrChoiceLookup()
   const config = choiceLookup.cybrConfig;
   const rules = resolveCybrRules(data, config);
   const duplicates = [];
-  const claimed = new Map();
+  const claimed = createCourseClaims(choiceLookup);
   const readCourse = (value, questionName) =>
     courseFromValue(value, choiceLookup, questionName);
 
@@ -57,7 +59,7 @@ export function calculateCybr(data = {}, choiceLookup = createCybrChoiceLookup()
   for (const course of mandatoryFixedCourses) {
     course.counted = claimCourse(
       course,
-      "mandatory component",
+      "Mandatory courses",
       claimed,
       duplicates,
     );
@@ -69,11 +71,24 @@ export function calculateCybr(data = {}, choiceLookup = createCybrChoiceLookup()
     claimed,
     duplicates,
   );
+  const internship = resolveInternship(data, choiceLookup, config);
+  if (internship.course) {
+    internship.counted = claimCourse(
+      internship.course,
+      "Internship",
+      claimed,
+      duplicates,
+    );
+    internship.exclusionReason = internship.counted
+      ? ""
+      : "Duplicate course; excluded from totals.";
+  }
+
   const cybrSelection = claimListedCourses({
     values: data.cybr_electives,
     allowedCodes: config.cybrElectiveCodes,
     questionName: CYBR_QUESTION_NAMES.cybrElectives,
-    component: "Cybersecurity elective",
+    component: "Cybersecurity electives",
     choiceLookup,
     claimed,
     duplicates,
@@ -87,29 +102,16 @@ export function calculateCybr(data = {}, choiceLookup = createCybrChoiceLookup()
   for (const course of excessCybrElectiveCourses) {
     renameCourseClaim(
       course,
-      "additional Cybersecurity elective in free-elective space",
+      "Additional Cybersecurity electives",
       claimed,
     );
-  }
-
-  const internship = resolveInternship(data, choiceLookup, config);
-  if (internship.course) {
-    internship.counted = claimCourse(
-      internship.course,
-      "internship",
-      claimed,
-      duplicates,
-    );
-    internship.exclusionReason = internship.counted
-      ? ""
-      : "Duplicate course; excluded from totals.";
   }
 
   const mcsSelection = claimListedCourses({
     values: data.mcs_course_electives,
     allowedCodes: config.mcsElectiveCodes,
     questionName: CYBR_QUESTION_NAMES.mcsElectives,
-    component: "IAM or CSE elective",
+    component: "IAM/CSE courses",
     choiceLookup,
     claimed,
     duplicates,
@@ -118,7 +120,7 @@ export function calculateCybr(data = {}, choiceLookup = createCybrChoiceLookup()
   const mcsRows = otherMcsCoursesActive
     ? claimManualCourseRows(
         normalizeManualCourseRows(data.mcs_other_courses),
-        "IAM or CSE elective",
+        "Other IAM/CSE courses",
         claimed,
         duplicates,
       )
@@ -130,17 +132,19 @@ export function calculateCybr(data = {}, choiceLookup = createCybrChoiceLookup()
         normalizeManualCourseRows(
           data.homologation_courses ?? data.assigned_homologation_courses,
         ),
-        "homologation",
+        "Homologation",
         claimed,
         duplicates,
       )
     : [];
   const freeElectiveRows = claimManualCourseRows(
     normalizeManualCourseRows(data.free_electives),
-    "free elective",
+    "Free electives",
     claimed,
     duplicates,
   );
+
+  finalizeCourseClaims(claimed, duplicates);
 
   const useCalculatedValues =
     duplicates.length === 0
@@ -259,6 +263,14 @@ export function calculateCybr(data = {}, choiceLookup = createCybrChoiceLookup()
 
   return {
     rules,
+    allocationCredits: {
+      cybr_elective_credits_excess: cybrElectivesExcess,
+    },
+    manualCourseTables: {
+      free_electives: freeElectiveRows,
+      homologation_courses: homologationRows,
+      mcs_other_courses: mcsRows,
+    },
     subtotals: {
       mandatoryFixed,
       graduation: graduationCredits,
@@ -282,10 +294,10 @@ export function calculateCybr(data = {}, choiceLookup = createCybrChoiceLookup()
       mandatoryFixedCourses,
       graduation,
       cybrElectiveCourses: cybrSelection.courses,
-      requiredCybrElectiveCourses,
+      requiredCybrElectiveCourses: [...requiredCybrElectiveCourses, ...cybrSelection.duplicateCourses],
       excessCybrElectiveCourses,
       invalidCybrCourses: cybrSelection.invalidCourses,
-      mcsElectiveCourses: mcsSelection.courses,
+      mcsElectiveCourses: [...mcsSelection.courses, ...mcsSelection.duplicateCourses],
       invalidMcsCourses: mcsSelection.invalidCourses,
       mcsRows,
       homologationRows,
@@ -308,7 +320,7 @@ function resolveGraduation(choiceLookup, config, claimed, duplicates) {
   for (const course of courses) {
     course.counted = claimCourse(
       course,
-      "graduation component",
+      "Graduation courses",
       claimed,
       duplicates,
     );

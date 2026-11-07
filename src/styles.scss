@@ -511,7 +511,7 @@ body:not(.is-first-survey-page) #surveyElement .sd-root-modern > .sd-container-m
 .summary-table--report td:last-child {
   width: 8rem;
   text-align: right;
-  white-space: nowrap;
+  white-space: normal;
 }
 
 .summary-table--report tbody td:first-child {
@@ -1360,7 +1360,7 @@ body:not(.is-first-survey-page) #surveyElement .sd-root-modern > .sd-container-m
 .summary-report--es .summary-table--es-free-space td:last-child {
   width: 15%;
   text-align: right;
-  white-space: nowrap;
+  white-space: normal;
 }
 
 .summary-report--es .summary-table--es-duplicates th:first-child,
@@ -1440,7 +1440,7 @@ body:not(.is-first-survey-page) #surveyElement .sd-root-modern > .sd-container-m
   .summary-report--es .summary-table--es-free-space td:last-child {
     width: 15% !important;
     text-align: right !important;
-    white-space: nowrap !important;
+    white-space: normal !important;
   }
 
   .summary-report--es .summary-table--es-duplicates th:first-child,

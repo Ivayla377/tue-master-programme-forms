@@ -134,9 +134,19 @@ export function renderValidationItem(validation) {
   return `
     <li class="validation-item validation-item--${validationStatus(validation)}">
       <strong>${escapeHtml(displayText(label))}</strong>
-      <span>${escapeHtml(displayText(detail))}</span>
+      <span>${renderValidationDetail(item, detail)}</span>
     </li>
   `;
+}
+
+function renderValidationDetail(item, detail) {
+  const code = item.duplicateCode;
+  const prefix = `Duplicate course detected: ${code}.`;
+  if (code && String(detail).startsWith(prefix)) {
+    return `Duplicate course detected: <strong>${escapeHtml(code)}.</strong>`
+      + escapeHtml(String(detail).slice(prefix.length));
+  }
+  return escapeHtml(displayText(detail));
 }
 
 export function booleanValue(value) {
@@ -298,7 +308,7 @@ function renderSidebarValidation(validation) {
   return `
     <li class="validation-item validation-item--${escapeHtml(validation.status)}">
       <strong>${escapeHtml(validation.label)}</strong>
-      <span>${escapeHtml(validation.detail)}</span>
+      <span>${renderValidationDetail(validation, validation.detail)}</span>
     </li>
   `;
 }
