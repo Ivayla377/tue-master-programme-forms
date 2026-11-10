@@ -40,9 +40,18 @@ export function createCseChoiceLookup(surveyJson = surveySource) {
 }
 
 export function buildCseFormConfig(surveyJson, lookup) {
+  const hasHomologationLimit = surveyJson.calculatedValues?.some(
+    ({ name }) => name === "rule_homologation_max_credits",
+  );
+  const ruleFields = Object.freeze({
+    ...CSE_RULE_FIELD_NAMES,
+    ...(hasHomologationLimit
+      ? { homologationMaximumCredits: "rule_homologation_max_credits" }
+      : {}),
+  });
   const rules = Object.freeze(readNumericRulesFromSurvey(
     surveyJson,
-    CSE_RULE_FIELD_NAMES,
+    ruleFields,
     "CSE form",
   ));
   const focusAreas = Object.freeze(
@@ -81,6 +90,7 @@ export function buildCseFormConfig(surveyJson, lookup) {
 
   return Object.freeze({
     rules,
+    ruleFields,
     focusAreas,
     graduationGroups,
     foundationalFields,
@@ -96,7 +106,7 @@ export function resolveCseRules(data, config = DEFAULT_CSE_CONFIG) {
   return resolveNumericRules(
     data,
     config.rules,
-    CSE_RULE_FIELD_NAMES,
+    config.ruleFields,
   );
 }
 

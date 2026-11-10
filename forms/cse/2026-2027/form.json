@@ -188,7 +188,7 @@
                 },
                 {
                   "value": "2imf10",
-                  "text": "2IMF10 Process Algebra (5 ECTS)"
+                  "text": "2IMF10 Concurrency Theory (5 ECTS)"
                 }
               ]
             },
@@ -208,7 +208,7 @@
                 },
                 {
                   "value": "2imd10",
-                  "text": "2IMD10 Engineering Data-Intensive Systems (5 ECTS)"
+                  "text": "2IMD10 Engineering of Data-Intensive Systems (5 ECTS)"
                 }
               ]
             },
@@ -280,7 +280,7 @@
                 },
                 {
                   "value": "2imf10",
-                  "text": "2IMF10 Process Algebra (5 ECTS)"
+                  "text": "2IMF10 Concurrency Theory (5 ECTS)"
                 },
                 {
                   "value": "2ima20",
@@ -303,12 +303,16 @@
                   "text": "2IMF15 Proving with Computer Assistance (5 ECTS)"
                 },
                 {
-                  "value": "2ima30",
-                  "text": "2IMA30 Topological Data Analysis (5 ECTS)"
-                },
-                {
                   "value": "2ima50",
                   "text": "2IMA50 Algorithms for Collective Decision Making (5 ECTS)"
+                },
+                {
+                  "value": "2imf40",
+                  "text": "2IMF40 Modeling and Verification of Probabilistic Systems (5 ECTS)"
+                },
+                {
+                  "value": "2ima45",
+                  "text": "2IMA45 Computational Topology (5 ECTS)"
                 }
               ],
               "choicesVisibleIf": "({item} <> {foundational_algorithms}) or {extra_algorithms} contains {item}"
@@ -333,7 +337,7 @@
                 },
                 {
                   "value": "2imd10",
-                  "text": "2IMD10 Engineering Data-Intensive Systems (5 ECTS)"
+                  "text": "2IMD10 Engineering of Data-Intensive Systems (5 ECTS)"
                 },
                 {
                   "value": "2imf35",
@@ -352,12 +356,12 @@
                   "text": "2IMN25 Quantitative Evaluation of Cyber Physical Systems (5 ECTS)"
                 },
                 {
-                  "value": "2imn35",
-                  "text": "2IMN35 VLSI Programming (5 ECTS)"
+                  "value": "2imn45",
+                  "text": "2IMN45 Edge Computing (5 ECTS)"
                 },
                 {
-                  "value": "2imn30",
-                  "text": "2IMN30 Machine Learning for Industry (5 ECTS)"
+                  "value": "2imn40",
+                  "text": "2IMN40 Approximate Computing (5 ECTS)"
                 }
               ],
               "choicesVisibleIf": "({item} <> {foundational_architectures}) or {extra_architectures} contains {item}"
@@ -383,10 +387,6 @@
                 {
                   "value": "2imp10",
                   "text": "2IMP10 Program Verification Techniques (5 ECTS)"
-                },
-                {
-                  "value": "2amm10",
-                  "text": "2AMM10 Deep Learning (5 ECTS)"
                 },
                 {
                   "value": "2amm20",
@@ -449,7 +449,7 @@
                 },
                 {
                   "value": "2imf10",
-                  "text": "2IMF10 Process Algebra (5 ECTS)"
+                  "text": "2IMF10 Concurrency Theory (5 ECTS)"
                 },
                 {
                   "value": "2ima20",
@@ -472,12 +472,16 @@
                   "text": "2IMF15 Proving with Computer Assistance (5 ECTS)"
                 },
                 {
-                  "value": "2ima30",
-                  "text": "2IMA30 Topological Data Analysis (5 ECTS)"
-                },
-                {
                   "value": "2ima50",
                   "text": "2IMA50 Algorithms for Collective Decision Making (5 ECTS)"
+                },
+                {
+                  "value": "2imf40",
+                  "text": "2IMF40 Modeling and Verification of Probabilistic Systems (5 ECTS)"
+                },
+                {
+                  "value": "2ima45",
+                  "text": "2IMA45 Computational Topology (5 ECTS)"
                 }
               ],
               "choicesVisibleIf": "({item} <> {foundational_algorithms} and {extra_algorithms} notcontains {item}) or {specialization_algorithms} contains {item}"
@@ -497,7 +501,7 @@
                 },
                 {
                   "value": "2imd10",
-                  "text": "2IMD10 Engineering Data-Intensive Systems (5 ECTS)"
+                  "text": "2IMD10 Engineering of Data-Intensive Systems (5 ECTS)"
                 },
                 {
                   "value": "2imf35",
@@ -516,12 +520,12 @@
                   "text": "2IMN25 Quantitative Evaluation of Cyber Physical Systems (5 ECTS)"
                 },
                 {
-                  "value": "2imn35",
-                  "text": "2IMN35 VLSI Programming (5 ECTS)"
+                  "value": "2imn45",
+                  "text": "2IMN45 Edge Computing (5 ECTS)"
                 },
                 {
-                  "value": "2imn30",
-                  "text": "2IMN30 Machine Learning for Industry (5 ECTS)"
+                  "value": "2imn40",
+                  "text": "2IMN40 Approximate Computing (5 ECTS)"
                 }
               ],
               "choicesVisibleIf": "({item} <> {foundational_architectures} and {extra_architectures} notcontains {item}) or {specialization_architectures} contains {item}"
@@ -542,10 +546,6 @@
                 {
                   "value": "2imp10",
                   "text": "2IMP10 Program Verification Techniques (5 ECTS)"
-                },
-                {
-                  "value": "2amm10",
-                  "text": "2AMM10 Deep Learning (5 ECTS)"
                 },
                 {
                   "value": "2amm20",
@@ -592,10 +592,6 @@
                   "text": "2IMS25 Principles of Data Protection (5 ECTS)"
                 },
                 {
-                  "value": "2imv25",
-                  "text": "2IMV25 Interactive Virtual Environments (5 ECTS)"
-                },
-                {
                   "value": "2dmi20",
                   "text": "2DMI20 Software Security (5 ECTS)"
                 },
@@ -617,15 +613,11 @@
                 },
                 {
                   "value": "2ims30",
-                  "text": "2IMS30 Advanced Network Security (5 ECTS)"
+                  "text": "2IMS30 Wireless IoT Security (5 ECTS)"
                 },
                 {
                   "value": "2ims40",
                   "text": "2IMS40 Intrusion Detection Laboratory (5 ECTS)"
-                },
-                {
-                  "value": "2ims50",
-                  "text": "2IMS50 Introduction to Quantum Computing and Security (5 ECTS)"
                 },
                 {
                   "value": "2ims60",
@@ -646,9 +638,20 @@
                 {
                   "value": "2imv15",
                   "text": "2IMV15 Simulation in Computer Graphics (5 ECTS)"
+                },
+                {
+                  "value": "2imv30",
+                  "text": "2IMV30 Interactive Visualization (5 ECTS)"
+                },
+                {
+                  "value": "2ims55",
+                  "text": "2IMS55 Quantum Protocols (5 ECTS)"
+                },
+                {
+                  "value": "2dm100",
+                  "text": "2DM100 Cryptographic Engineering (5 ECTS)"
                 }
-              ],
-              "choicesVisibleIf": "({item} <> {foundational_software} and {extra_software} notcontains {item}) or {specialization_additional} contains {item}"
+              ]
             },
             {
               "type": "html",
@@ -785,7 +788,7 @@
               "name": "homologation_courses",
               "visibleIf": "{homologation} = true",
               "title": "Included homologation courses",
-              "description": "Add up to three courses.",
+              "description": "Add courses up to a maximum of {rule_homologation_max_credits} credits.",
               "isRequired": true,
               "requiredIf": "{homologation} = true",
               "columns": [
@@ -811,15 +814,25 @@
                   "inputType": "number",
                   "min": 0,
                   "isRequired": true,
-                  "width": "5em"
+                  "width": "5em",
+                  "totalType": "sum",
+                  "totalDisplayStyle": "decimal",
+                  "validators": [
+                    {
+                      "type": "expression",
+                      "expression": "{row.credits} > 0",
+                      "text": "Enter a positive credit value."
+                    }
+                  ]
                 }
               ],
               "rowCount": 0,
-              "maxRowCount": 3,
               "confirmDelete": true,
               "addRowText": "Add homologation course",
               "confirmDeleteText": "Remove this homologation course?",
-              "cellType": "text"
+              "cellType": "text",
+              "minRowCount": 1,
+              "clearIfInvisible": "onHidden"
             },
             {
               "type": "boolean",
@@ -827,7 +840,8 @@
               "visibleIf": "{homologation} = true",
               "title": "Are any homologation courses self-chosen rather than assigned in the admission letter?",
               "isRequired": true,
-              "requiredIf": "{homologation} = true"
+              "requiredIf": "{homologation} = true",
+              "clearIfInvisible": "onHidden"
             },
             {
               "type": "comment",
@@ -836,7 +850,8 @@
               "title": "Motivation self-chosen homologation courses",
               "description": "Explain the deficiency addressed by each self-chosen bachelor course and for which master-level courses they are required.",
               "isRequired": true,
-              "requiredIf": "{homologation} = true and {self_chosen_homologation} = true"
+              "requiredIf": "{homologation} = true and {self_chosen_homologation} = true",
+              "clearIfInvisible": "onHidden"
             }
           ]
         }
@@ -855,7 +870,7 @@
           "choices": [
             {
               "value": "2imd00",
-              "text": "2IMD00 Seminar Datamanagement (5 ECTS)"
+              "text": "2IMD00 Seminar Data management (5 ECTS)"
             },
             {
               "value": "2imf00",
@@ -891,7 +906,7 @@
             },
             {
               "value": "2ims00",
-              "text": "2IMS00 Seminar Information Security Technology (5 ECTS)"
+              "text": "2IMS00 Seminar Cybersecurity (5 ECTS)"
             }
           ]
         },
@@ -1009,14 +1024,6 @@
             },
             {
               "type": "text",
-              "name": "programme_version_notice",
-              "title": "Version notice shown in the form and report",
-              "visible": false,
-              "readOnly": true,
-              "defaultValue": "Draft 2026-2027 placeholder. Uses 2025-2026 courses and rules. Not ready for submission."
-            },
-            {
-              "type": "text",
               "name": "programme_header_kicker",
               "title": "Program name shown above the form",
               "visible": false,
@@ -1076,6 +1083,11 @@
     },
     {
       "name": "rule_internship_credits",
+      "expression": "15",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_homologation_max_credits",
       "expression": "15",
       "includeIntoResult": true
     },

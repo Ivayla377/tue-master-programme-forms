@@ -149,7 +149,9 @@ export function calculateCse(data = {}, choiceLookup = createCseChoiceLookup()) 
   }
 
   const homologationRows = processRows(
-    isTrue(data.homologation) ? normalizeRows(data.homologation_courses) : [],
+    isTrue(data.homologation)
+      ? normalizeRows(data.homologation_courses, { titleFields: ["name", "title"] })
+      : [],
     "Homologation",
     claimed,
     doubleCountedCourses,
@@ -198,6 +200,7 @@ export function calculateCse(data = {}, choiceLookup = createCseChoiceLookup()) 
     internshipSelected,
     internshipCourse,
     freeSpaceTotal,
+    homologationCredits,
     seminarCredits,
     graduationCredits,
     totalCredits,

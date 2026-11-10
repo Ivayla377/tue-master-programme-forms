@@ -75,6 +75,14 @@ export function buildCseValidations(values) {
 
   validations.push(...duplicateCourseValidations(values.doubleCountedCourses));
 
+  if (values.homologationCredits > rules.homologationMaximumCredits) {
+    validations.push({
+      label: "Homologation limit",
+      status: "error",
+      detail: `Homologation exceeds the maximum of ${formatCredits(rules.homologationMaximumCredits, "credits")}.`,
+    });
+  }
+
   if (values.invalidFreeRows.length > 0) {
     validations.push({
       label: "Free elective rows",
