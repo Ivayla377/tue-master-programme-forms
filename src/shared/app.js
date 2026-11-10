@@ -56,6 +56,15 @@ export function mountProgramForm(config) {
     try {
       config.beforeCalculate?.(survey);
       const report = config.calculateReport(survey.data, choiceLookup);
+      if (labels.versionNotice) {
+        report.validations.unshift({
+          label: "Form version",
+          status: "warning",
+          detail: labels.versionNotice,
+        });
+        report.hasWarnings = true;
+        report.isComplete = false;
+      }
       syncCourseCreditDisplays(survey, report, choiceLookup);
       const summaryHtml = config.renderSummary(report, survey.data, choiceLookup, labels);
 

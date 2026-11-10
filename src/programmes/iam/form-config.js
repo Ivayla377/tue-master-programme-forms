@@ -1,5 +1,5 @@
 // Builds IAM course metadata and programme rules from the SurveyJS form JSON.
-import surveySource from "../../../forms/iam/form.json" with { type: "json" };
+import surveySource from "#forms/iam" with { type: "json" };
 
 import {
   createChoiceLookup as createSharedChoiceLookup,

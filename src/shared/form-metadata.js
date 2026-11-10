@@ -7,6 +7,7 @@ import {
 export const PROGRAMME_METADATA_QUESTIONS = Object.freeze({
   academicYear: "programme_academic_year",
   headerKicker: "programme_header_kicker",
+  versionNotice: "programme_version_notice",
 });
 
 export function readProgrammeFormMetadata(surveySource) {
@@ -21,6 +22,10 @@ export function readProgrammeFormMetadata(surveySource) {
     lookup,
     PROGRAMME_METADATA_QUESTIONS.academicYear,
   )).trim();
+  const versionNotice = String(defaultQuestionValue(
+    lookup,
+    PROGRAMME_METADATA_QUESTIONS.versionNotice,
+  )).trim();
   const headerKicker = String(defaultQuestionValue(
     lookup,
     PROGRAMME_METADATA_QUESTIONS.headerKicker,
@@ -33,6 +38,7 @@ export function readProgrammeFormMetadata(surveySource) {
 
   return Object.freeze({
     academicYear,
+    versionNotice,
     headerKicker,
     pageTitle,
     reportingPageTitle,
@@ -48,6 +54,7 @@ export function programmeFormLabels(surveySource) {
     kicker: metadata.headerKicker,
     heading: "Program of Examinations",
     year: metadata.academicYear,
+    versionNotice: metadata.versionNotice,
     ariaLabel: `${metadata.pageTitle} form`,
     summaryEyebrow: metadata.summaryEyebrow,
     summaryTitle: metadata.summaryTitle,

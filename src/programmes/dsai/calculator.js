@@ -46,7 +46,7 @@ export function calculateEcts(
   data = {},
   choiceLookup = createChoiceLookup(),
 ) {
-  const rules = resolveDsaiRules(data);
+  const rules = resolveDsaiRules(data, choiceLookup);
 
   function readCourse(questionName) {
     return (value) =>
@@ -88,6 +88,9 @@ export function calculateEcts(
     claim(trajectory.courses, trajectory.label);
   }
   claim(homologation.courses, "Homologation");
+  homologation.rows = claimManualCourseRows(
+    homologation.rows, "Homologation", claimed, duplicates,
+  );
   freeElectives.rows = claimManualCourseRows(
     freeElectives.rows, "Free electives", claimed, duplicates,
   );
@@ -100,7 +103,8 @@ export function calculateEcts(
     graduation.credits = sumCountedCourses(graduation.courses);
     seminar.credits = seminar.course?.counted ? seminar.course.credits : 0;
     internship.credits = internship.course?.counted ? internship.course.credits : 0;
-    homologation.credits = sumCountedCourses(homologation.courses);
+    homologation.credits = sumCountedCourses(homologation.courses)
+      + sumCountedRows(homologation.rows);
     freeElectives.credits = sumCountedRows(freeElectives.rows);
     for (const trajectory of specialization.trajectories) {
       trajectory.credits = sumCountedCourses(trajectory.courses);
@@ -162,6 +166,7 @@ export function calculateEcts(
     freeRowsCredits: freeElectives.credits,
     freeSpaceTotal,
     homologationCredits: homologation.credits,
+    invalidHomologationRows: homologation.rows.filter((row) => !row.validCredits),
     internshipCredits: internship.credits,
     graduationCredits: graduation.credits,
     totalCredits,
@@ -173,6 +178,7 @@ export function calculateEcts(
     rules,
     manualCourseTables: {
       free_electives: freeElectives.rows,
+      ...(homologation.isManual ? { homologation_courses: homologation.rows } : {}),
     },
     subtotals: {
       core: core.credits,
@@ -199,6 +205,7 @@ export function calculateEcts(
       seminar: seminar.course,
       freeRows: freeElectives.rows,
       homologationCourses: homologation.courses,
+      homologationRows: homologation.rows,
       internship,
       graduationCourses: graduation.courses,
       projectCourses,
@@ -239,8 +246,8 @@ function buildCore({ data, choiceLookup, readCourse }) {
   };
 }
 
-function buildSpecialization({ data, rules, readCourse }) {
-  const trajectories = TRAJECTORIES.map((trajectory) => {
+function buildSpecialization({ data, rules, readCourse, choiceLookup }) {
+  const trajectories = (choiceLookup.dsaiConfig?.trajectories ?? TRAJECTORIES).map((trajectory) => {
     const courses = selectedCodes(data, trajectory.name)
       .map(readCourse(trajectory.name));
     const credits = readNumericValue(
@@ -298,17 +305,24 @@ function buildSeminar({ data, readCourse }) {
   };
 }
 
-function buildHomologation({ data, readCourse }) {
-  const courses = isTrue(data.homologation)
+function buildHomologation({ data, readCourse, choiceLookup }) {
+  const included = isTrue(data.homologation);
+  const isManual = choiceLookup.getQuestion(QUESTION_NAMES.homologation)?.type === "matrixdynamic";
+  const rows = included && isManual
+    ? normalizeManualCourseRows(data[QUESTION_NAMES.homologation])
+    : [];
+  const courses = included && !isManual
     ? selectedValues(data[QUESTION_NAMES.homologation])
         .map(readCourse(QUESTION_NAMES.homologation))
     : [];
   return {
     courses,
+    rows,
+    isManual,
     credits: readNumericValue(
       data,
       "credits_homologation",
-      sumCourses(courses),
+      sumCourses(courses) + sumCourses(rows),
     ),
   };
 }
@@ -404,7 +418,7 @@ export function removeBlockedSpecializationSelections(
   const blockedByField = getBlockedSpecializationByField(
     coreElectiveCode,
     choiceLookup,
-    TRAJECTORIES,
+    choiceLookup.dsaiConfig?.trajectories ?? TRAJECTORIES,
   );
   let changed = false;
 

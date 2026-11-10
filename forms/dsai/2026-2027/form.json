@@ -1,0 +1,1081 @@
+{
+  "title": "Form 1: DS&AI Program of Examinations",
+  "description": "This form is used to create a report that shows your current study program. Its purpose is to be shared with the examination committee, so that they can check whether it satisfies the requirements of DS&AI programs and approve it or inform you of how it does not satisfy the requirements. This form has built-in validation that should help you create a valid study program.",
+  "completedHtml": "Thank you for completing the form",
+  "completedBeforeHtml": "You have already completed this form.",
+  "loadingHtml": "Loading form...",
+  "showProgressBar": "top",
+  "progressBarType": "pages",
+  "checkErrorsMode": "onNextPage",
+  "clearInvisibleValues": "onHidden",
+  "pages": [
+    {
+      "name": "frontmatter",
+      "title": "General information",
+      "elements": [
+        {
+          "type": "multipletext",
+          "name": "personal_info",
+          "title": "Personal information",
+          "isRequired": true,
+          "items": [
+            {
+              "name": "name",
+              "isRequired": true,
+              "placeholder": "Surname, Given name(s)",
+              "title": "Name"
+            },
+            {
+              "name": "id",
+              "isRequired": true,
+              "maskType": "pattern",
+              "maskSettings": {
+                "pattern": "9999999"
+              },
+              "title": "Student ID",
+              "maxLength": 7,
+              "inputSize": 7,
+              "validators": [
+                {
+                  "type": "regex",
+                  "text": "Your id is a 7-digit number",
+                  "regex": "\\d{7}"
+                }
+              ]
+            },
+            {
+              "name": "enrollment",
+              "title": "Month and year of enrollment",
+              "isRequired": true,
+              "inputType": "month",
+              "validators": [
+                {
+                  "type": "regex",
+                  "text": "Enter a valid enrollment month from 2010 to 2035.",
+                  "regex": "^(?:201[0-9]|202[0-9]|203[0-5])-(?:0[1-9]|1[0-2])$"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "panel",
+          "name": "graduation_cluster_panel",
+          "title": "Graduation cluster",
+          "elements": [
+            {
+              "type": "dropdown",
+              "name": "intended_graduation_cluster",
+              "title": "Intended graduation cluster",
+              "isRequired": true,
+              "choices": [
+                {
+                  "value": "algorithms",
+                  "text": "Algorithms (ALGO)"
+                },
+                {
+                  "value": "formal_systems_analysis",
+                  "text": "Formal Systems Analysis (FSA)"
+                },
+                {
+                  "value": "security",
+                  "text": "Security (SEC)"
+                },
+                {
+                  "value": "software_engineering_technology",
+                  "text": "Software Engineering and Technology (SET)"
+                },
+                {
+                  "value": "iris",
+                  "text": "Interconnected Resource-aware Intelligent Systems (IRIS)"
+                },
+                {
+                  "value": "dai_databases",
+                  "text": "Data and Artificial Intelligence (DAI) - Databases"
+                },
+                {
+                  "value": "dai_other",
+                  "text": "Data and Artificial Intelligence (DAI) - Other groups"
+                },
+                {
+                  "value": "process_analytics",
+                  "text": "Process Analytics (PA)"
+                },
+                {
+                  "value": "visualization",
+                  "text": "Visualization (VIS)"
+                },
+                {
+                  "value": "stochastic_probability_operations_research",
+                  "text": "Stochastic Probability and Operations Research (SPOR)"
+                }
+              ],
+              "showOtherItem": true,
+              "otherText": "Other / not listed",
+              "storeOthersAsComment": false
+            },
+            {
+              "type": "boolean",
+              "name": "matched_to_graduation_cluster",
+              "title": "Have you already been matched to your intended graduation cluster?",
+              "isRequired": true
+            },
+            {
+              "type": "text",
+              "name": "mentor_name",
+              "visibleIf": "{matched_to_graduation_cluster} = false",
+              "title": "Who is your mentor?",
+              "description": "The name of the person who advised you in the composition of your study program.",
+              "requiredIf": "{matched_to_graduation_cluster} = false",
+              "clearIfInvisible": "onHidden"
+            },
+            {
+              "type": "text",
+              "name": "graduation_cluster_representative_name",
+              "visibleIf": "{matched_to_graduation_cluster} = true",
+              "title": "Who is the representative of your intended graduation cluster?",
+              "description": "The name of the graduation cluster representative who advised you in the composition of your study program.",
+              "requiredIf": "{matched_to_graduation_cluster} = true",
+              "clearIfInvisible": "onHidden"
+            }
+          ]
+        },
+        {
+          "type": "panel",
+          "name": "previous_panel",
+          "title": "Previous approval",
+          "elements": [
+            {
+              "type": "boolean",
+              "name": "previous",
+              "title": "Is this a change of a previously approved study program?",
+              "isRequired": true
+            },
+            {
+              "type": "comment",
+              "name": "changes",
+              "visibleIf": "{previous} = true",
+              "title": "What has changed?",
+              "isRequired": true
+            },
+            {
+              "type": "panel",
+              "name": "programme_metadata",
+              "visible": false,
+              "elements": [
+                {
+                  "type": "text",
+                  "name": "programme_academic_year",
+                  "title": "Academic year used in form and report headings",
+                  "visible": false,
+                  "readOnly": true,
+                  "defaultValue": "2026-2027"
+                },
+                {
+                  "type": "text",
+                  "name": "programme_header_kicker",
+                  "title": "Program name shown above the form",
+                  "visible": false,
+                  "readOnly": true,
+                  "defaultValue": "TU/e MSc Data Science & Artificial Intelligence"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "program",
+      "title": "Program courses",
+      "elements": [
+        {
+          "type": "panel",
+          "name": "core_panel",
+          "title": "Mandatory courses",
+          "description": "The mandatory courses of the DS&AI program consist of 5 core courses and a mandatory choice of one out of three core electives. (All these courses are 5 credits.)",
+          "elements": [
+            {
+              "type": "checkbox",
+              "name": "core",
+              "title": "These are your core courses",
+              "description": "Every DS&AI student should have these courses in their program.",
+              "defaultValue": [
+                "2amm20",
+                "2ams11",
+                "0lm190",
+                "2amd15",
+                "2amu10"
+              ],
+              "correctAnswer": [
+                "2amm20",
+                "2ams11",
+                "0lm190",
+                "2amd15",
+                "2amu10"
+              ],
+              "commentText": "",
+              "choices": [
+                {
+                  "value": "2amm20",
+                  "text": "2AMM20 Research Topics in Data Mining (5 ECTS)"
+                },
+                {
+                  "value": "2ams11",
+                  "text": "2AMS11 Survival Analysis for Data Scientists (5 ECTS)"
+                },
+                {
+                  "value": "0lm190",
+                  "text": "0LM190 Philosophy and ethics of AI (5 ECTS)"
+                },
+                {
+                  "value": "2amu10",
+                  "text": "2AMU10 Foundations of Artificial Intelligence (5 ECTS)"
+                },
+                {
+                  "value": "2amd15",
+                  "text": "2AMD15 Big Data Management (5 ECTS)"
+                }
+              ]
+            },
+            {
+              "type": "comment",
+              "name": "core_deselected",
+              "visibleIf": "{core} <> ['2amm20', '2ams11', '0lm190', '2amd15', '2amu10']",
+              "title": "Explain why you have not included all core courses!",
+              "isRequired": true
+            },
+            {
+              "type": "radiogroup",
+              "name": "core_elective",
+              "title": "Which core elective course did you choose?",
+              "isRequired": true,
+              "choices": [
+                {
+                  "value": "2ami10",
+                  "text": "2AMI10 Foundations of Process Mining (5 ECTS)"
+                },
+                {
+                  "value": "2amv10",
+                  "text": "2AMV10 Visual Analytics (5 ECTS)"
+                },
+                {
+                  "value": "2ams50",
+                  "text": "2AMS50 Optimization for Data Science (5 ECTS)"
+                }
+              ],
+              "choicesOrder": "asc"
+            }
+          ]
+        },
+        {
+          "type": "panel",
+          "name": "specialization_panel",
+          "title": "Specialization electives",
+          "description": "As part of your program, you must choose at least six specialization electives. (All these courses are 5 credits.) These are grouped per trajectory. You must have two major trajectories from which you choose at least two courses and also choose two courses from one or more further trajectories (minors).",
+          "isRequired": true,
+          "elements": [
+            {
+              "type": "checkbox",
+              "name": "context",
+              "title": "DS&AI in Context",
+              "choices": [
+                {
+                  "value": "2imp40",
+                  "text": "2IMP40 Empirical Methods in Software Engineering (5 ECTS)"
+                }
+              ]
+            },
+            {
+              "type": "checkbox",
+              "name": "stat",
+              "title": "Statistics",
+              "choices": [
+                {
+                  "value": "2mms80",
+                  "text": "2MMS80 Statistical Learning Theory (5 ECTS)"
+                },
+                {
+                  "value": "2dd23",
+                  "text": "2DD23 Time Series & Forecasting (5 ECTS)"
+                },
+                {
+                  "value": "2ams30",
+                  "text": "2AMS30 Network Statistics for Data Science (5 ECTS)"
+                }
+              ]
+            },
+            {
+              "type": "checkbox",
+              "name": "db",
+              "title": "Data Engineering & Management",
+              "choices": [
+                {
+                  "value": "2imd10",
+                  "text": "2IMD10 Engineering Data-Intensive Systems (5 ECTS)"
+                },
+                {
+                  "value": "2ims25",
+                  "text": "2IMS25 Principles of Data Protection (5 ECTS)"
+                },
+                {
+                  "value": "2amd20",
+                  "text": "2AMD20 Knowledge Engineering (5 ECTS)"
+                }
+              ]
+            },
+            {
+              "type": "checkbox",
+              "name": "aiml",
+              "title": "Artificial Intelligence & Machine Learning",
+              "choices": [
+                {
+                  "value": "2amu20",
+                  "text": "2AMU20 Generative AI Models (5 ECTS)"
+                },
+                {
+                  "value": "2amu30",
+                  "text": "2AMU30 Uncertainty Representations and Reasoning (5 ECTS)"
+                },
+                {
+                  "value": "2amm40",
+                  "text": "2AMM40 Machine Learning for Science (5 ECTS)"
+                },
+                {
+                  "value": "2ams40",
+                  "text": "2AMS40 Optimal Decision Making & Reinforcement Learning (5 ECTS)"
+                },
+                {
+                  "value": "2amc15",
+                  "text": "2AMC15 Reinforcement Learning in Practice (5 ECTS)"
+                }
+              ]
+            },
+            {
+              "type": "checkbox",
+              "name": "dmml",
+              "title": "Data Mining & Machine Learning",
+              "choices": [
+                {
+                  "value": "2amm15",
+                  "text": "2AMM15 Machine Learning Engineering (5 ECTS)"
+                },
+                {
+                  "value": "2amm10",
+                  "text": "2AMM10 Deep Learning (5 ECTS)"
+                }
+              ]
+            },
+            {
+              "type": "checkbox",
+              "name": "pmva",
+              "title": "Process Mining & Visual Analytics",
+              "choices": [
+                {
+                  "value": "2ami10",
+                  "text": "2AMI10 Foundations of Process Mining (5 ECTS)",
+                  "visibleIf": "{core_elective} <> '2ami10'",
+                  "enableIf": "{core_elective} <> '2ami10'"
+                },
+                {
+                  "value": "2ami20",
+                  "text": "2AMI20 Advanced Process Mining (5 ECTS)"
+                },
+                {
+                  "value": "2ami30",
+                  "text": "2AMI30 Process Intelligence in Action (5 ECTS)"
+                },
+                {
+                  "value": "2amv10",
+                  "text": "2AMV10 Visual Analytics (5 ECTS)",
+                  "visibleIf": "{core_elective} <> '2amv10'",
+                  "enableIf": "{core_elective} <> '2amv10'"
+                }
+              ]
+            },
+            {
+              "type": "checkbox",
+              "name": "ada",
+              "title": "Algorithmic Data Analysis",
+              "choices": [
+                {
+                  "value": "2ams50",
+                  "text": "2AMS50 Optimization for Data Science (5 ECTS)",
+                  "visibleIf": "{core_elective} <> '2ams50'",
+                  "enableIf": "{core_elective} <> '2ams50'"
+                },
+                {
+                  "value": "2ima20",
+                  "text": "2IMA20 Algorithms for Geovisualization (5 ECTS)"
+                },
+                {
+                  "value": "2ima35",
+                  "text": "2IMA35 Massively Parallel Algorithms (5 ECTS)"
+                }
+              ]
+            },
+            {
+              "type": "html",
+              "name": "trajectory_classification_html",
+              "html": "<section class=\"trajectory-classification\" aria-live=\"polite\"><h4>Selection overview</h4><p>Review how your selected trajectories are classified below.</p><p class=\"trajectory-classification__empty\">Select specialization electives to see the overview.</p></section>"
+            },
+            {
+              "type": "checkbox",
+              "name": "selected_major_trajectories",
+              "visibleIf": "{number_of_major_candidates} > {rule_major_min_count}",
+              "title": "Which two qualifying trajectories do you want to use as your majors?",
+              "description": "More than two trajectories meet the threshold of {rule_major_min_credits} credits. Select two as majors; the others count toward the minor.",
+              "isRequired": true,
+              "requiredErrorText": "Select exactly two major trajectories.",
+              "clearIfInvisible": "onHidden",
+              "maxSelectedChoices": 2,
+              "validators": [
+                {
+                  "type": "answercount",
+                  "text": "Select exactly two major trajectories.",
+                  "minCount": 2,
+                  "maxCount": 2
+                }
+              ],
+              "choices": [
+                {
+                  "value": "context",
+                  "text": "DS&AI in Context",
+                  "visibleIf": "{credits_context_electives} >= {rule_major_min_credits}"
+                },
+                {
+                  "value": "stat",
+                  "text": "Statistics",
+                  "visibleIf": "{credits_stat_electives} >= {rule_major_min_credits}"
+                },
+                {
+                  "value": "db",
+                  "text": "Data Engineering & Management",
+                  "visibleIf": "{credits_db_electives} >= {rule_major_min_credits}"
+                },
+                {
+                  "value": "aiml",
+                  "text": "Artificial Intelligence & Machine Learning",
+                  "visibleIf": "{credits_aiml_electives} >= {rule_major_min_credits}"
+                },
+                {
+                  "value": "dmml",
+                  "text": "Data Mining & Machine Learning",
+                  "visibleIf": "{credits_dmml_electives} >= {rule_major_min_credits}"
+                },
+                {
+                  "value": "pmva",
+                  "text": "Process Mining & Visual Analytics",
+                  "visibleIf": "{credits_pmva_electives} >= {rule_major_min_credits}"
+                },
+                {
+                  "value": "ada",
+                  "text": "Algorithmic Data Analysis",
+                  "visibleIf": "{credits_ada_electives} >= {rule_major_min_credits}"
+                }
+              ]
+            },
+            {
+              "type": "checkbox",
+              "name": "project_course_metadata",
+              "visible": false,
+              "defaultValue": [
+                "2amv10",
+                "2amd20",
+                "2ami30",
+                "2amc15"
+              ],
+              "readOnly": true,
+              "choices": [
+                {
+                  "value": "2amv10",
+                  "text": "2AMV10 Visual Analytics (5 ECTS)"
+                },
+                {
+                  "value": "2amd20",
+                  "text": "2AMD20 Knowledge Engineering (5 ECTS)"
+                },
+                {
+                  "value": "2ami30",
+                  "text": "2AMI30 Process Intelligence in Action (5 ECTS)"
+                },
+                {
+                  "value": "2amc15",
+                  "text": "2AMC15 Reinforcement Learning in Practice (5 ECTS)"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "html",
+          "name": "project",
+          "visibleIf": "{core_elective} <> '2amv10' and {db} notcontains '2amd20' and {aiml} notcontains '2amc15' and {pmva} notcontains '2ami30' and {pmva} notcontains '2amv10'",
+          "html": "<div class=\"project-warning\"><p class=\"project-warning__title\">You must choose at least one project course!</p><p class=\"project-warning__description\">Your study program must include at least one project course. Below, we show the possible project courses. Select one of them above as a core elective or specialization elective.</p><ul class=\"project-course-list\"><li>2AMV10 Visual Analytics</li><li>2AMI30 Process Intelligence in Action</li><li>2AMC15 Reinforcement Learning in Practice</li><li>2AMD20 Knowledge Engineering</li></ul></div>"
+        }
+      ]
+    },
+    {
+      "name": "free_elective_space",
+      "title": "Free-elective space",
+      "description": "The free-elective space is 15 credits. It can be filled with free electives, homologation courses or an internship.",
+      "elements": [
+        {
+          "type": "panel",
+          "name": "free_electives_panel",
+          "title": "Free elective courses",
+          "description": "Add master-level courses that are not already counted elsewhere in your study program. These may be offered by your own program, another TU/e department or another university. Courses must not substantially overlap with each other or with other courses in your program.",
+          "elements": [
+            {
+              "type": "matrixdynamic",
+              "name": "free_electives",
+              "title": "Free elective courses",
+              "titleLocation": "hidden",
+              "columns": [
+                {
+                  "name": "code",
+                  "title": "Course code",
+                  "isRequired": true,
+                  "width": "6em"
+                },
+                {
+                  "name": "title",
+                  "title": "Course title",
+                  "isRequired": true
+                },
+                {
+                  "name": "credits",
+                  "title": "ECTS",
+                  "cellType": "dropdown",
+                  "isRequired": true,
+                  "width": "3em",
+                  "totalType": "sum",
+                  "totalDisplayStyle": "decimal",
+                  "choices": [
+                    2.5,
+                    3,
+                    4,
+                    5,
+                    6,
+                    7.5,
+                    8,
+                    9,
+                    10,
+                    12,
+                    15
+                  ]
+                }
+              ],
+              "cellType": "text",
+              "rowCount": 0,
+              "confirmDelete": true,
+              "confirmDeleteText": "Are you sure you want to delete this free elective?",
+              "addRowText": "Add free elective",
+              "allowRowReorder": true
+            }
+          ]
+        },
+        {
+          "type": "panel",
+          "name": "homologation_panel",
+          "title": "Homologation courses",
+          "description": "Homologation courses are bachelor courses used to make up deficiencies in previous knowledge. Please check your admission letter to see assigned homologation courses. It is also possible to pick a maximum of three bachelor courses yourself to compensate deficiencies, if you think it is necessary.",
+          "elements": [
+            {
+              "type": "boolean",
+              "name": "homologation",
+              "title": "Do you include homologation courses?",
+              "isRequired": true
+            },
+            {
+              "type": "matrixdynamic",
+              "name": "homologation_courses",
+              "visibleIf": "{homologation} = true",
+              "title": "Included homologation courses",
+              "description": "Add courses up to a maximum of {rule_homologation_max_credits} credits.",
+              "isRequired": true,
+              "requiredIf": "{homologation} = true",
+              "clearIfInvisible": "onHidden",
+              "cellType": "text",
+              "rowCount": 0,
+              "minRowCount": 1,
+              "addRowText": "Add homologation course",
+              "confirmDelete": true,
+              "confirmDeleteText": "Are you sure you want to delete this homologation course?",
+              "columns": [
+                {
+                  "name": "code",
+                  "title": "Course code",
+                  "isRequired": true,
+                  "width": "6em"
+                },
+                {
+                  "name": "title",
+                  "title": "Course title",
+                  "isRequired": true
+                },
+                {
+                  "name": "credits",
+                  "title": "ECTS",
+                  "cellType": "text",
+                  "inputType": "number",
+                  "isRequired": true,
+                  "width": "4em",
+                  "totalType": "sum",
+                  "totalDisplayStyle": "decimal",
+                  "validators": [
+                    {
+                      "type": "expression",
+                      "expression": "{row.credits} > 0",
+                      "text": "Enter a positive credit value."
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "boolean",
+              "name": "unassigned_homologation",
+              "visibleIf": "{homologation} = true",
+              "title": "Are any homologation courses self-chosen rather than assigned in the admission letter?",
+              "isRequired": true,
+              "clearIfInvisible": "onHidden"
+            },
+            {
+              "type": "comment",
+              "name": "unassigned_motivation",
+              "visibleIf": "{homologation} = true and {unassigned_homologation} = true",
+              "title": "Motivation self-chosen homologation courses",
+              "description": "Explain the deficiency addressed by each self-chosen bachelor course and for which master-level courses they are required.",
+              "isRequired": true,
+              "requiredIf": "{homologation} = true and {unassigned_homologation} = true",
+              "clearIfInvisible": "onHidden"
+            }
+          ]
+        },
+        {
+          "type": "panel",
+          "name": "internship_panel",
+          "title": "Internship",
+          "description": "An internship is optional and contributes 15 credits to the free-elective total. For an external internship, the graduation project must be executed internally. For an internal internship, you cannot graduate with the same supervisor.",
+          "elements": [
+            {
+              "type": "boolean",
+              "name": "internship",
+              "title": "Do you include an internship (2IMC10)?",
+              "isRequired": true
+            },
+            {
+              "type": "checkbox",
+              "name": "internship_course_display",
+              "visible": false,
+              "defaultValue": [
+                "2imc10"
+              ],
+              "readOnly": true,
+              "choices": [
+                {
+                  "value": "2imc10",
+                  "text": "2IMC10 Internship (15 ECTS)"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "name": "internship_supervisor",
+              "visibleIf": "{internship} = true",
+              "title": "Internship supervisor (if known)",
+              "isRequired": true,
+              "requiredIf": "{internship} = true",
+              "placeholder": "Supervisor name"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "grad_phase",
+      "title": "Graduation phase",
+      "elements": [
+        {
+          "type": "panel",
+          "name": "seminar_panel",
+          "elements": [
+            {
+              "type": "radiogroup",
+              "name": "seminar",
+              "title": "What seminar is included in your study program?",
+              "description": "Choose the seminar that corresponds to your intended graduation cluster. Seminars are worth 5 credits.",
+              "isRequired": true,
+              "choices": [
+                {
+                  "value": "2ima00",
+                  "text": "2IMA00 Seminar Algorithms (ALGO) (5 ECTS)"
+                },
+                {
+                  "value": "2imd00",
+                  "text": "2IMD00 Seminar Datamanagement (DAI-DB) (5 ECTS)"
+                },
+                {
+                  "value": "2imi00",
+                  "text": "2IMI00 Seminar Process Analytics (PA) (5 ECTS)"
+                },
+                {
+                  "value": "2imm00",
+                  "text": "2IMM00 Seminar Data Mining (DAI-DM) (5 ECTS)"
+                },
+                {
+                  "value": "2ims00",
+                  "text": "2IMS00 Seminar Information Security Technology (SEC) (5 ECTS)"
+                },
+                {
+                  "value": "2imu00",
+                  "text": "2IMU00 Seminar Uncertainty in AI (DAI-UAI) (5 ECTS)"
+                },
+                {
+                  "value": "2imv00",
+                  "text": "2IMV00 Seminar Visualization (VIS) (5 ECTS)"
+                },
+                {
+                  "value": "2ams00",
+                  "text": "2AMS00 Seminar Statistics, Probability and Operations Research (SPOR) (5 ECTS)"
+                },
+                {
+                  "value": "2imn00",
+                  "text": "2IMN00 Seminar Interconnected Resource-aware Intelligent Systems (IRIS) (5 ECTS)"
+                },
+                {
+                  "value": "2imp00",
+                  "text": "2IMP00 Seminar Software Engineering and Technology (SET) (5 ECTS)"
+                },
+                {
+                  "value": "2imf00",
+                  "text": "2IMF00 Seminar Formal System Analysis (FSA) (5 ECTS)"
+                }
+              ]
+            },
+            {
+              "type": "comment",
+              "name": "mismatch",
+              "visibleIf": "{seminar} notempty and {intended_graduation_cluster} <> {seminar_group}",
+              "title": "Your seminar does not correspond to your intended graduation cluster!",
+              "description": "Please explain why this is the case",
+              "isRequired": true
+            }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "name": "graduation",
+          "title": "Graduation",
+          "description": "The following study components will in any case be part of your study program.",
+          "defaultValue": [
+            "2amc05",
+            "2amc00",
+            "2imr10"
+          ],
+          "correctAnswer": [
+            "2amc05",
+            "2amc00",
+            "2imr10"
+          ],
+          "readOnly": true,
+          "choices": [
+            {
+              "value": "2amc05",
+              "text": "2AMC05 Graduation Preparation Project (10 ECTS)"
+            },
+            {
+              "value": "2amc00",
+              "text": "2AMC00 Master Project (30 ECTS)"
+            },
+            {
+              "value": "2imr10",
+              "text": "2IMR10 Study & Career Orientation Program (SCOP/e) (0 ECTS)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "additional_information",
+      "title": "Additional information",
+      "elements": [
+        {
+          "type": "panel",
+          "name": "external_courses_panel",
+          "title": "External university courses",
+          "elements": [
+            {
+              "type": "boolean",
+              "name": "external_courses",
+              "title": "Does your proposed study program include any course offered by another university?",
+              "isRequired": true
+            },
+            {
+              "type": "text",
+              "name": "external_course_institutions",
+              "visibleIf": "{external_courses} = true",
+              "title": "External institution(s)",
+              "isRequired": true,
+              "requiredIf": "{external_courses} = true",
+              "placeholder": "Institution name(s)"
+            },
+            {
+              "type": "comment",
+              "name": "external_course_links",
+              "visibleIf": "{external_courses} = true",
+              "title": "Course-description link(s)",
+              "description": "Provide a course-catalogue or official description link for every external course.",
+              "isRequired": true,
+              "requiredIf": "{external_courses} = true",
+              "validators": [
+                {
+                  "type": "regex",
+                  "text": "Provide at least one http(s) course-description link.",
+                  "regex": "[\\s\\S]*https?:\\/\\/\\S+[\\s\\S]*"
+                }
+              ]
+            },
+            {
+              "type": "comment",
+              "name": "external_course_motivation",
+              "visibleIf": "{external_courses} = true",
+              "title": "Motivation for selecting the external course(s)",
+              "isRequired": true,
+              "requiredIf": "{external_courses} = true"
+            },
+            {
+              "type": "comment",
+              "name": "external_course_overlap",
+              "visibleIf": "{external_courses} = true",
+              "title": "Explanation of non-overlap",
+              "description": "Explain why the external courses do not overlap with each other or with another course in the proposed program.",
+              "isRequired": true,
+              "requiredIf": "{external_courses} = true"
+            }
+          ]
+        },
+        {
+          "type": "comment",
+          "name": "committee_notes",
+          "title": "Additional notes for the Examination Committee",
+          "description": "Include any other information that should appear in the final report."
+        }
+      ]
+    },
+    {
+      "name": "reporting",
+      "title": "Review and print"
+    }
+  ],
+  "calculatedValues": [
+    {
+      "name": "rule_programme_target",
+      "expression": "120",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_standard_course_credits",
+      "expression": "5",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_core_credits",
+      "expression": "30",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_specialization_min_credits",
+      "expression": "30",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_specialization_min_count",
+      "expression": "6",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_major_min_credits",
+      "expression": "10",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_major_min_count",
+      "expression": "2",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_minor_min_credits",
+      "expression": "10",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_project_min_count",
+      "expression": "1",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_seminar_credits",
+      "expression": "5",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_internship_credits",
+      "expression": "15",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_free_elective_space_credits",
+      "expression": "15",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_graduation_credits",
+      "expression": "40",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_homologation_max_credits",
+      "expression": "15",
+      "includeIntoResult": true
+    },
+    {
+      "name": "seminar_group",
+      "expression": "iif({seminar} = '2ima00', 'algorithms', iif({seminar} = '2imd00', 'dai_databases', iif({seminar} = '2imi00', 'process_analytics', iif({seminar} = '2imm00', 'dai_other', iif({seminar} = '2ims00', 'security', iif({seminar} = '2imu00', 'dai_other', iif({seminar} = '2imv00', 'visualization', iif({seminar} = '2ams00', 'stochastic_probability_operations_research', iif({seminar} = '2imn00', 'iris', iif({seminar} = '2imp00', 'software_engineering_technology', iif({seminar} = '2imf00', 'formal_systems_analysis', '')))))))))))",
+      "includeIntoResult": true
+    },
+    {
+      "name": "number_of_context_electives",
+      "expression": "count({context})",
+      "includeIntoResult": true
+    },
+    {
+      "name": "number_of_stat_electives",
+      "expression": "count({stat})",
+      "includeIntoResult": true
+    },
+    {
+      "name": "number_of_db_electives",
+      "expression": "count({db})",
+      "includeIntoResult": true
+    },
+    {
+      "name": "number_of_aiml_electives",
+      "expression": "count({aiml})",
+      "includeIntoResult": true
+    },
+    {
+      "name": "number_of_dmml_electives",
+      "expression": "count({dmml})",
+      "includeIntoResult": true
+    },
+    {
+      "name": "number_of_pmva_electives",
+      "expression": "count({pmva})",
+      "includeIntoResult": true
+    },
+    {
+      "name": "number_of_ada_electives",
+      "expression": "count({ada})",
+      "includeIntoResult": true
+    },
+    {
+      "name": "number_of_core_courses",
+      "expression": "count({core}) + iif({core_elective} notempty, 1, 0)",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_core",
+      "expression": "{number_of_core_courses} * {rule_standard_course_credits}",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_context_electives",
+      "expression": "{number_of_context_electives} * {rule_standard_course_credits}",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_stat_electives",
+      "expression": "{number_of_stat_electives} * {rule_standard_course_credits}",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_db_electives",
+      "expression": "{number_of_db_electives} * {rule_standard_course_credits}",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_aiml_electives",
+      "expression": "{number_of_aiml_electives} * {rule_standard_course_credits}",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_dmml_electives",
+      "expression": "{number_of_dmml_electives} * {rule_standard_course_credits}",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_pmva_electives",
+      "expression": "{number_of_pmva_electives} * {rule_standard_course_credits}",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_ada_electives",
+      "expression": "{number_of_ada_electives} * {rule_standard_course_credits}",
+      "includeIntoResult": true
+    },
+    {
+      "name": "number_of_major_candidates",
+      "expression": "iif({credits_context_electives} >= {rule_major_min_credits}, 1, 0) + iif({credits_stat_electives} >= {rule_major_min_credits}, 1, 0) + iif({credits_db_electives} >= {rule_major_min_credits}, 1, 0) + iif({credits_aiml_electives} >= {rule_major_min_credits}, 1, 0) + iif({credits_dmml_electives} >= {rule_major_min_credits}, 1, 0) + iif({credits_pmva_electives} >= {rule_major_min_credits}, 1, 0) + iif({credits_ada_electives} >= {rule_major_min_credits}, 1, 0)",
+      "includeIntoResult": true
+    },
+    {
+      "name": "number_of_specialization_electives",
+      "expression": "{number_of_context_electives} + {number_of_stat_electives} + {number_of_db_electives} + {number_of_aiml_electives} + {number_of_dmml_electives} + {number_of_pmva_electives} + {number_of_ada_electives}",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_specialization",
+      "expression": "{number_of_specialization_electives} * {rule_standard_course_credits}",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_seminar",
+      "expression": "iif({seminar} notempty, {rule_seminar_credits}, 0)",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_free_rows",
+      "expression": "sumInArray({free_electives}, 'credits', {code} notempty and {title} notempty and {credits} > 0)",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_homologation",
+      "expression": "iif({homologation} = true, sumInArray({homologation_courses}, 'credits', {code} notempty and {title} notempty and {credits} > 0), 0)",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_internship",
+      "expression": "iif({internship} = true, {rule_internship_credits}, 0)",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_free_space",
+      "expression": "{credits_free_rows} + {credits_homologation} + {credits_internship}",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_graduation",
+      "expression": "{rule_graduation_credits}",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_total",
+      "expression": "{credits_core} + {credits_specialization} + {credits_seminar} + {credits_free_space} + {credits_graduation}",
+      "includeIntoResult": true
+    }
+  ],
+  "partialSendEnabled": true,
+  "headerView": "advanced"
+}

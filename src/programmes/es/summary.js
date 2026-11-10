@@ -110,6 +110,7 @@ const SIDEBAR_ERROR_ONLY = new Set([
 ]);
 
 const SIDEBAR_EXCEPTION_ONLY = new Set([
+  "Form version",
   "Double counting",
   "Stale stream selections",
   "University of Twente secondary enrollment",

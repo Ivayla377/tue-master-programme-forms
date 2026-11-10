@@ -54,6 +54,7 @@ const SIDEBAR_ALWAYS_VISIBLE = new Set([
 ]);
 
 const SIDEBAR_EXCEPTION_LABELS = new Set([
+  "Form version",
   "Mandatory components",
   "Homologation credits",
   "Homologation courses",

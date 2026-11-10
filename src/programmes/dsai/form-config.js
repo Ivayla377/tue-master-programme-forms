@@ -1,6 +1,6 @@
 // Builds DS&AI metadata and programme rules from the SurveyJS form JSON.
 
-import surveySource from "../../../forms/dsai/form.json" with { type: "json" };
+import surveySource from "#forms/dsai" with { type: "json" };
 
 import {
   createChoiceLookup as createSharedChoiceLookup,
@@ -52,11 +52,12 @@ const TRAJECTORY_NAMES = Object.freeze([
 ]);
 
 const FORM_LOOKUP = createSharedChoiceLookup(surveySource);
+const FORM_RULE_FIELDS = ruleFieldsForSurvey(surveySource);
 
 export const DEFAULT_RULES = Object.freeze(
   readNumericRulesFromSurvey(
     surveySource,
-    RULE_FIELD_NAMES,
+    FORM_RULE_FIELDS,
     "DS&AI form",
   ),
 );
@@ -81,9 +82,36 @@ export const PROJECT_COURSE_CODES = new Set(
 );
 
 export function createChoiceLookup(surveyJson = surveySource) {
-  return createSharedChoiceLookup(surveyJson);
+  const lookup = createSharedChoiceLookup(surveyJson);
+  const ruleFields = ruleFieldsForSurvey(surveyJson);
+  lookup.dsaiConfig = Object.freeze({
+    ruleFields,
+    rules: Object.freeze(readNumericRulesFromSurvey(surveyJson, ruleFields, "DS&AI form")),
+    trajectories: Object.freeze(TRAJECTORY_NAMES.map((name) => Object.freeze({
+      name,
+      label: lookup.getQuestion(name)?.title ?? name,
+    }))),
+  });
+  return lookup;
 }
 
-export function resolveDsaiRules(data) {
-  return resolveNumericRules(data, DEFAULT_RULES, RULE_FIELD_NAMES);
+export function resolveDsaiRules(data, choiceLookup) {
+  return resolveNumericRules(
+    data,
+    choiceLookup?.dsaiConfig?.rules ?? DEFAULT_RULES,
+    choiceLookup?.dsaiConfig?.ruleFields ?? FORM_RULE_FIELDS,
+  );
+}
+
+function ruleFieldsForSurvey(surveyJson) {
+  // Older definitions use a fixed homologation list without a separate credit cap.
+  const hasHomologationLimit = surveyJson.calculatedValues?.some(
+    ({ name }) => name === "rule_homologation_max_credits",
+  );
+  return Object.freeze({
+    ...RULE_FIELD_NAMES,
+    ...(hasHomologationLimit
+      ? { homologationMaximumCredits: "rule_homologation_max_credits" }
+      : {}),
+  });
 }

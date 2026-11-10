@@ -1,0 +1,1159 @@
+{
+  "title": "Form 1: ES Program of Examinations",
+  "description": "This form is used to create a report that shows your current study program. Its purpose is to be shared with the examination committee, so that they can check whether it satisfies the requirements of Embedded Systems programs and approve it or inform you of how it does not satisfy the requirements. This form has built-in validation that should help you create a valid study program. Please complete this form at the end of Q3.",
+  "completedHtml": "",
+  "showCompletePage": false,
+  "clearInvisibleValues": "onHiddenContainer",
+  "showProgressBar": "top",
+  "progressBarType": "pages",
+  "pages": [
+    {
+      "name": "frontmatter",
+      "title": "General information",
+      "elements": [
+        {
+          "type": "multipletext",
+          "name": "personal_info",
+          "title": "Personal information",
+          "isRequired": true,
+          "items": [
+            {
+              "name": "name",
+              "title": "Name",
+              "isRequired": true,
+              "placeholder": "Surname, Given name(s)"
+            },
+            {
+              "name": "id",
+              "title": "Student ID",
+              "isRequired": true,
+              "maskType": "pattern",
+              "maskSettings": {
+                "pattern": "9999999"
+              },
+              "maxLength": 7,
+              "inputSize": 7,
+              "validators": [
+                {
+                  "type": "regex",
+                  "text": "Your student ID must be a 7-digit number.",
+                  "regex": "\\d{7}"
+                }
+              ]
+            },
+            {
+              "name": "enrollment",
+              "title": "Month and year of enrollment",
+              "isRequired": true,
+              "inputType": "month",
+              "validators": [
+                {
+                  "type": "regex",
+                  "text": "Enter a valid enrollment month from 2010 to 2035.",
+                  "regex": "^(?:201[0-9]|202[0-9]|203[0-5])-(?:0[1-9]|1[0-2])$"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "panel",
+          "name": "graduation_cluster_panel",
+          "title": "Graduation cluster",
+          "elements": [
+            {
+              "type": "dropdown",
+              "name": "intended_graduation_cluster",
+              "title": "Intended graduation cluster",
+              "isRequired": true,
+              "choices": [
+                {
+                  "value": "algorithms",
+                  "text": "Algorithms (ALGO)"
+                },
+                {
+                  "value": "formal_systems_analysis",
+                  "text": "Formal Systems Analysis (FSA)"
+                },
+                {
+                  "value": "security",
+                  "text": "Security (SEC)"
+                },
+                {
+                  "value": "software_engineering_technology",
+                  "text": "Software Engineering and Technology (SET)"
+                },
+                {
+                  "value": "iris",
+                  "text": "Interconnected Resource-aware Intelligent Systems (IRIS)"
+                },
+                {
+                  "value": "dai_databases",
+                  "text": "Data and Artificial Intelligence (DAI) - Databases"
+                },
+                {
+                  "value": "dai_other",
+                  "text": "Data and Artificial Intelligence (DAI) - Other groups"
+                },
+                {
+                  "value": "process_analytics",
+                  "text": "Process Analytics (PA)"
+                },
+                {
+                  "value": "visualization",
+                  "text": "Visualization (VIS)"
+                },
+                {
+                  "value": "electronic_systems",
+                  "text": "Cluster Electronic Systems (ES)"
+                }
+              ],
+              "showOtherItem": true,
+              "otherText": "Other / not listed",
+              "storeOthersAsComment": false
+            },
+            {
+              "type": "boolean",
+              "name": "matched_to_graduation_cluster",
+              "title": "Have you already been matched to your intended graduation cluster?",
+              "isRequired": true
+            },
+            {
+              "type": "text",
+              "name": "mentor_name",
+              "visibleIf": "{matched_to_graduation_cluster} = false",
+              "title": "Who is your mentor?",
+              "description": "The name of the person who advised you in the composition of your study program.",
+              "requiredIf": "{matched_to_graduation_cluster} = false",
+              "clearIfInvisible": "onHidden"
+            },
+            {
+              "type": "text",
+              "name": "graduation_cluster_representative_name",
+              "visibleIf": "{matched_to_graduation_cluster} = true",
+              "title": "Who is the representative of your intended graduation cluster?",
+              "description": "The name of the graduation cluster representative who advised you in the composition of your study program.",
+              "requiredIf": "{matched_to_graduation_cluster} = true",
+              "clearIfInvisible": "onHidden"
+            }
+          ]
+        },
+        {
+          "type": "panel",
+          "name": "previous_panel",
+          "title": "Previous approval",
+          "elements": [
+            {
+              "type": "boolean",
+              "name": "previous",
+              "title": "Is this a change of a previously approved study program?",
+              "isRequired": true
+            },
+            {
+              "type": "comment",
+              "name": "changes",
+              "visibleIf": "{previous} = true",
+              "title": "What has changed in the program?",
+              "description": "List each change clearly.",
+              "isRequired": true,
+              "requiredIf": "{previous} = true"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "common_and_graduation",
+      "title": "Mandatory and graduation courses",
+      "elements": [
+        {
+          "type": "panel",
+          "name": "common_mandatory_panel",
+          "title": "Common mandatory courses",
+          "description": "Five fixed courses · 25 credits",
+          "elements": [
+            {
+              "type": "checkbox",
+              "name": "common_mandatory_display",
+              "title": "Included courses",
+              "readOnly": true,
+              "defaultValue": [
+                "2imf30",
+                "5sia0",
+                "2imn20",
+                "2imn25",
+                "5lib0"
+              ],
+              "choices": [
+                {
+                  "value": "2imf30",
+                  "text": "2IMF30 System Validation (5 ECTS)"
+                },
+                {
+                  "value": "5sia0",
+                  "text": "5SIA0 Embedded Computer Architecture (5 ECTS)"
+                },
+                {
+                  "value": "2imn20",
+                  "text": "2IMN20 Real-Time Systems (5 ECTS)"
+                },
+                {
+                  "value": "2imn25",
+                  "text": "2IMN25 Quantitative Evaluation of Cyber Physical Systems (5 ECTS)"
+                },
+                {
+                  "value": "5lib0",
+                  "text": "5LIB0 Embedded Systems Laboratory (5 ECTS)"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "panel",
+          "name": "graduation_courses_panel",
+          "title": "Graduation courses",
+          "description": "The applicable course code depends on whether the graduation project is carried out through M&CS or Electrical Engineering.",
+          "elements": [
+            {
+              "type": "checkbox",
+              "name": "graduation_courses",
+              "title": "Graduation project",
+              "defaultValue": [
+                "2imc05 / 5t514",
+                "2imc00 / 5t746",
+                "2imr10"
+              ],
+              "correctAnswer": [
+                "2imc05 / 5t514",
+                "2imc00 / 5t746",
+                "2imr10"
+              ],
+              "readOnly": true,
+              "choices": [
+                {
+                  "value": "2imc05 / 5t514",
+                  "text": "2IMC05 / 5T514 - Preparation Graduation Project (10 ECTS)"
+                },
+                {
+                  "value": "2imc00 / 5t746",
+                  "text": "2IMC00 / 5T746 - Graduation Project (30 ECTS)"
+                },
+                {
+                  "value": "2imr10",
+                  "text": "2IMR10 Study & Career Orientation Program (SCOP/e) (0 ECTS)"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "stream_courses",
+      "title": "Stream courses",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "stream",
+          "title": "Choose an Embedded Systems stream",
+          "isRequired": true,
+          "choices": [
+            {
+              "value": "systems_on_chip",
+              "text": "Systems on Chip"
+            },
+            {
+              "value": "embedded_software",
+              "text": "Embedded Software"
+            },
+            {
+              "value": "embedded_networking",
+              "text": "Embedded Networking"
+            },
+            {
+              "value": "cyber_physical_systems",
+              "text": "Cyber-Physical Systems"
+            }
+          ]
+        },
+        {
+          "type": "panel",
+          "name": "systems_on_chip_panel",
+          "visibleIf": "{stream} = 'systems_on_chip'",
+          "title": "Systems on Chip",
+          "elements": [
+            {
+              "type": "checkbox",
+              "name": "systems_on_chip_mandatory_display",
+              "title": "Mandatory courses · 15 ECTS",
+              "readOnly": true,
+              "defaultValue": [
+                "2imf25",
+                "5lih0",
+                "5lid0"
+              ],
+              "choices": [
+                {
+                  "value": "2imf25",
+                  "text": "2IMF25 Automated Reasoning (5 ECTS)"
+                },
+                {
+                  "value": "5lih0",
+                  "text": "5LIH0 Digital Integrated Circuit Design (5 ECTS)"
+                },
+                {
+                  "value": "5lid0",
+                  "text": "5LID0 Systems on Silicon (5 ECTS)"
+                }
+              ]
+            },
+            {
+              "type": "tagbox",
+              "name": "stream_electives_systems_on_chip",
+              "title": "Choose at least three stream electives · 15 credits required",
+              "description": "2IMNT1 requires secondary enrollment at the University of Twente. Seminar courses can be taken from Q4.",
+              "isRequired": true,
+              "requiredIf": "{stream} = 'systems_on_chip'",
+              "minSelectedChoices": 3,
+              "choices": [
+                {
+                  "value": "5cca0",
+                  "text": "5CCA0 Semiconductor Physics and Materials (5 ECTS)"
+                },
+                {
+                  "value": "2imnt1",
+                  "text": "2IMNT1 Embedded Computer Architectures 2 (5 ECTS)"
+                },
+                {
+                  "value": "5lig0",
+                  "text": "5LIG0 Applied Combinatorial Algorithms (5 ECTS)"
+                },
+                {
+                  "value": "5lil0",
+                  "text": "5LIL0 Intelligent Architectures (5 ECTS)"
+                },
+                {
+                  "value": "5lie0",
+                  "text": "5LIE0 Multiprocessors (5 ECTS)"
+                },
+                {
+                  "value": "5lim0",
+                  "text": "5LIM0 Parallelization, Compilers and Platforms (5 ECTS)"
+                },
+                {
+                  "value": "5sib0",
+                  "text": "5SIB0 Electronic Design Automation (5 ECTS)"
+                },
+                {
+                  "value": "5lij0",
+                  "text": "5LIJ0 Embedded Control Systems (5 ECTS)"
+                },
+                {
+                  "value": "5lia0",
+                  "text": "5LIA0 Embedded Visual Control (5 ECTS)"
+                },
+                {
+                  "value": "2imf00",
+                  "text": "2IMF00 Seminar Formal System Analysis (5 ECTS)"
+                }
+              ]
+            },
+            {
+              "type": "html",
+              "name": "stream_electives_systems_on_chip_excess_notice",
+              "visibleIf": "{credits_stream_electives_excess} > 0",
+              "html": "<p class='elective-allocation-note'>The required three courses are filled. Additional selected courses count towards your free-elective space. Edit the choices above to change them.</p>"
+            }
+          ]
+        },
+        {
+          "type": "panel",
+          "name": "embedded_software_panel",
+          "visibleIf": "{stream} = 'embedded_software'",
+          "title": "Embedded Software",
+          "elements": [
+            {
+              "type": "checkbox",
+              "name": "embedded_software_mandatory_display",
+              "title": "Mandatory courses · 15 ECTS",
+              "readOnly": true,
+              "defaultValue": [
+                "2imf25",
+                "5lim0",
+                "2imp30"
+              ],
+              "choices": [
+                {
+                  "value": "2imf25",
+                  "text": "2IMF25 Automated Reasoning (5 ECTS)"
+                },
+                {
+                  "value": "5lim0",
+                  "text": "5LIM0 Parallelization, Compilers and Platforms (5 ECTS)"
+                },
+                {
+                  "value": "2imp30",
+                  "text": "2IMP30 System Design Engineering (5 ECTS)"
+                }
+              ]
+            },
+            {
+              "type": "tagbox",
+              "name": "stream_electives_embedded_software",
+              "title": "Choose at least three stream electives · 15 credits required",
+              "description": "Seminar courses can be taken from Q4.",
+              "isRequired": true,
+              "requiredIf": "{stream} = 'embedded_software'",
+              "minSelectedChoices": 3,
+              "choices": [
+                {
+                  "value": "2imn10",
+                  "text": "2IMN10 Architecture of Distributed Systems (5 ECTS)"
+                },
+                {
+                  "value": "2dmi20",
+                  "text": "2DMI20 Software Security (5 ECTS)"
+                },
+                {
+                  "value": "2imp10",
+                  "text": "2IMP10 Program Verification Techniques (5 ECTS)"
+                },
+                {
+                  "value": "5lig0",
+                  "text": "5LIG0 Applied Combinatorial Algorithms (5 ECTS)"
+                },
+                {
+                  "value": "2imf35",
+                  "text": "2IMF35 Algorithms for Model Checking (5 ECTS)"
+                },
+                {
+                  "value": "2imp25",
+                  "text": "2IMP25 Software Evolution (5 ECTS)"
+                },
+                {
+                  "value": "5lie0",
+                  "text": "5LIE0 Multiprocessors (5 ECTS)"
+                },
+                {
+                  "value": "5lij0",
+                  "text": "5LIJ0 Embedded Control Systems (5 ECTS)"
+                },
+                {
+                  "value": "5lil0",
+                  "text": "5LIL0 Intelligent Architectures (5 ECTS)"
+                },
+                {
+                  "value": "2imp20",
+                  "text": "2IMP20 Domain Specific Language Design (5 ECTS)"
+                },
+                {
+                  "value": "5lik0",
+                  "text": "5LIK0 Embedded Signal Processing Systems (5 ECTS)"
+                },
+                {
+                  "value": "2imf00",
+                  "text": "2IMF00 Seminar Formal System Analysis (5 ECTS)"
+                },
+                {
+                  "value": "2imn00",
+                  "text": "2IMN00 Seminar Interconnected Resource-aware Intelligent Systems (IRIS) (5 ECTS)"
+                },
+                {
+                  "value": "2imp00",
+                  "text": "2IMP00 Seminar Software Engineering and Technology (5 ECTS)"
+                }
+              ]
+            },
+            {
+              "type": "html",
+              "name": "stream_electives_embedded_software_excess_notice",
+              "visibleIf": "{credits_stream_electives_excess} > 0",
+              "html": "<p class='elective-allocation-note'>The required three courses are filled. Additional selected courses count towards your free-elective space. Edit the choices above to change them.</p>"
+            }
+          ]
+        },
+        {
+          "type": "panel",
+          "name": "embedded_networking_panel",
+          "visibleIf": "{stream} = 'embedded_networking'",
+          "title": "Embedded Networking",
+          "elements": [
+            {
+              "type": "checkbox",
+              "name": "embedded_networking_mandatory_display",
+              "title": "Mandatory courses · 15 ECTS",
+              "readOnly": true,
+              "defaultValue": [
+                "2imn10",
+                "5lic0",
+                "2imn15"
+              ],
+              "choices": [
+                {
+                  "value": "2imn10",
+                  "text": "2IMN10 Architecture of Distributed Systems (5 ECTS)"
+                },
+                {
+                  "value": "5lic0",
+                  "text": "5LIC0 Networked Embedded Systems (5 ECTS)"
+                },
+                {
+                  "value": "2imn15",
+                  "text": "2IMN15 Internet of Things (5 ECTS)"
+                }
+              ]
+            },
+            {
+              "type": "tagbox",
+              "name": "stream_electives_embedded_networking",
+              "title": "Choose at least three stream electives · 15 credits required",
+              "description": "Seminar courses can be taken from Q4.",
+              "isRequired": true,
+              "requiredIf": "{stream} = 'embedded_networking'",
+              "minSelectedChoices": 3,
+              "choices": [
+                {
+                  "value": "2imf25",
+                  "text": "2IMF25 Automated Reasoning (5 ECTS)"
+                },
+                {
+                  "value": "5lih0",
+                  "text": "5LIH0 Digital Integrated Circuit Design (5 ECTS)"
+                },
+                {
+                  "value": "2ims20",
+                  "text": "2IMS20 Cyberattacks, Crime and Defenses (5 ECTS)"
+                },
+                {
+                  "value": "2ims30",
+                  "text": "2IMS30 Advanced Network Security (5 ECTS)"
+                },
+                {
+                  "value": "2ims15",
+                  "text": "2IMS15 Verification of Security Protocols (5 ECTS)"
+                },
+                {
+                  "value": "5sib0",
+                  "text": "5SIB0 Electronic Design Automation (5 ECTS)"
+                },
+                {
+                  "value": "5lik0",
+                  "text": "5LIK0 Embedded Signal Processing Systems (5 ECTS)"
+                },
+                {
+                  "value": "5lia0",
+                  "text": "5LIA0 Embedded Visual Control (5 ECTS)"
+                },
+                {
+                  "value": "5lid0",
+                  "text": "5LID0 Systems on Silicon (5 ECTS)"
+                },
+                {
+                  "value": "2imp30",
+                  "text": "2IMP30 System Design Engineering (5 ECTS)"
+                },
+                {
+                  "value": "2imf00",
+                  "text": "2IMF00 Seminar Formal System Analysis (5 ECTS)"
+                },
+                {
+                  "value": "2imn00",
+                  "text": "2IMN00 Seminar Interconnected Resource-aware Intelligent Systems (IRIS) (5 ECTS)"
+                }
+              ]
+            },
+            {
+              "type": "html",
+              "name": "stream_electives_embedded_networking_excess_notice",
+              "visibleIf": "{credits_stream_electives_excess} > 0",
+              "html": "<p class='elective-allocation-note'>The required three courses are filled. Additional selected courses count towards your free-elective space. Edit the choices above to change them.</p>"
+            }
+          ]
+        },
+        {
+          "type": "panel",
+          "name": "cyber_physical_systems_panel",
+          "visibleIf": "{stream} = 'cyber_physical_systems'",
+          "title": "Cyber-Physical Systems",
+          "elements": [
+            {
+              "type": "checkbox",
+              "name": "cyber_physical_systems_mandatory_display",
+              "title": "Mandatory courses · 15 ECTS",
+              "readOnly": true,
+              "defaultValue": [
+                "2imn15",
+                "5lij0",
+                "5lik0"
+              ],
+              "choices": [
+                {
+                  "value": "2imn15",
+                  "text": "2IMN15 Internet of Things (5 ECTS)"
+                },
+                {
+                  "value": "5lij0",
+                  "text": "5LIJ0 Embedded Control Systems (5 ECTS)"
+                },
+                {
+                  "value": "5lik0",
+                  "text": "5LIK0 Embedded Signal Processing Systems (5 ECTS)"
+                }
+              ]
+            },
+            {
+              "type": "tagbox",
+              "name": "stream_electives_cyber_physical_systems",
+              "title": "Choose at least three stream electives · 15 credits required",
+              "isRequired": true,
+              "requiredIf": "{stream} = 'cyber_physical_systems'",
+              "minSelectedChoices": 3,
+              "choices": [
+                {
+                  "value": "2imn10",
+                  "text": "2IMN10 Architecture of Distributed Systems (5 ECTS)"
+                },
+                {
+                  "value": "5csa0",
+                  "text": "5CSA0 Modeling Dynamics (5 ECTS)"
+                },
+                {
+                  "value": "5lic0",
+                  "text": "5LIC0 Networked Embedded Systems (5 ECTS)"
+                },
+                {
+                  "value": "5lig0",
+                  "text": "5LIG0 Applied Combinatorial Algorithms (5 ECTS)"
+                },
+                {
+                  "value": "2imp25",
+                  "text": "2IMP25 Software Evolution (5 ECTS)"
+                },
+                {
+                  "value": "5lim0",
+                  "text": "5LIM0 Parallelization, Compilers and Platforms (5 ECTS)"
+                },
+                {
+                  "value": "5lie0",
+                  "text": "5LIE0 Multiprocessors (5 ECTS)"
+                },
+                {
+                  "value": "5lil0",
+                  "text": "5LIL0 Intelligent Architectures (5 ECTS)"
+                },
+                {
+                  "value": "5sib0",
+                  "text": "5SIB0 Electronic Design Automation (5 ECTS)"
+                },
+                {
+                  "value": "5lia0",
+                  "text": "5LIA0 Embedded Visual Control (5 ECTS)"
+                },
+                {
+                  "value": "2imp30",
+                  "text": "2IMP30 System Design Engineering (5 ECTS)"
+                },
+                {
+                  "value": "2imp20",
+                  "text": "2IMP20 Domain Specific Language Design (5 ECTS)"
+                }
+              ]
+            },
+            {
+              "type": "html",
+              "name": "stream_electives_cyber_physical_systems_excess_notice",
+              "visibleIf": "{credits_stream_electives_excess} > 0",
+              "html": "<p class='elective-allocation-note'>The required three courses are filled. Additional selected courses count towards your free-elective space. Edit the choices above to change them.</p>"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "free_space",
+      "title": "Free-elective space",
+      "description": "The free-elective space is 25 credits. It can be filled with additional stream electives, other free electives, homologation courses or an internship.",
+      "elements": [
+        {
+          "type": "panel",
+          "name": "free_electives_panel",
+          "title": "Free elective courses",
+          "description": "Add master-level courses that are not already counted elsewhere in your study program. These may be offered by your own program, another TU/e department or another university. Courses must not substantially overlap with each other or with other courses in your program.",
+          "elements": [
+            {
+              "type": "html",
+              "name": "stream_elective_excess_notice",
+              "visibleIf": "{credits_stream_electives_excess} > 0",
+              "html": "<p class='elective-allocation-note'><strong>Note:</strong> Stream electives above the required 15 credits already count towards this free-elective space. To change them, return to the previous Stream courses page and edit your selection.</p>"
+            },
+            {
+              "type": "matrixdynamic",
+              "name": "free_electives",
+              "title": "Free elective courses",
+              "titleLocation": "hidden",
+              "columns": [
+                {
+                  "name": "code",
+                  "title": "Course code",
+                  "isRequired": true,
+                  "width": "8em",
+                  "cellType": "text",
+                  "inputType": "text"
+                },
+                {
+                  "name": "title",
+                  "title": "Course title",
+                  "isRequired": true,
+                  "cellType": "text",
+                  "inputType": "text"
+                },
+                {
+                  "name": "credits",
+                  "title": "ECTS",
+                  "isRequired": true,
+                  "width": "6em",
+                  "cellType": "dropdown",
+                  "totalType": "sum",
+                  "totalDisplayStyle": "decimal",
+                  "choices": [
+                    2.5,
+                    3,
+                    4,
+                    5,
+                    6,
+                    7.5,
+                    8,
+                    9,
+                    10,
+                    12,
+                    15
+                  ]
+                }
+              ],
+              "rowCount": 0,
+              "confirmDelete": true,
+              "addRowText": "Add free elective",
+              "confirmDeleteText": "Remove this free elective?"
+            }
+          ]
+        },
+        {
+          "type": "panel",
+          "name": "homologation_panel",
+          "title": "Homologation courses",
+          "description": "Homologation courses are bachelor courses used to make up deficiencies in previous knowledge. Please check your admission letter to see assigned homologation courses. It is also possible to pick a maximum of three bachelor courses yourself to compensate deficiencies, if you think it is necessary.",
+          "elements": [
+            {
+              "type": "boolean",
+              "name": "homologation",
+              "title": "Do you include homologation courses?",
+              "isRequired": true
+            },
+            {
+              "type": "matrixdynamic",
+              "name": "homologation_courses",
+              "visibleIf": "{homologation} = true",
+              "title": "Included homologation courses",
+              "description": "Add up to three courses.",
+              "isRequired": true,
+              "requiredIf": "{homologation} = true",
+              "columns": [
+                {
+                  "name": "code",
+                  "title": "Course code",
+                  "isRequired": true,
+                  "width": "8em",
+                  "cellType": "text"
+                },
+                {
+                  "name": "title",
+                  "title": "Course title",
+                  "isRequired": true,
+                  "cellType": "text"
+                },
+                {
+                  "name": "credits",
+                  "title": "ECTS",
+                  "isRequired": true,
+                  "width": "6em",
+                  "cellType": "text"
+                }
+              ],
+              "rowCount": 0,
+              "maxRowCount": 3,
+              "confirmDelete": true,
+              "addRowText": "Add homologation course",
+              "confirmDeleteText": "Remove this homologation course?"
+            },
+            {
+              "type": "boolean",
+              "name": "self_chosen_homologation",
+              "visibleIf": "{homologation} = true",
+              "title": "Are any homologation courses self-chosen rather than assigned in the admission letter?",
+              "isRequired": true,
+              "requiredIf": "{homologation} = true"
+            },
+            {
+              "type": "comment",
+              "name": "homologation_motivation",
+              "visibleIf": "{homologation} = true and {self_chosen_homologation} = true",
+              "title": "Motivation self-chosen homologation courses",
+              "description": "Explain the deficiency addressed by each self-chosen bachelor course and for which master-level courses they are required.",
+              "isRequired": true,
+              "requiredIf": "{homologation} = true and {self_chosen_homologation} = true"
+            }
+          ]
+        },
+        {
+          "type": "panel",
+          "name": "internship_panel",
+          "title": "Internship",
+          "description": "An internship is optional and contributes 15 credits to the free-elective total. For an external internship, the graduation project must be executed internally. For an internal internship, you cannot graduate with the same supervisor.",
+          "elements": [
+            {
+              "type": "boolean",
+              "name": "internship",
+              "title": "Do you include an internship (2IMC10 / 5L990)?",
+              "isRequired": true
+            },
+            {
+              "type": "checkbox",
+              "name": "internship_course_display",
+              "title": "Internship course metadata",
+              "visible": false,
+              "readOnly": true,
+              "choices": [
+                {
+                  "value": "2imc10",
+                  "text": "2IMC10 Internship (15 ECTS)"
+                },
+                {
+                  "value": "5l990",
+                  "text": "5L990 Internship (15 ECTS)"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "name": "internship_supervisor",
+              "visibleIf": "{internship} = true",
+              "title": "Internship supervisor (if known)",
+              "isRequired": true,
+              "requiredIf": "{internship} = true",
+              "placeholder": "Supervisor name"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "additional_information",
+      "title": "Additional information",
+      "elements": [
+        {
+          "type": "panel",
+          "name": "external_courses_panel",
+          "title": "External university courses",
+          "elements": [
+            {
+              "type": "boolean",
+              "name": "external_courses",
+              "title": "Does your proposed study program include any course offered by another university?",
+              "isRequired": true
+            },
+            {
+              "type": "text",
+              "name": "external_course_institutions",
+              "visibleIf": "{external_courses} = true or {stream_electives_systems_on_chip} contains '2imnt1'",
+              "title": "External institution(s)",
+              "isRequired": true,
+              "requiredIf": "{external_courses} = true or {stream_electives_systems_on_chip} contains '2imnt1'",
+              "placeholder": "Institution name(s)"
+            },
+            {
+              "type": "comment",
+              "name": "external_course_links",
+              "visibleIf": "{external_courses} = true or {stream_electives_systems_on_chip} contains '2imnt1'",
+              "title": "Course-description link(s)",
+              "description": "Provide a course-catalogue or official description link for every external course.",
+              "isRequired": true,
+              "requiredIf": "{external_courses} = true or {stream_electives_systems_on_chip} contains '2imnt1'",
+              "validators": [
+                {
+                  "type": "regex",
+                  "text": "Provide at least one http(s) course-description link.",
+                  "regex": "[\\s\\S]*https?:\\/\\/\\S+[\\s\\S]*"
+                }
+              ]
+            },
+            {
+              "type": "comment",
+              "name": "external_course_motivation",
+              "visibleIf": "{external_courses} = true or {stream_electives_systems_on_chip} contains '2imnt1'",
+              "title": "Motivation for selecting the external course(s)",
+              "isRequired": true,
+              "requiredIf": "{external_courses} = true or {stream_electives_systems_on_chip} contains '2imnt1'"
+            },
+            {
+              "type": "comment",
+              "name": "external_course_overlap",
+              "visibleIf": "{external_courses} = true or {stream_electives_systems_on_chip} contains '2imnt1'",
+              "title": "Explanation of non-overlap",
+              "description": "Explain why the external courses do not overlap with each other or with another course in the proposed program.",
+              "isRequired": true,
+              "requiredIf": "{external_courses} = true or {stream_electives_systems_on_chip} contains '2imnt1'"
+            }
+          ]
+        },
+        {
+          "type": "panel",
+          "name": "programme_metadata",
+          "visible": false,
+          "elements": [
+            {
+              "type": "text",
+              "name": "programme_academic_year",
+              "title": "Academic year used in form and report headings",
+              "visible": false,
+              "readOnly": true,
+              "defaultValue": "2026-2027"
+            },
+            {
+              "type": "text",
+              "name": "programme_version_notice",
+              "title": "Version notice shown in the form and report",
+              "visible": false,
+              "readOnly": true,
+              "defaultValue": "Draft 2026-2027 placeholder. Uses 2025-2026 courses and rules. Not ready for submission."
+            },
+            {
+              "type": "text",
+              "name": "programme_header_kicker",
+              "title": "Program name shown above the form",
+              "visible": false,
+              "readOnly": true,
+              "defaultValue": "TU/e MSc Embedded Systems"
+            },
+            {
+              "type": "checkbox",
+              "name": "legacy_stream_elective_metadata",
+              "title": "Legacy stream-elective course metadata",
+              "visible": false,
+              "readOnly": true,
+              "choices": [
+                {
+                  "value": "5lif0",
+                  "text": "5LIF0 Advanced Digital Circuit Design (5 ECTS)"
+                },
+                {
+                  "value": "5lin0",
+                  "text": "5LIN0 Video Processing (5 ECTS)"
+                },
+                {
+                  "value": "5liv0",
+                  "text": "5LIV0 Video Health Monitoring (5 ECTS)"
+                }
+              ]
+            },
+            {
+              "type": "checkbox",
+              "name": "seminar_course_metadata",
+              "title": "Stream-elective seminar metadata",
+              "visible": false,
+              "readOnly": true,
+              "choices": [
+                {
+                  "value": "2imf00",
+                  "text": "2IMF00 Seminar Formal System Analysis (5 ECTS)"
+                },
+                {
+                  "value": "2imn00",
+                  "text": "2IMN00 Seminar Interconnected Resource-aware Intelligent Systems (IRIS) (5 ECTS)"
+                },
+                {
+                  "value": "2imp00",
+                  "text": "2IMP00 Seminar Software Engineering and Technology (5 ECTS)"
+                }
+              ]
+            },
+            {
+              "type": "checkbox",
+              "name": "external_course_metadata",
+              "title": "Courses that require external-university information",
+              "visible": false,
+              "readOnly": true,
+              "choices": [
+                {
+                  "value": "2imnt1",
+                  "text": "2IMNT1 Embedded Computer Architectures 2 (5 ECTS)"
+                }
+              ]
+            },
+            {
+              "type": "checkbox",
+              "name": "prohibited_combination_5lih0_5lip0",
+              "title": "Prohibited course combination: 5LIH0 and 5LIP0",
+              "description": "Source: M&CS Master PER 2025-2026, p. 59",
+              "visible": false,
+              "readOnly": true,
+              "choices": [
+                {
+                  "value": "5lih0",
+                  "text": "5LIH0 Digital Integrated Circuit Design (5 ECTS)"
+                },
+                {
+                  "value": "5lip0",
+                  "text": "5LIP0 Digital Integrated Circuits: Fundamentals (5 ECTS)"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "comment",
+          "name": "committee_notes",
+          "title": "Additional notes for the Examination Committee",
+          "description": "Include any other information that should appear in the final report."
+        }
+      ]
+    },
+    {
+      "name": "reporting",
+      "title": "Review and print"
+    }
+  ],
+  "headerView": "advanced",
+  "calculatedValues": [
+    {
+      "name": "rule_programme_target",
+      "expression": "120",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_standard_course_credits",
+      "expression": "5",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_common_mandatory_credits",
+      "expression": "25",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_stream_mandatory_credits",
+      "expression": "15",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_stream_elective_target",
+      "expression": "15",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_free_elective_space_target",
+      "expression": "25",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_preparation_project_credits",
+      "expression": "10",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_graduation_project_credits",
+      "expression": "30",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_graduation_phase_credits",
+      "expression": "40",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_internship_credits",
+      "expression": "15",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_homologation_max_credits",
+      "expression": "15",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_self_chosen_homologation_max_courses",
+      "expression": "3",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_common_mandatory",
+      "expression": "{rule_common_mandatory_credits}",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_stream_mandatory",
+      "expression": "iif({stream} notempty, {rule_stream_mandatory_credits}, 0)",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_stream_electives_selected",
+      "expression": "iif({stream} = 'systems_on_chip', count({stream_electives_systems_on_chip}) * {rule_standard_course_credits}, iif({stream} = 'embedded_software', count({stream_electives_embedded_software}) * {rule_standard_course_credits}, iif({stream} = 'embedded_networking', count({stream_electives_embedded_networking}) * {rule_standard_course_credits}, iif({stream} = 'cyber_physical_systems', count({stream_electives_cyber_physical_systems}) * {rule_standard_course_credits}, 0))))",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_stream_electives_required",
+      "expression": "iif({credits_stream_electives_selected} > {rule_stream_elective_target}, {rule_stream_elective_target}, {credits_stream_electives_selected})",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_stream_electives_excess",
+      "expression": "{credits_stream_electives_selected} - {credits_stream_electives_required}",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_free_rows",
+      "expression": "sumInArray({free_electives}, 'credits', {code} notempty and {title} notempty and {credits} > 0)",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_homologation",
+      "expression": "iif({homologation} = true, sumInArray({homologation_courses}, 'credits', {code} notempty and {title} notempty and {credits} > 0), 0)",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_internship",
+      "expression": "iif({internship} = true, {rule_internship_credits}, 0)",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_free_space",
+      "expression": "{credits_stream_electives_excess} + {credits_free_rows} + {credits_homologation} + {credits_internship}",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_preparation_project",
+      "expression": "{rule_preparation_project_credits}",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_graduation_project",
+      "expression": "{rule_graduation_project_credits}",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_graduation_phase",
+      "expression": "{credits_preparation_project} + {credits_graduation_project}",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_mandatory_and_graduation",
+      "expression": "{credits_common_mandatory} + {credits_graduation_phase}",
+      "includeIntoResult": true
+    },
+    {
+      "name": "credits_total",
+      "expression": "{credits_common_mandatory} + {credits_stream_mandatory} + {credits_stream_electives_required} + {credits_free_space} + {credits_graduation_phase}",
+      "includeIntoResult": true
+    }
+  ]
+}

@@ -1,36 +1,38 @@
+// Every registered programme has an independently editable definition per year.
 export const programmes = {
-  dsai: {
-    input: "dsai.html",
-    output: "dist/dsai.html",
-    emptyOutDir: false,
-    removeBeforeBuild: ["dist/index.html"],
-  },
-  cse: {
-    input: "cse.html",
-    output: "dist/cse.html",
-    emptyOutDir: false,
-  },
-  es: {
-    input: "es.html",
-    output: "dist/es.html",
-    emptyOutDir: false,
-  },
-  iam: {
-    input: "iam.html",
-    output: "dist/iam.html",
-    emptyOutDir: false,
-  },
-  cybr: {
-    input: "cybr.html",
-    output: "dist/cybr.html",
-    emptyOutDir: false,
-  },
+  dsai: { input: "dsai.html" },
+  cse: { input: "cse.html" },
+  es: { input: "es.html" },
+  iam: { input: "iam.html" },
+  cybr: { input: "cybr.html" },
 };
 
+export const formYears = ["2025-2026", "2026-2027"];
+// Keep the package.json #forms/* fallback aligned with this default.
+export const DEFAULT_FORM_YEAR = "2025-2026";
+
 export function getProgramme(slug) {
-  const programme = programmes[slug];
-  if (!programme) {
+  if (!Object.hasOwn(programmes, slug)) {
     throw new Error(`Unknown programme \"${slug}\". Available programmes: ${Object.keys(programmes).join(", ")}.`);
   }
-  return programme;
+  return programmes[slug];
+}
+
+export function validateFormYear(year) {
+  if (!formYears.includes(year)) {
+    throw new Error(`Unknown academic year "${year}". Available years: ${formYears.join(", ")}.`);
+  }
+  return year;
+}
+
+export function getFormTarget(slug, year = DEFAULT_FORM_YEAR) {
+  const programme = getProgramme(slug);
+  validateFormYear(year);
+  return {
+    slug,
+    year,
+    input: programme.input,
+    definition: `forms/${slug}/${year}/form.json`,
+    output: `dist/${slug}-${year}.html`,
+  };
 }

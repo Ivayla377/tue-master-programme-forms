@@ -1,32 +1,42 @@
-import { spawn } from "node:child_process";
-import { rmSync } from "node:fs";
+import { spawnSync } from "node:child_process";
+import { existsSync, renameSync, rmSync } from "node:fs";
 import { resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
-import { getProgramme } from "./programmes.mjs";
+import { getFormTarget } from "./programmes.mjs";
 
-const slug = process.argv[2];
-if (!slug) {
-  throw new Error("Usage: node scripts/build-program.mjs <programme-slug>");
+const [slug, year, ...extra] = process.argv.slice(2);
+if (!slug || extra.length > 0) {
+  throw new Error("Usage: node scripts/build-program.mjs <programme> [academic-year]");
 }
 
-const programme = getProgramme(slug);
+const target = getFormTarget(slug, year);
 const projectRoot = fileURLToPath(new URL("../", import.meta.url));
 const distDirectory = resolve(projectRoot, "dist");
 
-for (const relativePath of programme.removeBeforeBuild ?? []) {
-  const staleOutput = resolve(projectRoot, relativePath);
-  if (!staleOutput.startsWith(`${distDirectory}${sep}`)) {
-    throw new Error(`Refusing to remove a file outside dist: ${relativePath}`);
+const intermediateOutput = resolve(distDirectory, target.input);
+const finalOutput = resolve(projectRoot, target.output);
+for (const path of [intermediateOutput, finalOutput]) {
+  if (!path.startsWith(`${distDirectory}${sep}`)) {
+    throw new Error(`Refusing to write outside dist: ${path}`);
   }
-  rmSync(staleOutput, { force: true });
 }
 
+// Vite uses the shared entry filename. Only a successful build is renamed.
+rmSync(intermediateOutput, { force: true });
 const viteBin = fileURLToPath(new URL("../node_modules/vite/bin/vite.js", import.meta.url));
-const child = spawn(process.execPath, [viteBin, "build"], {
-  env: { ...process.env, PROGRAM_FORM: slug },
+const build = spawnSync(process.execPath, [viteBin, "build"], {
+  cwd: projectRoot,
+  env: { ...process.env, PROGRAM_FORM: slug, PROGRAM_YEAR: target.year },
   stdio: "inherit",
 });
 
-child.on("exit", (code) => {
-  process.exitCode = code ?? 1;
-});
+if (build.error) throw build.error;
+if (build.status !== 0) {
+  process.exitCode = build.status ?? 1;
+} else {
+  if (!existsSync(intermediateOutput)) {
+    throw new Error(`Vite did not produce ${intermediateOutput}.`);
+  }
+  renameSync(intermediateOutput, finalOutput);
+  console.log(`Built ${slug} ${target.year}: ${target.output}`);
+}

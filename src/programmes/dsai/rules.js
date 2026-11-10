@@ -227,6 +227,22 @@ export function buildDsaiValidations(values) {
     });
   }
 
+  if (values.invalidHomologationRows?.length > 0) {
+    validations.push({
+      label: "Homologation courses",
+      status: "warning",
+      detail: "Incomplete homologation rows do not contribute credits. Enter a code, title and positive credit value.",
+    });
+  }
+
+  if (values.homologationCredits > rules.homologationMaximumCredits) {
+    validations.push({
+      label: "Homologation limit",
+      status: "error",
+      detail: `Homologation exceeds the maximum of ${formatCredits(rules.homologationMaximumCredits, "credits")}.`,
+    });
+  }
+
   if (values.internshipCredits > 0 && values.freeRowsCredits > 0) {
     validations.push({
       label: "Internship and free elective rows",

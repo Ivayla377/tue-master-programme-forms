@@ -1,5 +1,5 @@
 // Builds CYBR course metadata and programme rules from the SurveyJS form JSON.
-import surveySource from "../../../forms/cybr/form.json" with { type: "json" };
+import surveySource from "#forms/cybr" with { type: "json" };
 
 import {
   createChoiceLookup as createSharedChoiceLookup,

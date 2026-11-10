@@ -1,5 +1,5 @@
 // Builds CSE metadata and programme rules from the SurveyJS form JSON.
-import surveySource from "../../../forms/cse/form.json" with { type: "json" };
+import surveySource from "#forms/cse" with { type: "json" };
 
 import {
   createChoiceLookup as createSharedChoiceLookup,

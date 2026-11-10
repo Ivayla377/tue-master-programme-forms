@@ -4,16 +4,19 @@
   "private": true,
   "description": "Offline SurveyJS Program of Examinations forms for TU/e master programs.",
   "type": "module",
+  "imports": {
+    "#forms/*": "./forms/*/2025-2026/form.json"
+  },
   "scripts": {
-    "dev": "vite --host 127.0.0.1",
+    "dev": "node scripts/dev-program.mjs",
     "build": "node scripts/build-program.mjs dsai",
     "build:program": "node scripts/build-program.mjs",
-    "build:dsai": "npm run build:program -- dsai",
-    "build:cse": "npm run build:program -- cse",
-    "build:es": "npm run build:program -- es",
-    "build:iam": "npm run build:program -- iam",
-    "build:cybr": "npm run build:program -- cybr",
-    "build:all": "npm run build:dsai && npm run build:cse && npm run build:es && npm run build:iam && npm run build:cybr",
+    "build:dsai": "node scripts/build-program.mjs dsai",
+    "build:cse": "node scripts/build-program.mjs cse",
+    "build:es": "node scripts/build-program.mjs es",
+    "build:iam": "node scripts/build-program.mjs iam",
+    "build:cybr": "node scripts/build-program.mjs cybr",
+    "build:all": "node scripts/build-all.mjs",
     "test": "node --test",
     "preview": "vite preview --host 127.0.0.1"
   },

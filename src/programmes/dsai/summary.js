@@ -51,7 +51,9 @@ export function renderTrajectoryClassification(report) {
 export function renderSummary(report, data, choiceLookup, labels = {}) {
   const personalInfo = data.personal_info ?? {};
   const hasFreeElectives = report.selected.freeRows.length > 0;
-  const hasHomologationCourses = report.selected.homologationCourses.length > 0;
+  const homologationRows = report.selected.homologationRows ?? [];
+  const hasHomologationCourses = report.selected.homologationCourses.length > 0
+    || homologationRows.length > 0;
   const hasFreeSpaceCourses = hasFreeElectives || hasHomologationCourses;
 
   const summaryEyebrow = labels.summaryEyebrow ?? "Program of Examinations";
@@ -125,6 +127,7 @@ export function renderSummary(report, data, choiceLookup, labels = {}) {
         ])}
         ${renderReportTable(["Area", "Selection", "Value / credits"], [
           ...renderFreeRows(report.selected.freeRows),
+          ...renderFreeRows(homologationRows, "Homologation course"),
           ...(hasHomologationCourses
             ? renderCourseRows("Homologation course", report.selected.homologationCourses)
             : []),
@@ -218,10 +221,10 @@ function renderTrajectoryRows(type, trajectories) {
   ]);
 }
 
-function renderFreeRows(rows) {
+function renderFreeRows(rows, category = "Free elective") {
   return rows.map((row) => ({
     cells: [
-      "Free elective",
+      category,
       [row.code, row.title].filter(Boolean).join(" "),
       row.duplicate ? "Not counted (duplicate)" : row.validCredits ? formatCredits(row.credits) : "Not counted",
     ],
