@@ -18,6 +18,8 @@ export const IAM_QUESTION_NAMES = Object.freeze({
   specialization: "specialization_electives",
   listedFree: "listed_free_electives",
   internship: "internship_course_display",
+  qstMandatory: "qst_mandatory_components_display",
+  qstSpecialization: "qst_specialization_electives",
 });
 
 export const IAM_RULE_FIELD_NAMES = Object.freeze({
@@ -26,6 +28,9 @@ export const IAM_RULE_FIELD_NAMES = Object.freeze({
   coreMinimumCount: "rule_core_min_count",
   coreSpecializationMinimum: "rule_core_specialization_min_credits",
   homologationMaximum: "rule_homologation_max_credits",
+  internshipInSpecialization: "rule_internship_in_specialization",
+  qstMinimum: "rule_qst_min_credits",
+  qstSpecializationMinimum: "rule_qst_specialization_min_credits",
 });
 
 const COURSE_QUESTION_NAMES = Object.freeze(Object.values(IAM_QUESTION_NAMES));
@@ -37,25 +42,41 @@ export function createIamChoiceLookup(surveyJson = surveySource) {
 }
 
 export function buildIamFormConfig(surveyJson, lookup) {
+  const ruleFields = { ...IAM_RULE_FIELD_NAMES };
+  // Earlier definitions do not have QST or the new internship allocation.
+  for (const key of ["internshipInSpecialization", "qstMinimum", "qstSpecializationMinimum"]) {
+    if (!surveyJson.calculatedValues?.some(({ name }) => name === ruleFields[key])) {
+      delete ruleFields[key];
+    }
+  }
+  Object.freeze(ruleFields);
   const mandatoryCodes = Object.freeze(defaultCourseCodes(
     lookup,
     IAM_QUESTION_NAMES.mandatory,
   ));
 
   return Object.freeze({
+    ruleFields,
     rules: Object.freeze(readNumericRulesFromSurvey(
       surveyJson,
-      IAM_RULE_FIELD_NAMES,
+      ruleFields,
       "IAM form",
     )),
     courseCatalog: Object.freeze(buildCourseCatalog(lookup)),
     mandatoryCodes,
+    trackChoices: Object.freeze(lookup.getChoices("program_track")),
+    qstMandatoryCodes: Object.freeze(defaultCourseCodes(lookup, IAM_QUESTION_NAMES.qstMandatory)),
+    qstElectiveCodes: Object.freeze(lookup.getCodes(IAM_QUESTION_NAMES.qstSpecialization)),
+    // The form lists the portfolio first and the final project last.
     professionalPortfolioCode: mandatoryCodes[0] ?? "",
-    finalProjectCode: mandatoryCodes[1] ?? "",
+    finalProjectCode: mandatoryCodes.at(-1) ?? "",
     coreElectiveCodes: Object.freeze(lookup.getCodes(IAM_QUESTION_NAMES.core)),
     specializationElectiveCodes: Object.freeze(
-      lookup.getCodes(IAM_QUESTION_NAMES.specialization),
+      // Choices with a visibility condition are available only in the QST track.
+      lookup.getChoices(IAM_QUESTION_NAMES.specialization)
+        .filter(choice => !choice.visibleIf).map(choice => choice.displayCode),
     ),
+    qstSpecializationElectiveCodes: Object.freeze(lookup.getCodes(IAM_QUESTION_NAMES.specialization)),
     listedFreeElectiveCodes: Object.freeze(
       lookup.getCodes(IAM_QUESTION_NAMES.listedFree),
     ),
@@ -67,7 +88,17 @@ export function buildIamFormConfig(surveyJson, lookup) {
 }
 
 export function resolveIamRules(data, config = DEFAULT_IAM_CONFIG) {
-  return resolveNumericRules(data, config.rules, IAM_RULE_FIELD_NAMES);
+  const rules = resolveNumericRules(data, config.rules, config.ruleFields);
+  if (isIamQstTrack(data, config)) {
+    rules.coreMinimum = 0;
+    rules.coreMinimumCount = 0;
+    rules.coreSpecializationMinimum = rules.qstSpecializationMinimum;
+  }
+  return rules;
+}
+
+export function isIamQstTrack(data, config) {
+  return data.program_track === "qst" && config.qstMandatoryCodes.length > 0;
 }
 
 function buildCourseCatalog(lookup) {

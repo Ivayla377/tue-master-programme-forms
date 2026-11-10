@@ -27,6 +27,7 @@ import {
   SPECIALIZATION_ELECTIVE_CODES,
   createIamChoiceLookup,
   resolveIamRules,
+  isIamQstTrack,
 } from "./form-config.js";
 import { buildIamValidations } from "./rules.js";
 
@@ -46,23 +47,26 @@ export const normalizeCode = normalizeCourseCode;
 export function calculateIam(data = {}, choiceLookup = createIamChoiceLookup()) {
   const config = choiceLookup.iamConfig;
   const rules = resolveIamRules(data, config);
+  const isQst = isIamQstTrack(data, config);
+  const internshipInSpecialization = rules.internshipInSpecialization === 1;
   const duplicates = [];
   const claimed = createCourseClaims(choiceLookup);
   const readCourse = (value, questionName) =>
     courseFromValue(value, choiceLookup, questionName);
 
-  const mandatoryCourses = config.mandatoryCodes.map((code) =>
-    readCourse(code, IAM_QUESTION_NAMES.mandatory),
+  const mandatoryCourses = (isQst ? config.qstMandatoryCodes : config.mandatoryCodes).map((code) =>
+    readCourse(code, isQst ? IAM_QUESTION_NAMES.qstMandatory : IAM_QUESTION_NAMES.mandatory),
   );
   for (const course of mandatoryCourses) {
     course.counted = claimCourse(course, "Mandatory courses", claimed, duplicates);
   }
 
   const internship = resolveInternship(data, choiceLookup, config);
+  internship.component = internshipInSpecialization ? "Specialization electives" : "Free electives";
   if (internship.course) {
     internship.counted = claimCourse(
       internship.course,
-      "Internship",
+      internshipInSpecialization ? internship.component : "Internship",
       claimed,
       duplicates,
     );
@@ -72,7 +76,7 @@ export function calculateIam(data = {}, choiceLookup = createIamChoiceLookup()) 
   }
 
   const coreSelection = claimListedCourses({
-    values: data.core_electives,
+    values: isQst ? [] : data.core_electives,
     allowedCodes: config.coreElectiveCodes,
     questionName: IAM_QUESTION_NAMES.core,
     component: "Core electives",
@@ -81,9 +85,19 @@ export function calculateIam(data = {}, choiceLookup = createIamChoiceLookup()) 
     duplicates,
     invalidReason: "Not in the current PER list.",
   });
+  const qstSelection = claimListedCourses({
+    values: isQst ? data.qst_specialization_electives : [],
+    allowedCodes: config.qstElectiveCodes,
+    questionName: IAM_QUESTION_NAMES.qstSpecialization,
+    component: "QST specialization electives",
+    choiceLookup,
+    claimed,
+    duplicates,
+    invalidReason: "Not in the QST elective list.",
+  });
   const specializationSelection = claimListedCourses({
     values: data.specialization_electives,
-    allowedCodes: config.specializationElectiveCodes,
+    allowedCodes: isQst ? config.qstSpecializationElectiveCodes : config.specializationElectiveCodes,
     questionName: IAM_QUESTION_NAMES.specialization,
     component: "Specialization electives",
     choiceLookup,
@@ -141,6 +155,7 @@ export function calculateIam(data = {}, choiceLookup = createIamChoiceLookup()) 
   const useCalculatedValues =
     duplicates.length === 0
     && coreSelection.invalidCourses.length === 0
+    && qstSelection.invalidCourses.length === 0
     && specializationSelection.invalidCourses.length === 0
     && listedFreeSelection.invalidCourses.length === 0
     && selfChosenHomologationRows.length === 0;
@@ -159,7 +174,7 @@ export function calculateIam(data = {}, choiceLookup = createIamChoiceLookup()) 
     mandatoryCredits.get(normalizeCourseCode(config.finalProjectCode)) ?? 0,
   );
   const mandatory = subtotal("mandatory_credits", sumCountedCourses(mandatoryCourses));
-  const coreElectives = subtotal(
+  const coreElectives = isQst ? 0 : subtotal(
     "core_elective_credits",
     sumCourses(coreSelection.courses),
   );
@@ -167,13 +182,22 @@ export function calculateIam(data = {}, choiceLookup = createIamChoiceLookup()) 
     "listed_specialization_credits",
     sumCourses(specializationSelection.courses),
   );
+  const qstSpecialization = isQst ? subtotal(
+    "qst_specialization_credits",
+    sumCourses(qstSelection.courses),
+  ) : 0;
   const mastermathSpecialization = subtotal(
     "mastermath_specialization_credits",
     sumCountedRows(mastermathRows),
   );
+  const internshipCredits = subtotal(
+    "internship_credits",
+    internship.selected && internship.counted ? internship.credits : 0,
+  );
   const specializationElectives = subtotal(
     "specialization_credits",
-    roundCredits(listedSpecialization + mastermathSpecialization),
+    roundCredits(qstSpecialization + listedSpecialization + mastermathSpecialization
+      + (internshipInSpecialization ? internshipCredits : 0)),
   );
   const coreAndSpecialization = subtotal(
     "core_and_specialization_credits",
@@ -182,10 +206,6 @@ export function calculateIam(data = {}, choiceLookup = createIamChoiceLookup()) 
   const listedFreeElectives = subtotal(
     "listed_free_elective_credits",
     sumCourses(listedFreeSelection.courses),
-  );
-  const internshipCredits = subtotal(
-    "internship_credits",
-    internship.selected && internship.counted ? internship.credits : 0,
   );
   const assignedHomologation = subtotal(
     "assigned_homologation_credits",
@@ -207,7 +227,7 @@ export function calculateIam(data = {}, choiceLookup = createIamChoiceLookup()) 
     "free_elective_space_credits",
     roundCredits(
       listedFreeElectives
-      + internshipCredits
+      + (internshipInSpecialization ? 0 : internshipCredits)
       + homologation
       + freeElectiveRowsCredits,
     ),
@@ -230,6 +250,7 @@ export function calculateIam(data = {}, choiceLookup = createIamChoiceLookup()) 
   const homologationMotivationPresent =
     String(data.homologation_motivation ?? "").trim() !== "";
   const flags = {
+    qstMinimumMet: !isQst || qstSpecialization >= rules.qstMinimum,
     coreMinimumMet: coreElectives >= rules.coreMinimum,
     coreCountMet: coreCount >= rules.coreMinimumCount,
     coreSpecializationMinimumMet:
@@ -254,6 +275,9 @@ export function calculateIam(data = {}, choiceLookup = createIamChoiceLookup()) 
   const validations = buildIamValidations({
     flags,
     rules,
+    isQst,
+    qstSpecialization,
+    invalidQstCourses: qstSelection.invalidCourses,
     coreElectives,
     coreCount,
     specializationElectives,
@@ -274,6 +298,10 @@ export function calculateIam(data = {}, choiceLookup = createIamChoiceLookup()) 
 
   return {
     rules,
+    track: {
+      isQst,
+      label: config.trackChoices.find(choice => choice.value === (isQst ? "qst" : "standard"))?.text ?? "",
+    },
     manualCourseTables: {
       free_electives: freeElectiveRows,
       homologation_courses: homologationRows,
@@ -285,6 +313,7 @@ export function calculateIam(data = {}, choiceLookup = createIamChoiceLookup()) 
       professionalPortfolio,
       finalProject,
       coreElectives,
+      qstSpecialization,
       listedSpecialization,
       mastermathSpecialization,
       specializationElectives,
@@ -300,6 +329,8 @@ export function calculateIam(data = {}, choiceLookup = createIamChoiceLookup()) 
     },
     selected: {
       mandatoryCourses,
+      qstSpecializationCourses: [...qstSelection.courses, ...qstSelection.duplicateCourses],
+      invalidQstCourses: qstSelection.invalidCourses,
       coreElectiveCourses: [...coreSelection.courses, ...coreSelection.duplicateCourses],
       invalidCoreCourses: coreSelection.invalidCourses,
       specializationElectiveCourses: [...specializationSelection.courses, ...specializationSelection.duplicateCourses],

@@ -24,8 +24,6 @@ import {
 } from "../../shared/summary-rendering.js";
 
 const PANEL_SUBTOTAL_ROWS = [
-  ["professionalPortfolio", "Professional Portfolio"],
-  ["finalProject", "Final Project"],
   ["coreElectives", "Core electives"],
   ["specializationElectives", "Specialization electives"],
   ["coreAndSpecialization", "Core + specialization"],
@@ -34,14 +32,11 @@ const PANEL_SUBTOTAL_ROWS = [
 ];
 
 const SUMMARY_SUBTOTAL_ROWS = [
-  ["professionalPortfolio", "Professional Portfolio"],
-  ["finalProject", "Final Project"],
   ["coreElectives", "Core electives"],
   ["listedSpecialization", "Listed specialization electives"],
   ["mastermathSpecialization", "Mastermath / approved specialization"],
   ["coreAndSpecialization", "Core and specialization subtotal"],
   ["listedFreeElectives", "Listed free electives"],
-  ["internship", "Internship"],
   ["homologation", "Homologation"],
   ["freeElectiveRows", "Other free electives"],
   ["total", "Overall program total"],
@@ -50,12 +45,15 @@ const SUMMARY_SUBTOTAL_ROWS = [
 const SIDEBAR_ALWAYS_VISIBLE = new Set([
   "Core electives",
   "Core and specialization total",
+  "QST specialization electives",
+  "Specialization total",
   "Total credits",
 ]);
 
 const SIDEBAR_EXCEPTION_LABELS = new Set([
   "Form version",
   "Core-elective eligibility",
+  "QST-elective eligibility",
   "Specialization-elective eligibility",
   "Listed free-elective eligibility",
   "Manual course rows",
@@ -65,13 +63,15 @@ const SIDEBAR_EXCEPTION_LABELS = new Set([
 
 export function renderIamEctsPanel(report) {
   const validations = selectIamSidebarValidations(report.validations);
+  const mandatory = mandatorySubtotalEntries(report);
   return renderSharedEctsPanel(
     {
       ...report,
+      subtotals: { ...report.subtotals, ...Object.fromEntries(mandatory.map(([key, , credits]) => [key, credits])) },
       validations,
       hasWarnings: validations.some((validation) => validation.status === "warning"),
     },
-    PANEL_SUBTOTAL_ROWS,
+    [...mandatory.map(([key, label]) => [key, label]), ...trackSubtotalRows(PANEL_SUBTOTAL_ROWS, report)],
   );
 }
 
@@ -88,6 +88,7 @@ export function renderIamSummary(report, data, choiceLookup, labels = {}) {
   const safeReport = normalizeReport(report);
   const safeData = asRecord(data);
   const selected = safeReport.selected;
+  const isQst = safeReport.track.isQst;
   const personalInfo = asRecord(safeData.personal_info);
   const summaryEyebrow = labels.summaryEyebrow ?? "IAM Program of Examinations";
   const summaryTitle = labels.summaryTitle ?? "Form 1: IAM Program of Examinations";
@@ -113,6 +114,7 @@ export function renderIamSummary(report, data, choiceLookup, labels = {}) {
   const internship = asRecord(selected.internship);
   const internshipSelected = booleanValue(coalesce(internship.selected, safeData.internship));
   const internshipCourse = internshipSelected ? internship.course : null;
+  const internshipInSpecialization = report.rules?.internshipInSpecialization === 1;
   const externalActive = booleanValue(safeData.external_courses) === true;
 
   return `
@@ -135,6 +137,7 @@ export function renderIamSummary(report, data, choiceLookup, labels = {}) {
           ["Student ID", personalInfo.id],
           ["Month and year of enrollment", formatMonthYear(personalInfo.enrollment)],
           ["Mentor", safeData.mentor],
+          ...(safeReport.track.label ? [["Program track", safeReport.track.label]] : []),
           ["Updates a previously approved program", yesNo(safeData.previous)],
         ])}
       </section>
@@ -145,14 +148,16 @@ export function renderIamSummary(report, data, choiceLookup, labels = {}) {
       </section>
 
       <section class="summary-section summary-section--allow-break">
-        <h3>Core electives</h3>
-        <p class="summary-inline-detail"><strong>Selected:</strong> ${escapeHtml(formatCredits(safeReport.subtotals.coreElectives))} / at least ${escapeHtml(formatCredits(safeReport.rules.coreMinimum))}</p>
-        ${renderCourseTable(selected.coreElectiveCourses, "No core electives selected.")}
+        <h3>${isQst ? "QST specialization electives" : "Core electives"}</h3>
+        <p class="summary-inline-detail"><strong>Selected:</strong> ${escapeHtml(formatCredits(isQst ? safeReport.subtotals.qstSpecialization : safeReport.subtotals.coreElectives))} / at least ${escapeHtml(formatCredits(isQst ? safeReport.rules.qstMinimum : safeReport.rules.coreMinimum))}</p>
+        ${isQst
+          ? renderCourseTable([...selected.qstSpecializationCourses, ...selected.invalidQstCourses], "No QST specialization electives selected.")
+          : renderCourseTable([...selected.coreElectiveCourses, ...selected.invalidCoreCourses], "No core electives selected.")}
       </section>
 
       <section class="summary-section summary-section--allow-break">
         <h3>Specialization electives</h3>
-        <p class="summary-inline-detail"><strong>Selected:</strong> ${escapeHtml(formatCredits(safeReport.subtotals.specializationElectives))}</p>
+        <p class="summary-inline-detail"><strong>${isQst ? "Total including QST electives:" : "Selected:"}</strong> ${escapeHtml(formatCredits(safeReport.subtotals.specializationElectives))}</p>
         ${renderReportTable(
           ["Type", "Course code", "Course title", "Credits"],
           specializationRows,
@@ -162,7 +167,7 @@ export function renderIamSummary(report, data, choiceLookup, labels = {}) {
       </section>
 
       <section class="summary-section summary-section--allow-break">
-        <h3>Free electives, homologation and internship</h3>
+        <h3>${internshipInSpecialization ? "Free electives and homologation" : "Free electives, homologation and internship"}</h3>
         ${renderDetailsTable([
           ["Homologation included", yesNo(safeData.homologation)],
           ...(booleanValue(safeData.homologation) === true
@@ -181,6 +186,7 @@ export function renderIamSummary(report, data, choiceLookup, labels = {}) {
         <h3>Internship</h3>
         ${renderDetailsTable([
           ["Included", yesNo(coalesce(internship.selected, safeData.internship))],
+          ...(internshipSelected && internshipInSpecialization ? [["Counts toward", "Specialization electives"]] : []),
           ...(internshipSelected
             ? [
                 ["Supervisor", coalesce(internship.supervisor, safeData.internship_supervisor)],
@@ -262,11 +268,7 @@ export function compactIamSummaryValidations(validations) {
   return asArray(validations).filter((validation) => {
     const label = String(asRecord(validation).label ?? "");
     if (validationStatus(validation) !== "success") return true;
-    return [
-      "Core electives",
-      "Core and specialization total",
-      "Total credits",
-    ].includes(label);
+    return SIDEBAR_ALWAYS_VISIBLE.has(label);
   });
 }
 
@@ -278,9 +280,11 @@ function normalizeReport(report) {
   const validations = asArray(source.validations);
   return {
     ...source,
+    track: asRecord(source.track),
     rules: {
       programmeTarget: numericCredits(sourceRules.programmeTarget),
       coreMinimum: numericCredits(sourceRules.coreMinimum),
+      qstMinimum: numericCredits(sourceRules.qstMinimum),
       coreMinimumCount: numericCredits(sourceRules.coreMinimumCount),
       coreSpecializationMinimum: numericCredits(sourceRules.coreSpecializationMinimum),
       homologationMaximum: numericCredits(sourceRules.homologationMaximum),
@@ -289,6 +293,7 @@ function normalizeReport(report) {
       professionalPortfolio: numericCredits(sourceSubtotals.professionalPortfolio),
       finalProject: numericCredits(sourceSubtotals.finalProject),
       coreElectives: numericCredits(sourceSubtotals.coreElectives),
+      qstSpecialization: numericCredits(sourceSubtotals.qstSpecialization),
       listedSpecialization: numericCredits(sourceSubtotals.listedSpecialization),
       mastermathSpecialization: numericCredits(sourceSubtotals.mastermathSpecialization),
       specializationElectives: numericCredits(sourceSubtotals.specializationElectives),
@@ -304,7 +309,10 @@ function normalizeReport(report) {
     },
     selected: {
       mandatoryCourses: asArray(sourceSelected.mandatoryCourses),
+      qstSpecializationCourses: asArray(sourceSelected.qstSpecializationCourses),
+      invalidQstCourses: asArray(sourceSelected.invalidQstCourses),
       coreElectiveCourses: asArray(sourceSelected.coreElectiveCourses),
+      invalidCoreCourses: asArray(sourceSelected.invalidCoreCourses),
       specializationElectiveCourses: asArray(sourceSelected.specializationElectiveCourses),
       invalidSpecializationCourses: asArray(sourceSelected.invalidSpecializationCourses),
       mastermathSpecializationRows: asArray(sourceSelected.mastermathSpecializationRows),
@@ -320,18 +328,48 @@ function normalizeReport(report) {
 }
 
 function renderSubtotalsTable(report) {
+  const internshipRow = ["internship", "Internship"];
+  const rows = trackSubtotalRows(SUMMARY_SUBTOTAL_ROWS, report);
+  // Keep each subtotal next to the category in which it contributes.
+  const beforeKey = report.selected.internship.component === "Specialization electives"
+    ? "coreAndSpecialization" : "homologation";
+  rows.splice(rows.findIndex(([key]) => key === beforeKey), 0, internshipRow);
+  const entries = [
+    ...mandatorySubtotalEntries(report),
+    ...rows.map(([key, label]) => [key, label, report.subtotals[key]]),
+  ];
   return `
     <table class="summary-table summary-table--subtotals">
       <tbody>
-        ${SUMMARY_SUBTOTAL_ROWS.map(([key, label]) => `
+        ${entries.map(([key, label, credits]) => `
           <tr${key === "total" ? ' class="summary-row--group"' : ""}>
             <th scope="row">${escapeHtml(label)}</th>
-            <td>${escapeHtml(formatCredits(report.subtotals[key]))}</td>
+            <td>${escapeHtml(formatCredits(credits))}</td>
           </tr>
         `).join("")}
       </tbody>
     </table>
   `;
+}
+
+function trackSubtotalRows(rows, report) {
+  if (!report.track?.isQst) return [...rows];
+  return rows
+    // In QST there is no core subtotal to add to the specialization total.
+    .filter(([key]) => key !== "specializationElectives")
+    .map(([key, label]) => {
+      if (key === "coreElectives") return ["qstSpecialization", "QST specialization electives"];
+      if (key === "coreAndSpecialization") return [key, "Specialization total"];
+      return [key, label];
+    });
+}
+
+function mandatorySubtotalEntries(report) {
+  return asArray(report.selected?.mandatoryCourses).map(course => [
+    `mandatory_${course.code}`,
+    courseTitle(course),
+    course.counted === false ? 0 : numericCredits(course.credits),
+  ]);
 }
 
 function renderCourseTable(courses, emptyText, modifier = "summary-table--three-course") {
@@ -346,7 +384,7 @@ function renderCourseTable(courses, emptyText, modifier = "summary-table--three-
 function courseRow(course, className = "") {
   return {
     cells: [courseCode(course), courseTitle(course), courseCredits(course)],
-    className,
+    className: className || (course.counted === false ? "summary-row--not-counted" : ""),
   };
 }
 
@@ -412,6 +450,7 @@ function courseTitle(course, fallback = "Course title not available") {
 function courseCredits(course) {
   const item = asRecord(course);
   if (item.duplicate) return "Not counted (duplicate)";
+  if (item.counted === false) return "Not counted";
   const value = coalesceNonBlank(item.credits, item.rawCredits);
   if (value === undefined) return "Not reported";
   const parsed = parseCreditValue(value);

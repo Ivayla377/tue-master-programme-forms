@@ -91,6 +91,23 @@
       "title": "Mandatory and core courses",
       "elements": [
         {
+          "type": "radiogroup",
+          "name": "program_track",
+          "title": "Which program track are you following?",
+          "isRequired": true,
+          "defaultValue": "standard",
+          "choices": [
+            {
+              "value": "standard",
+              "text": "Standard Industrial and Applied Mathematics"
+            },
+            {
+              "value": "qst",
+              "text": "Track Quantum Science and Technology"
+            }
+          ]
+        },
+        {
           "type": "panel",
           "name": "mandatory_components_panel",
           "title": "Mandatory components",
@@ -102,12 +119,66 @@
               "readOnly": true,
               "defaultValue": [
                 "2mmr10",
+                "2mmr70",
                 "2mmr30"
               ],
               "choices": [
                 {
                   "value": "2mmr10",
                   "text": "2MMR10 Professional Portfolio (5 ECTS)"
+                },
+                {
+                  "value": "2mmr70",
+                  "text": "2MMR70 Toolkit of Computation (5 ECTS)"
+                },
+                {
+                  "value": "2mmr30",
+                  "text": "2MMR30 Final Project (30 ECTS)"
+                }
+              ],
+              "visibleIf": "{program_track} <> 'qst'",
+              "clearIfInvisible": "none"
+            },
+            {
+              "type": "checkbox",
+              "name": "qst_mandatory_components_display",
+              "title": "The following courses are already included:",
+              "visibleIf": "{program_track} = 'qst'",
+              "clearIfInvisible": "none",
+              "readOnly": true,
+              "defaultValue": [
+                "2mmr70",
+                "2mmr10",
+                "2mms10",
+                "35qst",
+                "2mma15",
+                "2mmd10",
+                "2mmr30"
+              ],
+              "choices": [
+                {
+                  "value": "2mmr70",
+                  "text": "2MMR70 Toolkit of Computation (5 ECTS)"
+                },
+                {
+                  "value": "2mmr10",
+                  "text": "2MMR10 Professional Portfolio (5 ECTS)"
+                },
+                {
+                  "value": "2mms10",
+                  "text": "2MMS10 Probability and Stochastics 1 (5 ECTS)"
+                },
+                {
+                  "value": "35qst",
+                  "text": "35QST Quantum Science & Technology (5 ECTS)"
+                },
+                {
+                  "value": "2mma15",
+                  "text": "2MMA15 Functional Analysis (5 ECTS)"
+                },
+                {
+                  "value": "2mmd10",
+                  "text": "2MMD10 Optimization (5 ECTS)"
                 },
                 {
                   "value": "2mmr30",
@@ -125,8 +196,8 @@
           "isRequired": true,
           "choices": [
             {
-              "value": "2mma10",
-              "text": "2MMA10 Applied Functional Analysis (5 ECTS)"
+              "value": "2mma15",
+              "text": "2MMA15 Functional Analysis (5 ECTS)"
             },
             {
               "value": "2mmc10",
@@ -145,8 +216,61 @@
               "text": "2MMS10 Probability and Stochastics 1 (5 ECTS)"
             },
             {
-              "value": "2mms90",
-              "text": "2MMS90 Sequential and Nonparametric Statistics (5 ECTS)"
+              "value": "2mms00",
+              "text": "2MMS00 Methods for Longitudinal and Time-to-Event Data (5 ECTS)"
+            }
+          ],
+          "visibleIf": "{program_track} <> 'qst'",
+          "clearIfInvisible": "onHidden"
+        },
+        {
+          "type": "checkbox",
+          "name": "qst_specialization_electives",
+          "title": "QST specialization electives",
+          "description": "Please select at least {rule_qst_min_credits} credits of these Quantum Science and Technology electives.",
+          "visibleIf": "{program_track} = 'qst'",
+          "clearIfInvisible": "onHidden",
+          "isRequired": true,
+          "choices": [
+            {
+              "value": "5lso0",
+              "text": "5LSO0 Quantum Optimization and Machine Learning (5 ECTS)"
+            },
+            {
+              "value": "37qin",
+              "text": "37QIN Quantum Information (5 ECTS)"
+            },
+            {
+              "value": "37hqc",
+              "text": "37HQC Hybrid Quantum Computing (5 ECTS)"
+            },
+            {
+              "value": "2mmq10",
+              "text": "2MMQ10 Quantum Computing and Algorithms (5 ECTS)"
+            },
+            {
+              "value": "37uqp",
+              "text": "37UQP Ultracold Quantum Physics (5 ECTS)"
+            },
+            {
+              "value": "2mmc30",
+              "text": "2MMC30 Coding Theory (8 ECTS)"
+            },
+            {
+              "value": "2mmq20",
+              "text": "2MMQ20 Functional Analysis for Quantum Theory (5 ECTS)"
+            },
+            {
+              "value": "2mmq30",
+              "text": "2MMQ30 Theory and Practice of Many-Body Quantum Systems (5 ECTS)"
+            },
+            {
+              "value": "2mmq40",
+              "text": "2MMQ40 Differential Geometry for Classical and Quantum Gravity (5 ECTS)"
+            },
+            {
+              "value": "2ims55",
+              "text": "2IMS55 Quantum Protocols (5 ECTS)"
             }
           ]
         }
@@ -155,7 +279,7 @@
     {
       "name": "specialization",
       "title": "Specialization electives",
-      "description": "Specialization electives together with core electives must add up to at least 55 credits.",
+      "description": "Specialization electives together with core electives must add up to at least {required_core_specialization_credits} credits.",
       "elements": [
         {
           "type": "tagbox",
@@ -172,10 +296,6 @@
               "text": "2MMA70 Differential Geometry for Image Processing (5 ECTS)"
             },
             {
-              "value": "2ima25",
-              "text": "2IMA25 Exact Algorithms for NP-hard Problems (5 ECTS)"
-            },
-            {
               "value": "2dmi10",
               "text": "2DMI10 Applied Cryptography (5 ECTS)"
             },
@@ -184,16 +304,8 @@
               "text": "2MMD20 Multilinear Algebra and Applications (5 ECTS)"
             },
             {
-              "value": "2mmn20",
-              "text": "2MMN20 Scientific Programming (5 ECTS)"
-            },
-            {
               "value": "2mms30",
               "text": "2MMS30 Probability and Stochastics 2 (5 ECTS)"
-            },
-            {
-              "value": "5lma0",
-              "text": "5LMA0 Model Reduction (5 ECTS)"
             },
             {
               "value": "2mma80",
@@ -202,10 +314,6 @@
             {
               "value": "2dmi00",
               "text": "2DMI00 Cryptographic Protocols (5 ECTS)"
-            },
-            {
-              "value": "2mma20",
-              "text": "2MMA20 Partial Differential Equations (5 ECTS)"
             },
             {
               "value": "2mmd30",
@@ -220,24 +328,12 @@
               "text": "2MMS80 Statistical Learning Theory (5 ECTS)"
             },
             {
-              "value": "2dd23",
-              "text": "2DD23 Time Series & Forecasting (5 ECTS)"
-            },
-            {
-              "value": "2mma40",
-              "text": "2MMA40 Evolution Equations (5 ECTS)"
-            },
-            {
               "value": "2mmd40",
               "text": "2MMD40 Integer Programming (5 ECTS)"
             },
             {
               "value": "2mmd50",
               "text": "2MMD50 Algebraic Combinatorics (5 ECTS)"
-            },
-            {
-              "value": "2mmn30",
-              "text": "2MMN30 Scientific Computing in Partial Differential Equations (5 ECTS)"
             },
             {
               "value": "2mms50",
@@ -262,8 +358,73 @@
             {
               "value": "2ims60",
               "text": "2IMS60 Provable Security (5 ECTS)"
+            },
+            {
+              "value": "2amu30",
+              "text": "2AMU30 Uncertainty Representation and Reasoning (5 ECTS)"
+            },
+            {
+              "value": "5lso0",
+              "text": "5LSO0 Quantum Optimization and Machine Learning (5 ECTS)"
+            },
+            {
+              "value": "2mma25",
+              "text": "2MMA25 Variational Partial Differential Equations (5 ECTS)"
+            },
+            {
+              "value": "2mmn25",
+              "text": "2MMN25 Numerical Analysis of Variational PDEs (5 ECTS)"
+            },
+            {
+              "value": "2mmq10",
+              "text": "2MMQ10 Quantum Computing and Algorithms (5 ECTS)"
+            },
+            {
+              "value": "2amu20",
+              "text": "2AMU20 Generative AI Models (5 ECTS)"
+            },
+            {
+              "value": "2ims55",
+              "text": "2IMS55 Quantum Protocols (5 ECTS)"
+            },
+            {
+              "value": "2mmn35",
+              "text": "2MMN35 Numerical Analysis of Transport PDEs (5 ECTS)"
+            },
+            {
+              "value": "2mmq20",
+              "text": "2MMQ20 Functional Analysis for Quantum Theory (5 ECTS)"
+            },
+            {
+              "value": "2mmq30",
+              "text": "2MMQ30 Theory and Practice of Many-Body Quantum Systems (5 ECTS)"
+            },
+            {
+              "value": "2mmq40",
+              "text": "2MMQ40 Differential Geometry for Classical and Quantum Gravity (5 ECTS)"
+            },
+            {
+              "value": "37qin",
+              "text": "37QIN Quantum Information (5 ECTS)",
+              "visibleIf": "{program_track} = 'qst' and {qst_specialization_electives} notcontains '37qin'"
+            },
+            {
+              "value": "37hqc",
+              "text": "37HQC Hybrid Quantum Computing (5 ECTS)",
+              "visibleIf": "{program_track} = 'qst' and {qst_specialization_electives} notcontains '37hqc'"
+            },
+            {
+              "value": "37uqp",
+              "text": "37UQP Ultracold Quantum Physics (5 ECTS)",
+              "visibleIf": "{program_track} = 'qst' and {qst_specialization_electives} notcontains '37uqp'"
+            },
+            {
+              "value": "2mmc30",
+              "text": "2MMC30 Coding Theory (8 ECTS)",
+              "visibleIf": "{program_track} = 'qst' and {qst_specialization_electives} notcontains '2mmc30'"
             }
-          ]
+          ],
+          "choicesVisibleIf": "{program_track} <> 'qst' or {qst_specialization_electives} notcontains {item}"
         },
         {
           "type": "matrixdynamic",
@@ -308,13 +469,52 @@
           "confirmDelete": true,
           "addRowText": "Add specialization elective",
           "confirmDeleteText": "Remove this specialization elective?"
+        },
+        {
+          "type": "panel",
+          "name": "internship_panel",
+          "title": "Internship",
+          "description": "An internship is optional and contributes 15 credits to the specialization total. For an external internship, the graduation project must be executed internally. For an internal internship, you cannot graduate with the same supervisor.",
+          "elements": [
+            {
+              "type": "boolean",
+              "name": "internship",
+              "title": "Do you include an internship (2MMR20)?",
+              "isRequired": true
+            },
+            {
+              "type": "checkbox",
+              "name": "internship_course_display",
+              "title": "Internship metadata",
+              "readOnly": true,
+              "defaultValue": [
+                "2mmr20"
+              ],
+              "choices": [
+                {
+                  "value": "2mmr20",
+                  "text": "2MMR20 Internship (15 ECTS)"
+                }
+              ],
+              "visible": false
+            },
+            {
+              "type": "text",
+              "name": "internship_supervisor",
+              "visibleIf": "{internship} = true",
+              "title": "Internship supervisor (if known)",
+              "isRequired": true,
+              "requiredIf": "{internship} = true",
+              "placeholder": "Supervisor name"
+            }
+          ]
         }
       ]
     },
     {
       "name": "free_space",
       "title": "Free-elective space",
-      "description": "The free-elective space is normally 30 credits. Additional core or specialization electives reduce the amount needed here. It can be filled with listed free electives, other free electives, homologation courses or an internship.",
+      "description": "The free-elective space is normally 15 credits. Additional core or specialization electives reduce the amount needed here. It can be filled with listed free electives, other free electives or homologation courses.",
       "elements": [
         {
           "type": "panel",
@@ -412,6 +612,7 @@
               "name": "homologation_courses",
               "visibleIf": "{homologation} = true",
               "title": "Included homologation courses",
+              "description": "Add courses up to a maximum of {rule_homologation_max_credits} credits.",
               "isRequired": true,
               "requiredIf": "{homologation} = true",
               "columns": [
@@ -452,9 +653,7 @@
               "confirmDelete": true,
               "addRowText": "Add homologation course",
               "confirmDeleteText": "Remove this homologation course?",
-              "minRowCount": 1,
-              "maxRowCount": 3,
-              "description": "Add up to three courses."
+              "minRowCount": 1
             },
             {
               "type": "boolean",
@@ -473,45 +672,6 @@
               "description": "Explain the deficiency addressed by each self-chosen bachelor course and for which master-level courses they are required.",
               "isRequired": true,
               "requiredIf": "{homologation} = true and {self_chosen_homologation} = true"
-            }
-          ]
-        },
-        {
-          "type": "panel",
-          "name": "internship_panel",
-          "title": "Internship",
-          "description": "An internship is optional and contributes 15 credits to the free-elective total. For an external internship, the graduation project must be executed internally. For an internal internship, you cannot graduate with the same supervisor.",
-          "elements": [
-            {
-              "type": "boolean",
-              "name": "internship",
-              "title": "Do you include an internship (2MMR20)?",
-              "isRequired": true
-            },
-            {
-              "type": "checkbox",
-              "name": "internship_course_display",
-              "title": "Internship metadata",
-              "readOnly": true,
-              "defaultValue": [
-                "2mmr20"
-              ],
-              "choices": [
-                {
-                  "value": "2mmr20",
-                  "text": "2MMR20 Internship (15 ECTS)"
-                }
-              ],
-              "visible": false
-            },
-            {
-              "type": "text",
-              "name": "internship_supervisor",
-              "visibleIf": "{internship} = true",
-              "title": "Internship supervisor (if known)",
-              "isRequired": true,
-              "requiredIf": "{internship} = true",
-              "placeholder": "Supervisor name"
             }
           ]
         }
@@ -597,14 +757,6 @@
             },
             {
               "type": "text",
-              "name": "programme_version_notice",
-              "title": "Version notice shown in the form and report",
-              "visible": false,
-              "readOnly": true,
-              "defaultValue": "Draft 2026-2027 placeholder. Uses 2025-2026 courses and rules. Not ready for submission."
-            },
-            {
-              "type": "text",
               "name": "programme_header_kicker",
               "title": "Program name shown above the form",
               "visible": false,
@@ -639,7 +791,7 @@
     },
     {
       "name": "rule_core_specialization_min_credits",
-      "expression": "55",
+      "expression": "65",
       "includeIntoResult": true
     },
     {
@@ -659,12 +811,12 @@
     },
     {
       "name": "mandatory_credits",
-      "expression": "{professional_portfolio_credits} + {final_project_credits}",
+      "expression": "{professional_portfolio_credits} + {toolkit_of_computation_credits} + {final_project_credits} + iif({program_track} = 'qst', 20, 0)",
       "includeIntoResult": true
     },
     {
       "name": "core_elective_count",
-      "expression": "count({core_electives})",
+      "expression": "iif({program_track} = 'qst', 0, count({core_electives}))",
       "includeIntoResult": true
     },
     {
@@ -679,7 +831,7 @@
     },
     {
       "name": "listed_specialization_credits",
-      "expression": "{listed_specialization_count} * 5",
+      "expression": "{listed_specialization_count} * 5 + iif({specialization_electives} contains '2mmc30', 3, 0)",
       "includeIntoResult": true
     },
     {
@@ -689,7 +841,7 @@
     },
     {
       "name": "specialization_credits",
-      "expression": "{listed_specialization_credits} + {mastermath_specialization_credits}",
+      "expression": "{listed_specialization_credits} + {mastermath_specialization_credits} + {internship_credits} + {qst_specialization_credits}",
       "includeIntoResult": true
     },
     {
@@ -729,12 +881,42 @@
     },
     {
       "name": "free_elective_space_credits",
-      "expression": "{listed_free_elective_credits} + {internship_credits} + {manual_free_elective_credits} + {homologation_credits}",
+      "expression": "{listed_free_elective_credits} + {manual_free_elective_credits} + {homologation_credits}",
       "includeIntoResult": true
     },
     {
       "name": "total_programme_credits",
       "expression": "{mandatory_credits} + {core_and_specialization_credits} + {free_elective_space_credits}",
+      "includeIntoResult": true
+    },
+    {
+      "name": "toolkit_of_computation_credits",
+      "expression": "5",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_internship_in_specialization",
+      "expression": "1",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_qst_min_credits",
+      "expression": "20",
+      "includeIntoResult": true
+    },
+    {
+      "name": "rule_qst_specialization_min_credits",
+      "expression": "45",
+      "includeIntoResult": true
+    },
+    {
+      "name": "required_core_specialization_credits",
+      "expression": "iif({program_track} = 'qst', {rule_qst_specialization_min_credits}, {rule_core_specialization_min_credits})",
+      "includeIntoResult": true
+    },
+    {
+      "name": "qst_specialization_credits",
+      "expression": "iif({program_track} = 'qst', count({qst_specialization_electives}) * 5 + iif({qst_specialization_electives} contains '2mmc30', 3, 0), 0)",
       "includeIntoResult": true
     }
   ]

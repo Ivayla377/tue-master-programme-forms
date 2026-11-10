@@ -5,7 +5,11 @@ export { resolveIamRules } from "./form-config.js";
 
 export function buildIamValidations(values) {
   const validations = [
-    {
+    values.isQst ? {
+      label: "QST specialization electives",
+      status: values.flags.qstMinimumMet ? "success" : "error",
+      detail: `${formatCredits(values.qstSpecialization)} / at least ${formatCredits(values.rules.qstMinimum)}.`,
+    } : {
       label: "Core electives",
       status:
         values.flags.coreMinimumMet && values.flags.coreCountMet
@@ -17,7 +21,7 @@ export function buildIamValidations(values) {
           : `${formatCredits(values.coreElectives)} / at least ${formatCredits(values.rules.coreMinimum)}.`,
     },
     {
-      label: "Core and specialization total",
+      label: values.isQst ? "Specialization total" : "Core and specialization total",
       status:
         values.flags.coreSpecializationMinimumMet
           ? "success"
@@ -38,6 +42,14 @@ export function buildIamValidations(values) {
           : `${formatCredits(values.homologation)} / maximum ${formatCredits(values.rules.homologationMaximum)} homologation credits.`,
     },
   ];
+
+  if (values.invalidQstCourses?.length > 0) {
+    validations.push({
+      label: "QST-elective eligibility",
+      status: "error",
+      detail: `${values.invalidQstCourses.map(course => course.displayCode).join(", ")} excluded because they are not QST specialization electives.`,
+    });
+  }
 
   if (values.invalidCoreCourses.length > 0) {
     validations.push({
