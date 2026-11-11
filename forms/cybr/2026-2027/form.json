@@ -202,11 +202,11 @@
                 },
                 {
                   "value": "2ims30",
-                  "text": "2IMS30 Advanced Network Security (5 ECTS)"
+                  "text": "2IMS30 Wireless IoT Security (5 ECTS)"
                 },
                 {
                   "value": "2ims00",
-                  "text": "2IMS00 Seminar Information Security Technology (5 ECTS)"
+                  "text": "2IMS00 Seminar Cybersecurity (5 ECTS)"
                 }
               ]
             }
@@ -243,8 +243,8 @@
                   "text": "2IMC00 / 5T746 - Graduation Project (30 ECTS)"
                 },
                 {
-                    "value": "2imr10",
-                    "text": "2IMR10 Study & Career Orientation Program (SCOP/e) (0 ECTS)"
+                  "value": "2imr10",
+                  "text": "2IMR10 Study & Career Orientation Program (SCOP/e) (0 ECTS)"
                 }
               ]
             }
@@ -283,12 +283,16 @@
                   "text": "2IMS40 Intrusion Detection Laboratory (5 ECTS)"
                 },
                 {
-                  "value": "2ims50",
-                  "text": "2IMS50 Introduction to Quantum Computing and Security (5 ECTS)"
+                  "value": "2ims55",
+                  "text": "2IMS55 Quantum Protocols (5 ECTS)"
                 },
                 {
                   "value": "2ims60",
                   "text": "2IMS60 Provable Security (5 ECTS)"
+                },
+                {
+                  "value": "2dm100",
+                  "text": "2DM100 Cryptographic Engineering (5 ECTS)"
                 }
               ]
             },
@@ -319,24 +323,12 @@
               "description": "Search for and select the courses included in your program.",
               "choices": [
                 {
-                  "value": "2amc15",
-                  "text": "2AMC15 Reinforcement Learning in Practice (5 ECTS)"
-                },
-                {
                   "value": "2amd15",
                   "text": "2AMD15 Big Data Management (5 ECTS)"
                 },
                 {
-                  "value": "2amd20",
-                  "text": "2AMD20 Knowledge Engineering (5 ECTS)"
-                },
-                {
                   "value": "2ami10",
                   "text": "2AMI10 Foundations of Process Mining (5 ECTS)"
-                },
-                {
-                  "value": "2ami30",
-                  "text": "2AMI30 Process Intelligence in Action (5 ECTS)"
                 },
                 {
                   "value": "2amm10",
@@ -351,12 +343,24 @@
                   "text": "2AMM20 Research Topics in Data Mining (5 ECTS)"
                 },
                 {
-                  "value": "2amv10",
-                  "text": "2AMV10 Visual Analytics (5 ECTS)"
+                  "value": "2amu20",
+                  "text": "2AMU20 Generative AI Models (5 ECTS)"
                 },
                 {
-                  "value": "2dd23",
-                  "text": "2DD23 Time Series & Forecasting (5 ECTS)"
+                  "value": "2amu30",
+                  "text": "2AMU30 Uncertainty Representation and Reasoning (5 ECTS)"
+                },
+                {
+                  "value": "2dm100",
+                  "text": "2DM100 Cryptographic Engineering (5 ECTS)"
+                },
+                {
+                  "value": "2dmi00",
+                  "text": "2DMI00 Cryptographic Protocols (5 ECTS)"
+                },
+                {
+                  "value": "2dmi10",
+                  "text": "2DMI10 Applied Cryptography (5 ECTS)"
                 },
                 {
                   "value": "2ima10",
@@ -375,12 +379,12 @@
                   "text": "2IMA25 Exact Algorithms for NP-hard Problems (5 ECTS)"
                 },
                 {
-                  "value": "2ima30",
-                  "text": "2IMA30 Topological Data Analysis (5 ECTS)"
-                },
-                {
                   "value": "2ima35",
                   "text": "2IMA35 Massively Parallel Algorithms (5 ECTS)"
+                },
+                {
+                  "value": "2ima45",
+                  "text": "2IMA45 Computational Topology (5 ECTS)"
                 },
                 {
                   "value": "2ima50",
@@ -388,7 +392,7 @@
                 },
                 {
                   "value": "2imd10",
-                  "text": "2IMD10 Engineering Data-Intensive Systems (5 ECTS)"
+                  "text": "2IMD10 Engineering of Data-Intensive Systems (5 ECTS)"
                 },
                 {
                   "value": "2imd20",
@@ -396,7 +400,7 @@
                 },
                 {
                   "value": "2imf10",
-                  "text": "2IMF10 Process Algebra (5 ECTS)"
+                  "text": "2IMF10 Concurrency Theory (5 ECTS)"
                 },
                 {
                   "value": "2imf15",
@@ -413,6 +417,10 @@
                 {
                   "value": "2imf35",
                   "text": "2IMF35 Algorithms for Model Checking (5 ECTS)"
+                },
+                {
+                  "value": "2imf40",
+                  "text": "2IMF40 Modeling and Verification of Probabilistic Systems (5 ECTS)"
                 },
                 {
                   "value": "2imn10",
@@ -435,8 +443,12 @@
                   "text": "2IMN30 Machine Learning for Industry (5 ECTS)"
                 },
                 {
-                  "value": "2imn35",
-                  "text": "2IMN35 VLSI Programming (5 ECTS)"
+                  "value": "2imn40",
+                  "text": "2IMN40 Approximate Computing (5 ECTS)"
+                },
+                {
+                  "value": "2imn45",
+                  "text": "2IMN45 Edge Computing (5 ECTS)"
                 },
                 {
                   "value": "2imp10",
@@ -467,6 +479,26 @@
                   "text": "2IMP60 Human-Computer Interaction (5 ECTS)"
                 },
                 {
+                  "value": "2ims10",
+                  "text": "2IMS10 Physical Aspects of Digital Security (5 ECTS)"
+                },
+                {
+                  "value": "2ims15",
+                  "text": "2IMS15 Verification of Security Protocols (5 ECTS)"
+                },
+                {
+                  "value": "2ims40",
+                  "text": "2IMS40 Intrusion Detection Laboratory (5 ECTS)"
+                },
+                {
+                  "value": "2ims55",
+                  "text": "2IMS55 Quantum Protocols (5 ECTS)"
+                },
+                {
+                  "value": "2ims60",
+                  "text": "2IMS60 Provable Security (5 ECTS)"
+                },
+                {
                   "value": "2imv10",
                   "text": "2IMV10 Visual Computing Project (5 ECTS)"
                 },
@@ -475,20 +507,16 @@
                   "text": "2IMV15 Simulation in Computer Graphics (5 ECTS)"
                 },
                 {
-                  "value": "2imv25",
-                  "text": "2IMV25 Interactive Virtual Environments (5 ECTS)"
+                  "value": "2imv30",
+                  "text": "2IMV30 Interactive Visualization (5 ECTS)"
                 },
                 {
-                  "value": "2mma10",
-                  "text": "2MMA10 Applied Functional Analysis (5 ECTS)"
+                  "value": "2mma15",
+                  "text": "2MMA15 Functional Analysis (5 ECTS)"
                 },
                 {
-                  "value": "2mma20",
-                  "text": "2MMA20 Partial Differential Equations (5 ECTS)"
-                },
-                {
-                  "value": "2mma40",
-                  "text": "2MMA40 Evolution Equations (5 ECTS)"
+                  "value": "2mma25",
+                  "text": "2MMA25 Variational Partial Differential Equations (5 ECTS)"
                 },
                 {
                   "value": "2mma70",
@@ -497,6 +525,10 @@
                 {
                   "value": "2mma80",
                   "text": "2MMA80 Mathematics of Neural Networks (5 ECTS)"
+                },
+                {
+                  "value": "2mmc30",
+                  "text": "2MMC30 Coding Theory (8 ECTS)"
                 },
                 {
                   "value": "2mmd10",
@@ -523,12 +555,28 @@
                   "text": "2MMN10 Scientific Computing (5 ECTS)"
                 },
                 {
-                  "value": "2mmn20",
-                  "text": "2MMN20 Scientific Programming (5 ECTS)"
+                  "value": "2mmn25",
+                  "text": "2MMN25 Numerical Analysis of Variational PDEs (5 ECTS)"
                 },
                 {
-                  "value": "2mmn30",
-                  "text": "2MMN30 Scientific Computing in Partial Differential Equations (5 ECTS)"
+                  "value": "2mmn35",
+                  "text": "2MMN35 Numerical Analysis of Transport PDEs (5 ECTS)"
+                },
+                {
+                  "value": "2mmq10",
+                  "text": "2MMQ10 Quantum Computing and Algorithms (5 ECTS)"
+                },
+                {
+                  "value": "2mmq20",
+                  "text": "2MMQ20 Functional Analysis for Quantum Theory (5 ECTS)"
+                },
+                {
+                  "value": "2mmq30",
+                  "text": "2MMQ30 Theory and Practice of Many-Body Quantum Systems (5 ECTS)"
+                },
+                {
+                  "value": "2mmq40",
+                  "text": "2MMQ40 Differential Geometry for Classical and Quantum Gravity (5 ECTS)"
                 },
                 {
                   "value": "2mmr40",
@@ -541,6 +589,10 @@
                 {
                   "value": "2mmr60",
                   "text": "2MMR60 Research Topic 3 (Capita Selecta) (5 ECTS)"
+                },
+                {
+                  "value": "2mms00",
+                  "text": "2MMS00 Methods for Longitudinal and Time-to-Event Data (5 ECTS)"
                 },
                 {
                   "value": "2mms10",
@@ -567,12 +619,20 @@
                   "text": "2MMS80 Statistical Learning Theory (5 ECTS)"
                 },
                 {
-                  "value": "2mms90",
-                  "text": "2MMS90 Sequential and Nonparametric Statistics (5 ECTS)"
+                  "value": "37hqc",
+                  "text": "37HQC Hybrid Quantum Computing (5 ECTS)"
                 },
                 {
-                  "value": "5lma0",
-                  "text": "5LMA0 Model Reduction (5 ECTS)"
+                  "value": "37qin",
+                  "text": "37QIN Quantum Information (5 ECTS)"
+                },
+                {
+                  "value": "37uqp",
+                  "text": "37UQP Ultracold Quantum Physics (5 ECTS)"
+                },
+                {
+                  "value": "5lso0",
+                  "text": "5LSO0 Quantum Optimization and Machine Learning (5 ECTS)"
                 }
               ]
             },
@@ -697,7 +757,7 @@
           "type": "panel",
           "name": "homologation_panel",
           "title": "Homologation courses",
-          "description": "Homologation courses are bachelor courses used to make up deficiencies in previous knowledge. Please check your admission letter to see assigned homologation courses. It is also possible to pick a maximum of three bachelor courses yourself to compensate deficiencies, if you think it is necessary.",
+          "description": "Homologation courses are bachelor courses used to make up deficiencies in previous knowledge. Please check your admission letter to see assigned homologation courses. It is also possible to pick bachelor courses up to a maximum of 15 credits yourself to compensate deficiencies, if you think it is necessary.",
           "elements": [
             {
               "type": "boolean",
@@ -710,7 +770,7 @@
               "name": "homologation_courses",
               "visibleIf": "{homologation} = true",
               "title": "Included homologation courses",
-              "description": "Add up to three courses.",
+              "description": "Add courses up to a maximum of 15 credits.",
               "columns": [
                 {
                   "name": "code",
@@ -746,7 +806,6 @@
                 }
               ],
               "rowCount": 0,
-              "maxRowCount": 3,
               "confirmDelete": true,
               "addRowText": "Add homologation course",
               "confirmDeleteText": "Remove this homologation course?",
@@ -894,14 +953,6 @@
             },
             {
               "type": "text",
-              "name": "programme_version_notice",
-              "title": "Version notice shown in the form and report",
-              "visible": false,
-              "readOnly": true,
-              "defaultValue": "Draft 2026-2027 placeholder. Uses 2025-2026 courses and rules. Not ready for submission."
-            },
-            {
-              "type": "text",
               "name": "programme_header_kicker",
               "title": "Program name shown above the form",
               "visible": false,
@@ -1006,7 +1057,7 @@
     },
     {
       "name": "mcs_course_credits",
-      "expression": "{mcs_course_count} * {rule_standard_course_credits}",
+      "expression": "{mcs_course_count} * {rule_standard_course_credits} + iif({mcs_course_electives} contains '2mmc30', 3, 0)",
       "includeIntoResult": true
     },
     {

@@ -147,7 +147,9 @@ export function calculateCybr(data = {}, choiceLookup = createCybrChoiceLookup()
   finalizeCourseClaims(claimed, duplicates);
 
   const useCalculatedValues =
-    duplicates.length === 0
+    // Mixed-credit catalogues use course metadata, including imported selections.
+    !config.hasVariableMcsCredits
+    && duplicates.length === 0
     && cybrSelection.invalidCourses.length === 0
     && mcsSelection.invalidCourses.length === 0
     && graduation.valid;

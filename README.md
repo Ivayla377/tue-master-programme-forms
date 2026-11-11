@@ -6,13 +6,19 @@ Fillable TU/e master's-program forms with live ECTS calculations, program-rule c
 
 No installation is needed to fill in a form. Download the program form, then open the downloaded HTML file in a browser such as Microsoft Edge, Google Chrome or Firefox.
 
-- [Download the DS&AI form](https://github.com/Ivayla377/tue-master-programme-forms/releases/latest/download/dsai.html)
-- [Download the CSE form](https://github.com/Ivayla377/tue-master-programme-forms/releases/latest/download/cse.html)
-- [Download the ES form](https://github.com/Ivayla377/tue-master-programme-forms/releases/latest/download/es.html)
-- [Download the IAM form](https://github.com/Ivayla377/tue-master-programme-forms/releases/latest/download/iam.html)
-- [Download the CYBR form](https://github.com/Ivayla377/tue-master-programme-forms/releases/latest/download/cybr.html)
+**Download 2026-2027 AY forms**
+- [Download the DS&AI form](https://github.com/Ivayla377/tue-master-programme-forms/releases/latest/download/dsai-2026-2027.html)
+- [Download the CSE form](https://github.com/Ivayla377/tue-master-programme-forms/releases/latest/download/cse-2026-2027.html)
+- [Download the ES form](https://github.com/Ivayla377/tue-master-programme-forms/releases/latest/download/es-2026-2027.html)
+- [Download the IAM form](https://github.com/Ivayla377/tue-master-programme-forms/releases/latest/download/iam-2026-2027.html)
+- [Download the CYBR form](https://github.com/Ivayla377/tue-master-programme-forms/releases/latest/download/cybr-2026-2027.html)
 
-*Latest release: 21 August 2026*
+**Download 2025-2026 AY forms**
+- [Download the DS&AI form](https://github.com/Ivayla377/tue-master-programme-forms/releases/latest/download/dsai-2025-2026.html)
+- [Download the CSE form](https://github.com/Ivayla377/tue-master-programme-forms/releases/latest/download/cse-2025-2026.html)
+- [Download the ES form](https://github.com/Ivayla377/tue-master-programme-forms/releases/latest/download/es-2025-2026.html)
+- [Download the IAM form](https://github.com/Ivayla377/tue-master-programme-forms/releases/latest/download/iam-2025-2026.html)
+- [Download the CYBR form](https://github.com/Ivayla377/tue-master-programme-forms/releases/latest/download/cybr-2025-2026.html)
 
 The forms work offline after download.
 
@@ -39,11 +45,18 @@ npm install
 
 ### Maintain a program
 
-Each program has one complete `forms/<programme>/form.json`. This JSON is the primary source for the form layout, questions, course choices, fixed course metadata, calculated ECTS values and editable program thresholds. It can be imported into (and exported from) the free hosted SurveyJS Creator visual editor.
+Each program and academic year has one complete
+`forms/<programme>/<year>/form.json`. This JSON is the primary source for the form
+layout, questions, course choices, fixed course metadata, calculated credits and
+editable program thresholds. Each file can be imported into (and exported from)
+the free hosted SurveyJS Creator visual editor.
+
+Supported years: **2025-2026** (default) and **2026-2027**. All five 2026-2027
+forms use the new PER.
 
 When updating a program:
 
-1. Edit its `form.json`, preferably through SurveyJS Creator, while preserving stable question names and course-code values.
+1. Edit the intended year's `form.json`, preferably through SurveyJS Creator, while preserving stable question names and course-code values.
 2. Keep course labels in the form `CODE Title (N ECTS)` so the shared code can read their credits.
 3. Use `src/programmes/<programme>/` only for academic logic or report rendering that SurveyJS expressions cannot express clearly.
 4. Put mechanics shared by several programs in `src/shared/` rather than copying them.
@@ -52,35 +65,41 @@ When updating a program:
 Run a form locally while editing with:
 
 ```bash
-npm run dev
+npm run dev -- es 2026-2027
 ```
+
+Replace `es` with `dsai`, `cse`, `iam` or `cybr` as needed. Open `/<programme>.html`
+at the printed server URL. Restart to change years. Without arguments, `npm run dev`
+uses DS&AI 2025-2026.
 
 ### Build standalone forms
 
 ```bash
-npm run build:dsai
-npm run build:cse
-npm run build:es
-npm run build:iam
-npm run build:cybr
-npm run build:all
+npm run build:program -- es 2026-2027   # One form
+npm run build:all -- 2026-2027          # All five forms for one year
+npm run build:all                      # All forms for both years
 ```
 
-The generated downloadable forms are located in the `dist/` directory: `dist/dsai.html`, `dist/cse.html`, `dist/es.html`, `dist/iam.html` and `dist/cybr.html`. Building one program preserves the other generated forms.
+Output: `dist/<programme>-<year>.html`, ready to open offline. Run build commands
+one at a time; other programme/year outputs are preserved.
 
 ## Project structure
 
 ```text
-dist/                         # Generated standalone forms for users
+dist/                         # <programme>-<year>.html standalone forms
 forms/
-  dsai/, cse/, es/, iam/, cybr/ # Authoritative SurveyJS JSON and source documents
+  dsai/                       # Also cse/, es/, iam/, cybr/
+    2025-2026/form.json        # Current academic rules
+    2026-2027/form.json        # New PER for all five programmes
 src/
-  shared/                     # Shared course, validation, SurveyJS and report helpers
+  shared/                     # Shared across all programmes and years
   programmes/
-    dsai/, cse/, es/, iam/, cybr/ # Program-specific configuration, rules and reports
+    dsai/, cse/, es/, iam/, cybr/ # Programme logic shared across years
   entries/                    # Browser entry modules for each form
 scripts/
-  programmes.mjs              # Registered build targets
-  build-program.mjs           # Builds one standalone form
+  programmes.mjs              # Registered programmes, years and target paths
+  build-program.mjs           # Builds one programme/year
+  build-all.mjs               # Builds one or all years sequentially
+  dev-program.mjs             # Starts Vite for a selected programme/year
 dsai.html, cse.html, es.html, iam.html, cybr.html # Vite HTML entry pages
 ```

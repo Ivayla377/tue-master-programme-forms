@@ -57,6 +57,23 @@
           ]
         },
         {
+          "type": "radiogroup",
+          "name": "program_track",
+          "title": "Which study track are you following?",
+          "isRequired": true,
+          "defaultValue": "standard",
+          "choices": [
+            {
+              "value": "standard",
+              "text": "Regular Industrial and Applied Mathematics"
+            },
+            {
+              "value": "qst",
+              "text": "Quantum Science and Technology track"
+            }
+          ]
+        },
+        {
           "type": "text",
           "name": "mentor",
           "title": "Mentor",
@@ -90,23 +107,6 @@
       "name": "mandatory_and_core",
       "title": "Mandatory and core courses",
       "elements": [
-        {
-          "type": "radiogroup",
-          "name": "program_track",
-          "title": "Which program track are you following?",
-          "isRequired": true,
-          "defaultValue": "standard",
-          "choices": [
-            {
-              "value": "standard",
-              "text": "Standard Industrial and Applied Mathematics"
-            },
-            {
-              "value": "qst",
-              "text": "Track Quantum Science and Technology"
-            }
-          ]
-        },
         {
           "type": "panel",
           "name": "mandatory_components_panel",

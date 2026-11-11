@@ -45,6 +45,9 @@ export function buildCybrFormConfig(surveyJson, lookup) {
   ];
 
   return Object.freeze({
+    hasVariableMcsCredits: new Set(lookup.getChoices(
+      CYBR_QUESTION_NAMES.mcsElectives,
+    ).map(({ credits }) => credits)).size > 1,
     rules: Object.freeze(readNumericRulesFromSurvey(
       surveyJson,
       CYBR_RULE_FIELD_NAMES,

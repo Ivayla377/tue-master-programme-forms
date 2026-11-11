@@ -24,7 +24,12 @@ import {
   renderValidationList,
   validationStatus,
 } from "../../shared/summary-rendering.js";
-import { DEFAULT_ES_CONFIG } from "./form-config.js";
+import {
+  DEFAULT_ES_CONFIG,
+  esSectionLabels,
+  resolveEsRoute,
+  resolveEsRules,
+} from "./form-config.js";
 
 const PANEL_SUBTOTAL_ROWS = [
   ["commonMandatory", "Common mandatory courses"],
@@ -98,6 +103,8 @@ export function renderEsEctsPanel(report) {
 }
 
 const SIDEBAR_ALWAYS_VISIBLE = new Set([
+  "Study track",
+  "Specialization electives",
   "Stream selection",
   "Stream electives",
   "Free elective space",
@@ -105,6 +112,7 @@ const SIDEBAR_ALWAYS_VISIBLE = new Set([
 ]);
 
 const SIDEBAR_ERROR_ONLY = new Set([
+  "Specialization-elective eligibility",
   "Course incompatibilities",
   "Stream-elective eligibility",
 ]);
@@ -152,6 +160,9 @@ export function renderEsSummary(report, data, choiceLookup, labels = {}) {
   const config = choiceLookup?.esConfig ?? DEFAULT_ES_CONFIG;
   const safeReport = normalizeReport(report);
   const safeData = asRecord(data);
+  const route = safeReport.route ?? resolveEsRoute(safeData, config);
+  const rules = safeReport.rules ?? resolveEsRules(safeData, config);
+  const sectionLabels = esSectionLabels(route);
   const selected = safeReport.selected;
   const personalInfo = asRecord(safeData.personal_info);
   const summaryEyebrow = labels.summaryEyebrow ?? "ES Program of Examinations";
@@ -195,7 +206,7 @@ export function renderEsSummary(report, data, choiceLookup, labels = {}) {
   const freeSpaceRows = [
     ...selected.excessStreamElectiveCourses.map((course) => ({
       cells: [
-        "Additional stream elective",
+        sectionLabels.additionalElective,
         courseCode(course),
         courseTitle(course),
         courseCredits(course),
@@ -264,31 +275,32 @@ export function renderEsSummary(report, data, choiceLookup, labels = {}) {
           ["Name", personalInfo.name],
           ["Student ID", personalInfo.id],
           ["Month and year of enrollment", formatMonthYear(personalInfo.enrollment)],
+          ...(config.routes.length > 1 ? [["Study track", route.label]] : []),
           ...graduationClusterDetails(safeData, choiceLookup),
           ["Updates a previously approved program", yesNo(safeData.previous)],
         ])}
       </section>
 
       <section class="summary-section">
-        <h3>Common mandatory courses</h3>
+        <h3>${escapeHtml(sectionLabels.mandatory)}</h3>
         ${renderCourseTable(selected.commonMandatoryCourses, "No common mandatory courses were reported.")}
       </section>
 
-      <section class="summary-section">
+      ${route.usesStreams ? `<section class="summary-section">
         <h3>Selected stream and mandatory courses</h3>
         <p class="summary-inline-detail"><strong>Selected stream:</strong> ${formatText(streamLabel)}</p>
         ${renderCourseTable(selected.streamMandatoryCourses, "No stream mandatory courses were reported.")}
-      </section>
+      </section>` : ""}
 
       <section class="summary-section summary-section--allow-break">
-        <h3>Stream electives</h3>
+        <h3>${escapeHtml(sectionLabels.electives)}</h3>
         <p class="summary-inline-detail">
-          <strong>Allocated:</strong> ${escapeHtml(formatCredits(safeReport.subtotals.streamElectivesRequired))} / ${escapeHtml(formatCredits(config.rules.streamElectiveTarget))}
+          <strong>Allocated:</strong> ${escapeHtml(formatCredits(safeReport.subtotals.streamElectivesRequired))} / ${escapeHtml(formatCredits(rules.streamElectiveTarget))}
         </p>
         ${renderReportTable(
           ["Course code", "Course title", "Credits"],
           streamElectiveRows,
-          "No stream electives selected.",
+          `No ${sectionLabels.electives.toLowerCase()} selected.`,
           "summary-table--course-data summary-table--three-course",
         )}
       </section>
@@ -557,10 +569,15 @@ function renderSubtotalsTable(report) {
 }
 
 function visibleSubtotalRows(rows, report) {
+  const sectionLabels = esSectionLabels(report.route);
   return rows.filter(
-    ([key]) => key !== "streamElectivesExcess"
-      || report.subtotals.streamElectivesExcess > 0,
-  );
+    ([key]) => (key !== "streamElectivesExcess" || report.subtotals.streamElectivesExcess > 0)
+      && (key !== "streamMandatory" || report.route?.usesStreams !== false),
+  ).map(([key, label]) => [key, {
+    commonMandatory: sectionLabels.mandatory,
+    streamElectivesRequired: `${sectionLabels.electives} (required)`,
+    streamElectivesExcess: sectionLabels.excessElectives,
+  }[key] ?? label]);
 }
 
 function renderCourseTable(courses, emptyText, modifier = "summary-table--three-course") {

@@ -32,6 +32,8 @@ import {
   STALE_STREAM_ELECTIVE_CODES,
   STREAM_ELECTIVE_TARGET,
   createEsChoiceLookup,
+  esSectionLabels,
+  resolveEsRoute,
   resolveEsRules,
 } from "./form-config.js";
 import { buildEsValidations } from "./rules.js";
@@ -56,6 +58,8 @@ export const createChoiceLookup = createEsChoiceLookup;
 
 export function calculateEs(data = {}, choiceLookup = createEsChoiceLookup()) {
   const config = choiceLookup.esConfig ?? DEFAULT_ES_CONFIG;
+  const route = resolveEsRoute(data, config);
+  const sectionLabels = esSectionLabels(route);
   const rules = resolveEsRules(data, config);
   const claimed = createCourseClaims(choiceLookup);
   const duplicates = [];
@@ -82,13 +86,13 @@ export function calculateEs(data = {}, choiceLookup = createEsChoiceLookup()) {
     };
   }
 
-  const commonMandatoryCourses = config.commonMandatoryCodes.map(
-    readCourse("common_mandatory_display"),
+  const commonMandatoryCourses = route.mandatoryCodes.map(
+    readCourse(route.mandatoryQuestion),
   );
   const rawStreamValues = selectedValues(data.stream)
     .map(normalizeStreamValue)
     .filter(Boolean);
-  const streamDefinition = rawStreamValues.length === 1
+  const streamDefinition = route.usesStreams && rawStreamValues.length === 1
     ? config.streams.find(({ value }) => value === rawStreamValues[0]) ?? null
     : null;
   const stream = streamDefinition
@@ -104,25 +108,26 @@ export function calculateEs(data = {}, choiceLookup = createEsChoiceLookup()) {
   const claim = (courses, section) => {
     for (const course of courses.filter(Boolean)) claimCourse(course, section, claimed, duplicates);
   };
-  claim(commonMandatoryCourses, "Common mandatory courses");
+  claim(commonMandatoryCourses, sectionLabels.mandatory);
   claim([graduation.preparationProject, graduation.graduationProject, ...graduation.additionalCourses], "Graduation courses");
   claim(streamMandatoryCourses, "Stream mandatory courses");
   claim([internship.course], "Internship");
   internship.counted = internship.course?.counted ?? false;
 
-  const activeElectiveValues = streamDefinition
-    ? selectedValues(data[streamDefinition.electiveQuestion])
+  const electiveDefinition = route.usesStreams ? streamDefinition : route;
+  const activeElectiveValues = electiveDefinition
+    ? selectedValues(data[electiveDefinition.electiveQuestion])
     : [];
   const allowedElectiveCodes = new Set(
-    (streamDefinition?.electiveCodes ?? []).map(claimed.identity),
+    (electiveDefinition?.electiveCodes ?? []).map(claimed.identity),
   );
   const streamElectiveCourses = [];
   const invalidStreamElectiveCourses = [];
   const duplicateStreamElectiveCourses = [];
   for (const value of activeElectiveValues) {
-    const course = readCourse(streamDefinition.electiveQuestion)(value);
+    const course = readCourse(electiveDefinition.electiveQuestion)(value);
     if (allowedElectiveCodes.has(claimed.identity(course.code))) {
-      if (claimCourse(course, "Stream electives", claimed, duplicates)) {
+      if (claimCourse(course, sectionLabels.electives, claimed, duplicates)) {
         streamElectiveCourses.push(course);
       } else {
         duplicateStreamElectiveCourses.push(course);
@@ -131,7 +136,7 @@ export function calculateEs(data = {}, choiceLookup = createEsChoiceLookup()) {
       invalidStreamElectiveCourses.push({
         ...course,
         exclusionReason:
-          `Not in the selected stream's current ${config.academicYear} PER elective list.`,
+          `Not in the selected ${route.usesStreams ? "stream's" : "track's"} current ${config.academicYear} PER elective list.`,
       });
     }
   }
@@ -142,7 +147,7 @@ export function calculateEs(data = {}, choiceLookup = createEsChoiceLookup()) {
   const requiredStreamElectiveCourses = streamElectiveAllocation.required;
   const excessStreamElectiveCourses = streamElectiveAllocation.excess;
 
-  const staleStreamElectiveCourses = config.streams
+  const staleStreamElectiveCourses = (route.usesStreams ? config.streams : [])
     .filter(({ value }) => value !== streamDefinition?.value)
     .flatMap(({ electiveQuestion }) =>
       selectedValues(data[electiveQuestion]).map((value) => ({
@@ -161,7 +166,10 @@ export function calculateEs(data = {}, choiceLookup = createEsChoiceLookup()) {
     normalizeManualCourseRows(data.free_electives), "Free electives", claimed, duplicates,
   );
   finalizeCourseClaims(claimed, duplicates);
-  const subtotal = (name, fallback) => duplicates.length > 0
+  // Multi-route forms use active course metadata, never saved calculated totals.
+  // Older forms retain their existing calculated-value handling unless codes are excluded.
+  const hasExcludedCourses = duplicates.length > 0 || invalidStreamElectiveCourses.length > 0;
+  const subtotal = (name, fallback) => config.routes.length > 1 || hasExcludedCourses
     ? fallback : readNumericValue(data, name, fallback);
   const selfChosenActive = homologationActive
     && booleanValue(data.self_chosen_homologation) === true;
@@ -297,7 +305,8 @@ export function calculateEs(data = {}, choiceLookup = createEsChoiceLookup()) {
     graduationPhaseComplete: graduationPhase === rules.graduationPhaseCredits,
     homologationWithinLimit: homologationCredits <= rules.homologationMaximum,
     selfChosenHomologationWithinLimit:
-      selfChosenCount <= rules.selfChosenHomologationMaximumCount,
+      rules.selfChosenHomologationMaximumCount === undefined
+      || selfChosenCount <= rules.selfChosenHomologationMaximumCount,
     homologationMotivationPresent:
       !selfChosenActive || (selfChosenCount > 0 && homologationMotivationPresent),
     internshipValid: !internship.selected || internship.valid,
@@ -319,6 +328,10 @@ export function calculateEs(data = {}, choiceLookup = createEsChoiceLookup()) {
   };
 
   const validations = buildEsValidations({
+    route,
+    sectionLabels,
+    routeSelectionValid: !data.program_track
+      || config.routes.some(({ value }) => value === data.program_track),
     duplicates,
     flags,
     stream,
@@ -351,13 +364,15 @@ export function calculateEs(data = {}, choiceLookup = createEsChoiceLookup()) {
     streamElectiveCourses,
     rules,
     streamCount: config.streams.length,
-    commonMandatoryCount: config.commonMandatoryCodes.length,
+    commonMandatoryCount: route.mandatoryCodes.length,
     seminarCodes: config.seminarCodes,
     externalCourseCodes: config.externalCourseCodes,
     externalCourseDisplayCodes: config.externalCourseDisplayCodes,
   });
 
   return {
+    route,
+    rules,
     allocationCredits: {
       credits_stream_electives_excess: streamElectivesExcess,
     },

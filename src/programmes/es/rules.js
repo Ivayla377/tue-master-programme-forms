@@ -3,17 +3,18 @@ import { duplicateCourseValidations } from "../../shared/course-selection.js";
 import { formatCredits } from "../../shared/credit-utils.js";
 
 export function buildEsValidations(values) {
-  const { rules } = values;
+  const { rules, route, sectionLabels } = values;
+  const electiveKind = route.usesStreams ? "stream" : "specialization";
   const externalCourseCodes = values.externalCourseDisplayCodes.join(", ");
   const validations = [
     {
-      label: "Common mandatory courses",
+      label: sectionLabels.mandatory,
       status: values.flags.commonMandatoryComplete ? "success" : "error",
       detail: values.flags.commonMandatoryComplete
-        ? `The ${values.commonMandatoryCount} fixed common courses total ${formatCredits(rules.commonMandatoryCredits, "credits")}.`
-        : `The fixed common courses must total ${formatCredits(rules.commonMandatoryCredits, "credits")}.`,
+        ? `The ${values.commonMandatoryCount} fixed courses total ${formatCredits(rules.commonMandatoryCredits, "credits")}.`
+        : `The fixed courses must total ${formatCredits(rules.commonMandatoryCredits, "credits")}.`,
     },
-    {
+    ...(route.usesStreams ? [{
       label: "Stream selection",
       status: values.flags.hasExactlyOneStream ? "success" : "error",
       detail: values.flags.hasExactlyOneStream
@@ -24,19 +25,19 @@ export function buildEsValidations(values) {
       label: "Stream mandatory courses",
       status: values.flags.streamMandatoryComplete ? "success" : "error",
       detail: `${formatCredits(values.streamMandatory)} / exactly ${formatCredits(rules.streamMandatoryCredits)} derived from the selected stream.`,
-    },
+    }] : []),
     {
-      label: "Stream electives",
+      label: sectionLabels.electives,
       status: values.flags.streamElectiveTargetMet ? "success" : "error",
       detail: values.streamElectivesExcess > 0
-        ? `${formatCredits(rules.streamElectiveTarget, "credits")} fill the stream-elective requirement; the additional ${formatCredits(values.streamElectivesExcess, "credits")} count in free-elective space.`
-        : `${formatCredits(values.streamElectivesSelected)} / ${formatCredits(rules.streamElectiveTarget)} from the selected stream's electives list.`,
+        ? `${formatCredits(rules.streamElectiveTarget, "credits")} fill the ${electiveKind}-elective requirement; the additional ${formatCredits(values.streamElectivesExcess, "credits")} count in free-elective space.`
+        : `${formatCredits(values.streamElectivesSelected)} / ${formatCredits(rules.streamElectiveTarget)} from the ${electiveKind} electives list.`,
     },
     targetWithOverWarning(
       "Free elective space",
       values.freeElectiveSpace,
       rules.freeElectiveSpaceTarget,
-      `Additional stream electives, other free electives, homologation and internship together fill ${formatCredits(rules.freeElectiveSpaceTarget, "credits")}.`,
+      `Additional ${electiveKind} electives, other free electives, homologation and internship together fill ${formatCredits(rules.freeElectiveSpaceTarget, "credits")}.`,
     ),
     {
       label: "Preparation project",
@@ -107,11 +108,11 @@ export function buildEsValidations(values) {
         ? "The self-chosen homologation yes/no question was answered when applicable."
         : "Indicate whether self-chosen bachelor courses are included.",
     },
-    {
+    ...(rules.selfChosenHomologationMaximumCount !== undefined ? [{
       label: "Self-chosen homologation maximum",
       status: values.flags.selfChosenHomologationWithinLimit ? "success" : "error",
       detail: `${values.selfChosenCount} / maximum ${rules.selfChosenHomologationMaximumCount} self-chosen bachelor courses.`,
-    },
+    }] : []),
     {
       label: "Self-chosen homologation motivation",
       status: values.selfChosenActive
@@ -156,11 +157,19 @@ export function buildEsValidations(values) {
 
   if (values.invalidStreamElectiveCourses.length > 0) {
     validations.push({
-      label: "Stream-elective eligibility",
+      label: route.usesStreams ? "Stream-elective eligibility" : "Specialization-elective eligibility",
       status: "error",
       detail: `${values.invalidStreamElectiveCourses
         .map((item) => item.displayCode)
-        .join(", ")} excluded because it is not on the selected stream's current PER list.`,
+        .join(", ")} excluded because it is not on the selected ${route.usesStreams ? "stream's" : "track's"} current PER list.`,
+    });
+  }
+
+  if (!values.routeSelectionValid) {
+    validations.push({
+      label: "Study track",
+      status: "error",
+      detail: "Select a valid Embedded Systems study track.",
     });
   }
 

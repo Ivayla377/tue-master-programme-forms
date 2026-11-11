@@ -16,6 +16,9 @@ import {
 export const ES_SURVEY_SOURCE = surveySource;
 
 export const ES_QUESTION_NAMES = Object.freeze({
+  track: "program_track",
+  edgeMandatory: "edge_mandatory_display",
+  edgeElectives: "edge_specialization_electives",
   commonMandatory: "common_mandatory_display",
   stream: "stream",
   graduationCourses: "graduation_courses",
@@ -49,9 +52,17 @@ export function createEsChoiceLookup(surveyJson = surveySource) {
 }
 
 export function buildEsFormConfig(surveyJson, lookup) {
+  const ruleFields = { ...ES_RULE_FIELD_NAMES };
+  // Earlier definitions cap self-chosen course counts; newer ones use credits only.
+  if (!surveyJson.calculatedValues?.some(
+    ({ name }) => name === ruleFields.selfChosenHomologationMaximumCount,
+  )) {
+    delete ruleFields.selfChosenHomologationMaximumCount;
+  }
+  Object.freeze(ruleFields);
   const rules = Object.freeze(readNumericRulesFromSurvey(
     surveyJson,
-    ES_RULE_FIELD_NAMES,
+    ruleFields,
     "ES form",
   ));
   const streams = Object.freeze(
@@ -83,8 +94,40 @@ export function buildEsFormConfig(surveyJson, lookup) {
   const externalCourseDisplayCodes = Object.freeze(lookup.getCodes(
     ES_QUESTION_NAMES.externalCourses,
   ));
+  const routes = [{
+    value: "standard",
+    label: lookup.getChoices(ES_QUESTION_NAMES.track)
+      .find(({ value }) => value === "standard")?.text
+      ?? "Standard Embedded Systems program",
+    usesStreams: true,
+    mandatoryQuestion: ES_QUESTION_NAMES.commonMandatory,
+    mandatoryCodes: Object.freeze(defaultCourseCodes(lookup, ES_QUESTION_NAMES.commonMandatory)),
+  }];
+  const edgeChoice = lookup.getChoices(ES_QUESTION_NAMES.track)
+    .find(({ value }) => value === "edge_intelligence");
+  if (edgeChoice) {
+    routes.push({
+      value: edgeChoice.value,
+      label: edgeChoice.text,
+      usesStreams: false,
+      mandatoryQuestion: ES_QUESTION_NAMES.edgeMandatory,
+      mandatoryCodes: Object.freeze(defaultCourseCodes(lookup, ES_QUESTION_NAMES.edgeMandatory)),
+      electiveQuestion: ES_QUESTION_NAMES.edgeElectives,
+      electiveCodes: Object.freeze(lookup.getCodes(ES_QUESTION_NAMES.edgeElectives)),
+      rules: Object.freeze({
+        ...readNumericRulesFromSurvey(surveyJson, {
+          commonMandatoryCredits: "rule_edge_mandatory_credits",
+          streamElectiveTarget: "rule_edge_specialization_target",
+          freeElectiveSpaceTarget: "rule_edge_free_elective_target",
+        }, "ES Edge Intelligence track"),
+        streamMandatoryCredits: 0,
+      }),
+    });
+  }
   return Object.freeze({
+    routes: Object.freeze(routes.map(Object.freeze)),
     rules,
+    ruleFields,
     academicYear: String(defaultQuestionValue(
       lookup,
       ES_QUESTION_NAMES.academicYear,
@@ -117,7 +160,29 @@ export function buildEsFormConfig(surveyJson, lookup) {
 }
 
 export function resolveEsRules(data, config = DEFAULT_ES_CONFIG) {
-  return resolveNumericRules(data, config.rules, ES_RULE_FIELD_NAMES);
+  return {
+    ...resolveNumericRules(data, config.rules, config.ruleFields),
+    ...resolveEsRoute(data, config).rules,
+  };
+}
+
+export function resolveEsRoute(data, config = DEFAULT_ES_CONFIG) {
+  return config.routes.find(({ value }) => value === data.program_track)
+    ?? config.routes[0];
+}
+
+export function esSectionLabels(route) {
+  return route?.usesStreams === false ? {
+    mandatory: "Edge Intelligence mandatory courses",
+    electives: "Specialization electives",
+    additionalElective: "Additional specialization elective",
+    excessElectives: "Additional specialization electives in free space",
+  } : {
+    mandatory: "Common mandatory courses",
+    electives: "Stream electives",
+    additionalElective: "Additional stream elective",
+    excessElectives: "Additional stream electives in free space",
+  };
 }
 
 function optionList(lookup, questionName) {
